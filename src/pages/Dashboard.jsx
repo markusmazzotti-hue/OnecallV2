@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ItalyMap from '../components/ItalyMap.jsx'
 import DonutChart from '../components/DonutChart.jsx'
+import { supabase } from '../lib/supabase.js'
 
 /* ============================================================
    DATA
@@ -288,9 +289,81 @@ function StatusBadge({ label, color }) {
 /* ============================================================
    MAIN COMPONENT
    ============================================================ */
+function formatDate(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  return d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
+function statoColor(s) {
+  const map = { in_valutazione: '#0088FF', sopralluogo: '#FF8C00', in_esecuzione: '#00CC66', in_attesa_info: '#9A9A9A', completata: '#00CC66' }
+  return map[s] || '#9A9A9A'
+}
+function statoLabel(s) {
+  const map = { in_valutazione: 'In valutazione', sopralluogo: 'Sopralluogo', in_esecuzione: 'In esecuzione', in_attesa_info: 'In attesa info', completata: 'Completata' }
+  return map[s] || s
+}
+function priorityColor(p) {
+  const map = { urgente: '#FF3333', breve_termine: '#FF8C00', programmabile: '#00CC66' }
+  return map[p] || '#9A9A9A'
+}
+function priorityLabel(p) {
+  const map = { urgente: 'Urgente', breve_termine: 'Breve termine', programmabile: 'Programmabile' }
+  return map[p] || p
+}
+
 export default function Dashboard() {
   const navigate = useNavigate()
   const [activeNav, setActiveNav] = useState('DASHBOARD')
+  const [richieste, setRichieste] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    supabase
+      .from('richieste')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(200)
+      .then(({ data }) => {
+        if (data && data.length > 0) setRichieste(data)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
+
+  // KPI calcolati dai dati reali (fallback ai mock se vuoto)
+  const hasReal = richieste.length > 0
+  const total      = hasReal ? richieste.length : 128
+  const inVal      = hasReal ? richieste.filter(r => r.stato === 'in_valutazione').length  : 24
+  const inExec     = hasReal ? richieste.filter(r => r.stato === 'in_esecuzione').length   : 15
+  const completed  = hasReal ? richieste.filter(r => r.stato === 'completata').length       : 89
+  const urgent     = hasReal ? richieste.filter(r => r.tempistica === 'urgente').length     : 8
+
+  // Richieste recenti
+  const recentRows = hasReal
+    ? richieste.slice(0, 5).map((r, i) => ({
+        id: `#OC-${new Date(r.created_at).getFullYear()}-${String(i + 1).padStart(4, '0')}`,
+        type: r.tipo_intervento,
+        city: r.localita || '—',
+        status: statoLabel(r.stato),
+        statusColor: statoColor(r.stato),
+        priority: priorityLabel(r.tempistica),
+        priorityColor: priorityColor(r.tempistica),
+        date: formatDate(r.created_at),
+      }))
+    : RECENT_REQUESTS
+
+  // Donut priorità
+  const urgCount   = hasReal ? richieste.filter(r => r.tempistica === 'urgente').length        : 8
+  const breveCount = hasReal ? richieste.filter(r => r.tempistica === 'breve_termine').length  : 46
+  const progCount  = hasReal ? richieste.filter(r => r.tempistica === 'programmabile').length  : 61
+  const valCount   = hasReal ? richieste.filter(r => !r.tempistica).length                     : 13
+  const donutData = hasReal ? [
+    { label: 'Urgenti',      value: urgCount,   color: '#FF3333', pct: total ? `${((urgCount/total)*100).toFixed(1)}%`   : '0%' },
+    { label: 'Breve termine',value: breveCount, color: '#FF8C00', pct: total ? `${((breveCount/total)*100).toFixed(1)}%` : '0%' },
+    { label: 'Programmabili',value: progCount,  color: '#00CC66', pct: total ? `${((progCount/total)*100).toFixed(1)}%`  : '0%' },
+    { label: 'Da valutare',  value: valCount,   color: '#0088FF', pct: total ? `${((valCount/total)*100).toFixed(1)}%`   : '0%' },
+  ] : DONUT_DATA
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#080808' }}>
@@ -475,9 +548,11 @@ export default function Dashboard() {
 
           {/* KPI ROW */}
           <div style={{ display: 'flex', gap: 12 }}>
-            {KPIS.map((kpi, i) => (
-              <KpiCard key={i} {...kpi} />
-            ))}
+            {KPIS.map((kpi, i) => {
+              const liveValues = [total, inVal, inExec, completed, urgent]
+              const liveColors = ['#0088FF','#0088FF','#FF8C00','#00CC66','#FF3333']
+              return <KpiCard key={i} {...kpi} value={liveValues[i]} color={liveColors[i]} />
+            })}
           </div>
 
           {/* MIDDLE ROW: Requests, Donut, Bars */}
@@ -504,7 +579,7 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {RECENT_REQUESTS.map((r, i) => (
+                    {recentRows.map((r, i) => (
                       <tr
                         key={i}
                         style={{ borderBottom: '1px solid #141414', transition: 'background 0.15s', cursor: 'pointer' }}
@@ -540,10 +615,10 @@ export default function Dashboard() {
             <Card>
               <CardHeader title="RICHIESTE PER PRIORITÀ" />
               <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
-                <DonutChart data={DONUT_DATA} total={128} size={160} thickness={24} />
+                <DonutChart data={donutData} total={total} size={160} thickness={24} />
                 {/* Legend */}
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {DONUT_DATA.map((d, i) => (
+                  {donutData.map((d, i) => (
                     <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
                         <div style={{ width: 8, height: 8, borderRadius: '50%', background: d.color, flexShrink: 0 }} />

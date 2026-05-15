@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import StepNav from '../components/StepNav.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase.js'
 
 const STEP1_ITEMS = [
   'Demolizione Industriale',
@@ -86,14 +87,17 @@ const labelStyle = {
   textTransform: 'uppercase',
 }
 
-function InputField({ label, placeholder, icon }) {
+function InputField({ label, placeholder, icon, value, onChange, type = 'text' }) {
   const [focused, setFocused] = useState(false)
   return (
     <div>
       <div style={{ ...labelStyle, marginBottom: 5 }}>{label}</div>
       <div style={{ position: 'relative' }}>
         <input
+          type={type}
           placeholder={placeholder}
+          value={value}
+          onChange={e => onChange && onChange(e.target.value)}
           style={{
             ...inputStyle,
             paddingLeft: icon ? 36 : 12,
@@ -114,15 +118,14 @@ function InputField({ label, placeholder, icon }) {
   )
 }
 
-function TextArea({ label, placeholder, max }) {
-  const [val, setVal] = useState('')
+function TextArea({ label, placeholder, max, value, onChange }) {
   const [focused, setFocused] = useState(false)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
       <div style={{ ...labelStyle, marginBottom: 5 }}>{label}</div>
       <textarea
-        value={val}
-        onChange={e => setVal(e.target.value.slice(0, max))}
+        value={value}
+        onChange={e => onChange && onChange(e.target.value.slice(0, max))}
         placeholder={placeholder}
         style={{
           ...inputStyle,
@@ -136,16 +139,17 @@ function TextArea({ label, placeholder, max }) {
         onBlur={() => setFocused(false)}
       />
       <div style={{ textAlign: 'right', fontSize: 10, color: '#555', marginTop: 3 }}>
-        {val.length} / {max}
+        {value.length} / {max}
       </div>
     </div>
   )
 }
 
-function UploadBtn({ icon, label, optional }) {
+function UploadBtn({ icon, label, optional, onClick }) {
   const [hover, setHover] = useState(false)
   return (
     <button
+      onClick={onClick}
       style={{
         flex: 1,
         background: hover ? '#1A1A1A' : '#0E0E0E',
@@ -186,6 +190,30 @@ export default function ClientForm() {
   const [step2, setStep2] = useState(0)
   const [priority, setPriority] = useState('breve')
   const [sopralluogo, setSopralluogo] = useState(true)
+
+  // Step 3
+  const [localita, setLocalita] = useState('')
+  const [indirizzo, setIndirizzo] = useState('')
+
+  // Step 5
+  const [descrizione, setDescrizione] = useState('')
+  const [condizioni, setCondizioni] = useState('')
+
+  // Step 6
+  const [nome, setNome] = useState('')
+  const [azienda, setAzienda] = useState('')
+  const [telefono, setTelefono] = useState('')
+  const [email, setEmail] = useState('')
+
+  // Step 4 — file upload
+  const [files, setFiles] = useState([])
+  const fileInputRef = useRef(null)
+
+  // Submit state
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
+
   const navigate = useNavigate()
 
   const priorities = [
@@ -197,11 +225,81 @@ export default function ClientForm() {
   const summaryItems = [
     { icon: '⚙', label: 'TIPO INTERVENTO', value: STEP1_ITEMS[step1] },
     { icon: '🏭', label: 'SETTORE', value: STEP2_ITEMS[step2] },
-    { icon: '📍', label: 'DOVE E QUANDO', value: 'Da definire' },
-    { icon: '📷', label: 'FOTO / VIDEO', value: 'Da caricare' },
-    { icon: '📝', label: 'DESCRIZIONE', value: 'Da definire' },
-    { icon: '👤', label: 'CONTATTI', value: 'Da definire' },
+    { icon: '📍', label: 'DOVE E QUANDO', value: localita || 'Da definire' },
+    { icon: '📷', label: 'FOTO / VIDEO', value: files.length > 0 ? `${files.length} file` : 'Da caricare' },
+    { icon: '📝', label: 'DESCRIZIONE', value: descrizione || 'Da definire' },
+    { icon: '👤', label: 'CONTATTI', value: nome || 'Da definire' },
   ]
+
+  const handleFileChange = (e) => {
+    const selected = Array.from(e.target.files || [])
+    setFiles(prev => [...prev, ...selected])
+    e.target.value = ''
+  }
+
+  const handleSubmit = async () => {
+    if (submitting) return
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      const { error } = await supabase.from('richieste').insert({
+        tipo_intervento: STEP1_ITEMS[step1],
+        settore:         STEP2_ITEMS[step2],
+        localita:        localita || null,
+        indirizzo:       indirizzo || null,
+        tempistica:      priority === 'breve' ? 'breve_termine' : priority,
+        sopralluogo,
+        descrizione:     descrizione || null,
+        condizioni:      condizioni || null,
+        nome_cognome:    nome || null,
+        azienda:         azienda || null,
+        telefono:        telefono || null,
+        email:           email || null,
+        stato:           'in_valutazione',
+      })
+      if (error) throw error
+      setSubmitted(true)
+    } catch (err) {
+      setSubmitError(err.message || 'Errore durante l\'invio. Riprova.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (submitted) {
+    return (
+      <div style={{
+        minHeight: '100vh', background: '#080808', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 24,
+      }}>
+        <div style={{
+          width: 80, height: 80, borderRadius: '50%',
+          background: 'linear-gradient(135deg,#008040,#00E676)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 40px rgba(0,230,118,0.5)',
+          fontSize: 36,
+        }}>✓</div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 32, color: '#00E676', letterSpacing: '0.06em' }}>
+            RICHIESTA INVIATA
+          </div>
+          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: '#9A9A9A', marginTop: 8 }}>
+            Il team Palmisano riceverà la tua richiesta e ti risponderà in pochi minuti.
+          </div>
+        </div>
+        <button
+          onClick={() => { setSubmitted(false); setLocalita(''); setIndirizzo(''); setDescrizione(''); setCondizioni(''); setNome(''); setAzienda(''); setTelefono(''); setEmail(''); setFiles([]) }}
+          style={{
+            background: 'linear-gradient(135deg,#CC6600,#FF8C00)',
+            border: 'none', borderRadius: 6, padding: '12px 32px',
+            fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 14,
+            color: '#fff', letterSpacing: '0.08em', cursor: 'pointer',
+            boxShadow: '0 0 20px rgba(255,140,0,0.4)',
+          }}
+        >NUOVA RICHIESTA</button>
+      </div>
+    )
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column' }}>
@@ -374,8 +472,8 @@ export default function ClientForm() {
 
             <div style={{ display: 'flex', gap: 12 }}>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" />
-                <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" />
+                <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
+                <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
 
                 <div>
                   <div style={{ ...labelStyle, marginBottom: 8 }}>TEMPISTICA INDICATIVA</div>
@@ -457,14 +555,39 @@ export default function ClientForm() {
             <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
               STEP <span style={{ color: '#FF8C00' }}>4</span> — CARICA FOTO, VIDEO E DESCRIZIONE AUDIO
             </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*,video/*,audio/*,.pdf"
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
             <div style={{ display: 'flex', gap: 6 }}>
-              <UploadBtn icon="📷" label="SCATTA FOTO" />
-              <UploadBtn icon="🖼" label="CARICA FOTO" />
-              <UploadBtn icon="🎥" label="CARICA VIDEO" />
-              <UploadBtn icon="🎙" label="AUDIO" />
-              <UploadBtn icon="📎" label="ALLEGATI" optional />
+              <UploadBtn icon="📷" label="SCATTA FOTO" onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn icon="🖼" label="CARICA FOTO" onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn icon="🎥" label="CARICA VIDEO" onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn icon="🎙" label="AUDIO" onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn icon="📎" label="ALLEGATI" optional onClick={() => fileInputRef.current?.click()} />
             </div>
-            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif" }}>
+            {files.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {files.map((f, i) => (
+                  <span key={i} style={{
+                    background: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: 3,
+                    padding: '2px 8px', fontSize: 10, color: '#9A9A9A', fontFamily: "'Inter', sans-serif",
+                    display: 'flex', alignItems: 'center', gap: 4,
+                  }}>
+                    {f.name.length > 20 ? f.name.slice(0, 18) + '…' : f.name}
+                    <span
+                      style={{ cursor: 'pointer', color: '#555', marginLeft: 2 }}
+                      onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))}
+                    >×</span>
+                  </span>
+                ))}
+              </div>
+            )}
+            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", margin: 0 }}>
               Puoi caricare più file alla volta. Formati supportati: JPG, PNG, MP4, MP3 (max 100MB)
             </p>
           </div>
@@ -479,11 +602,15 @@ export default function ClientForm() {
                 label="COSA VUOI OTTENERE?"
                 placeholder="Descrivi brevemente l'intervento, l'obiettivo e le criticità principali..."
                 max={2000}
+                value={descrizione}
+                onChange={setDescrizione}
               />
               <TextArea
                 label="CONDIZIONI PARTICOLARI (SE PRESENTI)"
                 placeholder="Descrivi eventuali condizioni particolari, vincoli, esigenze..."
                 max={1000}
+                value={condizioni}
+                onChange={setCondizioni}
               />
             </div>
           </div>
@@ -494,10 +621,10 @@ export default function ClientForm() {
               STEP <span style={{ color: '#FF8C00' }}>6</span> — I TUOI CONTATTI
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <InputField label="NOME E COGNOME" placeholder="Es. Mario Rossi" icon="👤" />
-              <InputField label="AZIENDA" placeholder="Nome azienda" icon="🏢" />
-              <InputField label="TELEFONO" placeholder="Es. +39 333 1234567" icon="📞" />
-              <InputField label="EMAIL" placeholder="Es. nome@azienda.it" icon="✉" />
+              <InputField label="NOME E COGNOME" placeholder="Es. Mario Rossi" icon="👤" value={nome} onChange={setNome} />
+              <InputField label="AZIENDA" placeholder="Nome azienda" icon="🏢" value={azienda} onChange={setAzienda} />
+              <InputField label="TELEFONO" placeholder="Es. +39 333 1234567" icon="📞" value={telefono} onChange={setTelefono} type="tel" />
+              <InputField label="EMAIL" placeholder="Es. nome@azienda.it" icon="✉" value={email} onChange={setEmail} type="email" />
             </div>
           </div>
         </div>
@@ -541,54 +668,44 @@ export default function ClientForm() {
           ))}
         </div>
 
-        <button
-          style={{
-            background: 'linear-gradient(135deg, #CC6600, #FF8C00, #FFA500)',
-            border: 'none',
-            borderRadius: 6,
-            padding: '14px 28px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            cursor: 'pointer',
-            boxShadow: '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)',
-            transition: 'all 0.2s',
-            flexShrink: 0,
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.boxShadow = '0 0 36px rgba(255,140,0,0.7), 0 0 72px rgba(255,140,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)'
-            e.currentTarget.style.transform = 'scale(1.02)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.boxShadow = '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)'
-            e.currentTarget.style.transform = 'scale(1)'
-          }}
-        >
-          <div style={{ textAlign: 'left' }}>
-            <div style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 18,
-              color: '#fff',
-              letterSpacing: '0.06em',
-              lineHeight: 1,
-            }}>ATTIVA ONE CALL™</div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
-              Invia richiesta tecnica a Palmisano Demolizioni & Taglio Termico
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, flexShrink: 0 }}>
+          {submitError && (
+            <div style={{ fontSize: 10, color: '#FF3333', fontFamily: "'Inter',sans-serif", maxWidth: 220, textAlign: 'right' }}>
+              {submitError}
             </div>
-          </div>
-          <div style={{
-            width: 36, height: 36,
-            background: 'rgba(0,0,0,0.25)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 18,
-            color: '#fff',
-            flexShrink: 0,
-          }}>→</div>
-        </button>
+          )}
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={{
+              background: submitting ? '#333' : 'linear-gradient(135deg, #CC6600, #FF8C00, #FFA500)',
+              border: 'none',
+              borderRadius: 6,
+              padding: '14px 28px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              cursor: submitting ? 'not-allowed' : 'pointer',
+              boxShadow: submitting ? 'none' : '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)',
+              transition: 'all 0.2s',
+              opacity: submitting ? 0.6 : 1,
+            }}
+            onMouseEnter={e => { if (!submitting) { e.currentTarget.style.boxShadow = '0 0 36px rgba(255,140,0,0.7), 0 0 72px rgba(255,140,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'scale(1.02)' } }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'scale(1)' }}
+          >
+            <div style={{ textAlign: 'left' }}>
+              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 18, color: '#fff', letterSpacing: '0.06em', lineHeight: 1 }}>
+                {submitting ? 'INVIO IN CORSO...' : 'ATTIVA ONE CALL™'}
+              </div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
+                Invia richiesta tecnica a Palmisano Demolizioni & Taglio Termico
+              </div>
+            </div>
+            <div style={{ width: 36, height: 36, background: 'rgba(0,0,0,0.25)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, color: '#fff', flexShrink: 0 }}>
+              {submitting ? '⏳' : '→'}
+            </div>
+          </button>
+        </div>
       </footer>
 
       {/* Security footer */}
