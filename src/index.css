@@ -1,0 +1,162 @@
+/* ============================================================
+   PALMISANO ONE CALL™ — Global Styles
+   ============================================================ */
+
+:root {
+  --bg: #080808;
+  --card-bg: #111111;
+  --card-border: #1E1E1E;
+  --orange: #FF8C00;
+  --orange-bright: #FFA500;
+  --green: #00E676;
+  --text-primary: #FFFFFF;
+  --text-secondary: #9A9A9A;
+  --text-muted: #555555;
+  --danger: #FF3333;
+  --warning: #FF8C00;
+  --success: #00CC66;
+  --info: #0088FF;
+
+  --glow-orange: 0 0 20px rgba(255,140,0,0.5), 0 0 40px rgba(255,140,0,0.2);
+  --glow-green: 0 0 20px rgba(0,230,118,0.5), 0 0 40px rgba(0,230,118,0.2);
+  --glow-blue: 0 0 20px rgba(0,136,255,0.4), 0 0 40px rgba(0,136,255,0.15);
+  --glow-red: 0 0 20px rgba(255,51,51,0.5), 0 0 40px rgba(255,51,51,0.2);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--orange); }
+
+/* Typography helpers */
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+.font-barlow { font-family: 'Barlow Condensed', sans-serif; }
+
+/* Card base */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top left, rgba(255,140,0,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Button base */
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* Input base */
+input, textarea, select {
+  background: #0D0D0D;
+  border: 1px solid #2A2A2A;
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 2px rgba(255,140,0,0.15);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Orange CTA button */
+.btn-orange {
+  background: linear-gradient(135deg, #CC7000 0%, #FF8C00 50%, #FFA500 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 12px rgba(255,140,0,0.4);
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  padding: 10px 18px;
+  border-radius: 5px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.btn-orange:hover {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), var(--glow-orange);
+  transform: translateY(-1px);
+}
+
+/* Badge helpers */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge-red { background: rgba(255,51,51,0.15); color: #FF3333; border: 1px solid rgba(255,51,51,0.3); }
+.badge-orange { background: rgba(255,140,0,0.15); color: #FFA500; border: 1px solid rgba(255,140,0,0.3); }
+.badge-green { background: rgba(0,204,102,0.15); color: #00CC66; border: 1px solid rgba(0,204,102,0.3); }
+.badge-blue { background: rgba(0,136,255,0.15); color: #0088FF; border: 1px solid rgba(0,136,255,0.3); }
+.badge-gray { background: rgba(100,100,100,0.15); color: #9A9A9A; border: 1px solid rgba(100,100,100,0.3); }
+
+/* Utility */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+.w-full { width: 100%; }
+.text-orange { color: var(--orange-bright); }
+.text-green { color: var(--green); }
+.text-muted { color: var(--text-muted); }
+.text-secondary { color: var(--text-secondary); }
