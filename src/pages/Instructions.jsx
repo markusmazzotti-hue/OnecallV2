@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import StepNav from '../components/StepNav.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
+import StepNav from '../components/StepNav.jsx'
 
 const STEP1_ITEMS = [
   'Demolizione Industriale',
@@ -22,405 +22,428 @@ const STEP2_ITEMS = [
   'Centro Riciclo Rottami',
 ]
 
-const STEPS_LIST = [
-  { num: 1, label: 'TIPO INTERVENTO', desc: 'Seleziona uno o più interventi richiesti.', color: '#FF8C00' },
-  { num: 2, label: 'SETTORE', desc: 'Scegli il settore di riferimento.', color: '#FF8C00' },
-  { num: 3, label: 'DOVE E QUANDO', desc: "Indica dove si trova l'intervento e quando è previsto.", color: '#FF8C00' },
-  { num: 4, label: 'FOTO, VIDEO E AUDIO', desc: "Carica tutto il materiale utile per valutare l'intervento.", color: '#FF8C00' },
-  { num: 5, label: 'DESCRIZIONE', desc: 'Scrivi cosa vuoi ottenere e le condizioni particolari.', color: '#FF8C00' },
-  { num: 6, label: 'CONTATTI', desc: 'Inserisci i tuoi dati per essere ricontattato.', color: '#FF8C00' },
-  { num: 7, label: 'RIEPILOGO', desc: 'Controlla i dati inseriti e invia la richiesta.', color: '#FF8C00' },
+const STEP_DESCRIPTIONS = [
+  {
+    num: 1,
+    title: 'TIPO DI INTERVENTO',
+    desc: 'Seleziona il tipo di intervento richiesto tra le opzioni disponibili: Demolizione Industriale, Taglio Termico, Smantellamento Impianti e altri.',
+    color: '#FF8C00',
+  },
+  {
+    num: 2,
+    title: 'SETTORE DI RIFERIMENTO',
+    desc: 'Indica il settore industriale di pertinenza. Questa informazione ci aiuta ad assegnare il team più competente per la tua richiesta.',
+    color: '#00E676',
+  },
+  {
+    num: 3,
+    title: 'DOVE E QUANDO',
+    desc: 'Inserisci la località dell\'intervento e la tempistica prevista (Urgente, Breve Termine, Programmabile). Puoi anche richiedere un sopralluogo.',
+    color: '#9A9A9A',
+  },
+  {
+    num: 4,
+    title: 'FOTO, VIDEO E AUDIO',
+    desc: 'Carica materiale visivo del sito: foto, video o descrizione audio. Il materiale aiuta il nostro team tecnico a valutare l\'intervento più velocemente.',
+    color: '#9A9A9A',
+  },
+  {
+    num: 5,
+    title: 'DESCRIZIONE',
+    desc: 'Descrivi in dettaglio cosa vuoi ottenere e le eventuali condizioni particolari del sito (vincoli strutturali, ambienti confinati, materiali speciali, ecc.).',
+    color: '#9A9A9A',
+  },
+  {
+    num: 6,
+    title: 'CONTATTI',
+    desc: 'Inserisci i tuoi dati di contatto: nome, azienda, telefono e email. Nessuna registrazione richiesta. I tuoi dati vengono trattati con massima riservatezza.',
+    color: '#9A9A9A',
+  },
+  {
+    num: 7,
+    title: 'RIEPILOGO E INVIO',
+    desc: 'Verifica tutti i dati inseriti nel pannello di riepilogo e premi "ATTIVA ONE CALL™" per inviare la tua richiesta tecnica. Riceverai risposta entro pochi minuti.',
+    color: '#FF8C00',
+  },
 ]
 
-const FOOTER_ITEMS = [
-  { icon: '⚡', label: 'ACCESSO IMMEDIATO', sub: 'Scansiona e attiva' },
-  { icon: '🔓', label: 'NESSUNA REGISTRAZIONE', sub: 'Nessun modulo richiesto' },
-  { icon: '⏱', label: 'RISPOSTA TECNICA', sub: 'Entro pochi minuti' },
-  { icon: '👥', label: 'TEAM OPERATIVO', sub: 'Specialisti al tuo fianco' },
-  { icon: '🔧', label: 'INTERVENTI SU MISURA', sub: 'Soluzioni concrete' },
-  { icon: '🕐', label: 'DISPONIBILITÀ 24/7', sub: 'Sempre operativi' },
+const MINI_STEPS = [
+  {
+    num: 3, title: 'DOVE E QUANDO',
+    desc: 'Inserisci la località e seleziona la tempistica: Urgente (rosso), Breve Termine (arancio) o Programmabile (verde). Attiva il sopralluogo se necessario.',
+  },
+  {
+    num: 4, title: 'FOTO, VIDEO E AUDIO',
+    desc: 'Scatta o carica foto del sito, video dell\'area e registra una descrizione audio. Più materiale fornisci, più rapida sarà la valutazione.',
+  },
+  {
+    num: 5, title: 'DESCRIZIONE RICHIESTA',
+    desc: 'Usa i due campi di testo per descrivere l\'obiettivo dell\'intervento e le condizioni particolari presenti sul sito.',
+  },
+  {
+    num: 6, title: 'I TUOI CONTATTI',
+    desc: 'Compila nome, azienda, telefono ed email. Saranno usati esclusivamente per contattarti riguardo la tua richiesta tecnica.',
+  },
+]
+
+const FOOTER_BADGES = [
+  { label: 'ACCESSO IMMEDIATO', sub: 'Nessuna registrazione' },
+  { label: 'RISPOSTA TECNICA', sub: 'Entro pochi minuti' },
+  { label: 'TEAM OPERATIVO', sub: 'Specialisti al tuo fianco' },
+  { label: 'INTERVENTI SU MISURA', sub: 'Soluzioni concrete' },
+  { label: 'DISPONIBILITÀ 24/7', sub: 'Sempre operativi' },
 ]
 
 export default function Instructions() {
-  const [step1, setStep1] = useState(1)
-  const [step2, setStep2] = useState(0)
   const navigate = useNavigate()
+  const [step1Index, setStep1Index] = useState(1)
+  const [step2Index, setStep2Index] = useState(0)
 
-  const cardStyle = {
+  const cardBase = {
     background: '#111111',
     border: '1px solid #1E1E1E',
-    borderRadius: 6,
-    padding: '12px',
+    borderRadius: 8,
+    overflow: 'hidden',
   }
 
   return (
     <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
+
+      {/* HEADER */}
       <header style={{
+        height: 56,
         background: '#0A0A0A',
         borderBottom: '1px solid #1A1A1A',
-        padding: '10px 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        padding: '0 24px',
         flexShrink: 0,
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 20, color: '#fff', letterSpacing: '0.04em' }}>PALMISANO</span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 20, color: '#FF8C00', letterSpacing: '0.04em' }}>ONE CALL™</span>
-            </div>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 500, fontSize: 10, color: '#555', letterSpacing: '0.12em' }}>DEMOLIZIONI & TAGLIO TERMICO</div>
-          </div>
-          <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 32,
-              color: '#fff',
-              letterSpacing: '0.06em',
-              lineHeight: 1,
-              textTransform: 'uppercase',
-            }}>ISTRUZIONI D'USO</div>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, color: '#9A9A9A', marginTop: 2 }}>
-              Invia la tua richiesta tecnica in pochi passaggi, in modo semplice e chiaro.
-              <span style={{
-                display: 'inline-block',
-                marginLeft: 8,
-                height: 1,
-                width: 120,
-                background: 'linear-gradient(90deg, #FF8C00, transparent)',
-                verticalAlign: 'middle',
-              }} />
+              width: 36, height: 36,
+              background: 'linear-gradient(135deg,#CC7000,#FF8C00)',
+              borderRadius: 4,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 12px rgba(255,140,0,0.5)',
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 17l2-8h14l2 8H3z"/>
+                <path d="M8 9V7a4 4 0 018 0v2"/>
+                <rect x="1" y="17" width="22" height="4" rx="1"/>
+              </svg>
             </div>
+            <div>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 16, color: '#fff', lineHeight: 1 }}>PALMISANO</div>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: 10, color: '#FF8C00', letterSpacing: '0.15em', lineHeight: 1 }}>DEMOLIZIONI</div>
+            </div>
+          </div>
+
+          <div style={{ width: 1, height: 28, background: '#2A2A2A' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 15, letterSpacing: '0.1em', color: '#FF8C00' }}>ONE CALL™</span>
+            <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: 12, color: '#555', letterSpacing: '0.08em' }}>DEMOLIZIONI & TAGLIO TERMICO</span>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            background: 'rgba(0,136,255,0.06)',
+            border: '1px solid rgba(0,136,255,0.2)',
+            borderRadius: 5,
+            padding: '5px 12px',
+          }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0088FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: 11, color: '#0088FF' }}>
+              Dati al sicuro. Nessuna registrazione richiesta.
+            </span>
+          </div>
           <button
             onClick={() => navigate('/')}
             style={{
-              background: 'linear-gradient(135deg, #CC6600, #FF8C00)',
-              border: 'none',
-              borderRadius: 4,
-              color: '#fff',
-              fontFamily: "'Rajdhani', sans-serif",
-              fontWeight: 700,
-              fontSize: 12,
-              letterSpacing: '0.08em',
+              background: 'linear-gradient(135deg,#CC7000,#FF8C00)',
+              border: 'none', borderRadius: 5,
               padding: '8px 16px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              boxShadow: '0 0 16px rgba(255,140,0,0.4)',
+              fontFamily: "'Rajdhani',sans-serif",
+              fontWeight: 700, fontSize: 12,
+              letterSpacing: '0.06em',
+              color: '#fff', cursor: 'pointer',
+              boxShadow: '0 0 12px rgba(255,140,0,0.4)',
             }}
-          >ACCESSO ONE CALL™ →</button>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            background: '#0E0E0E',
-            border: '1px solid #1E1E1E',
-            borderRadius: 4,
-            padding: '6px 10px',
-          }}>
-            <span style={{ fontSize: 16 }}>🛡</span>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 10, color: '#9A9A9A' }}>ONE CALL™<br />Accesso diretto per richieste tecniche</div>
-          </div>
+          >← TORNA ALLA RICHIESTA</button>
         </div>
       </header>
 
+      {/* STEP NAV */}
       <StepNav activeSteps={[1, 2]} />
 
-      <main style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, overflow: 'auto' }}>
+      {/* MAIN */}
+      <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-        {/* Main instruction area */}
-        <div style={{ display: 'flex', gap: 14 }}>
+        {/* Page title */}
+        <div style={{ textAlign: 'center', padding: '8px 0' }}>
+          <h1 style={{
+            fontFamily: "'Barlow Condensed',sans-serif",
+            fontWeight: 700,
+            fontSize: 28,
+            letterSpacing: '0.1em',
+            color: '#fff',
+            lineHeight: 1,
+          }}>ISTRUZIONI D'USO <span style={{ color: '#FF8C00' }}>— ONE CALL™</span></h1>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#555', marginTop: 6 }}>
+            Segui i 7 passaggi per inviare la tua richiesta tecnica in modo rapido e preciso.
+          </p>
+        </div>
 
-          {/* Left steps list */}
-          <div style={{
-            ...cardStyle,
-            width: 200,
-            flexShrink: 0,
-          }}>
+        {/* TOP SECTION: Steps list + Rotary selectors */}
+        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 14 }}>
+
+          {/* Steps list */}
+          <div style={{ ...cardBase, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
             <div style={{
-              fontFamily: "'Rajdhani', sans-serif",
+              fontFamily: "'Rajdhani',sans-serif",
               fontWeight: 700,
               fontSize: 12,
-              letterSpacing: '0.1em',
+              letterSpacing: '0.12em',
               color: '#FF8C00',
-              marginBottom: 16,
-              lineHeight: 1.3,
-            }}>I 7 PASSAGGI<br />PER INVIARE LA RICHIESTA</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {STEPS_LIST.map(s => (
-                <div key={s.num} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              marginBottom: 12,
+            }}>I 7 PASSAGGI PER INVIARE LA RICHIESTA</div>
+
+            {STEP_DESCRIPTIONS.map((s, i) => (
+              <div key={i} style={{
+                display: 'flex',
+                gap: 10,
+                padding: '9px 0',
+                borderBottom: i < STEP_DESCRIPTIONS.length - 1 ? '1px solid #1A1A1A' : 'none',
+              }}>
+                <div style={{
+                  width: 22, height: 22,
+                  borderRadius: '50%',
+                  background: s.color === '#FF8C00'
+                    ? 'linear-gradient(135deg,#CC7000,#FF8C00)'
+                    : s.color === '#00E676'
+                    ? 'linear-gradient(135deg,#008040,#00E676)'
+                    : '#1E1E1E',
+                  border: s.color === '#9A9A9A' ? '1px solid #2A2A2A' : 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: "'Barlow Condensed',sans-serif",
+                  fontWeight: 700, fontSize: 11,
+                  color: s.color === '#9A9A9A' ? '#555' : '#fff',
+                  flexShrink: 0,
+                  marginTop: 1,
+                  boxShadow: s.color === '#FF8C00' ? '0 0 6px rgba(255,140,0,0.4)' : s.color === '#00E676' ? '0 0 6px rgba(0,230,118,0.4)' : 'none',
+                }}>{s.num}</div>
+                <div>
                   <div style={{
-                    width: 22, height: 22,
-                    background: 'linear-gradient(135deg, #CC7000, #FF8C00)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontFamily: "'Barlow Condensed', sans-serif",
+                    fontFamily: "'Rajdhani',sans-serif",
                     fontWeight: 700,
-                    fontSize: 12,
-                    color: '#fff',
-                    flexShrink: 0,
-                    boxShadow: '0 0 6px rgba(255,140,0,0.4)',
+                    fontSize: 11,
+                    letterSpacing: '0.08em',
+                    color: s.color === '#FF8C00' ? '#FFA500' : s.color === '#00E676' ? '#00E676' : '#9A9A9A',
+                    marginBottom: 3,
+                  }}>{s.title}</div>
+                  <div style={{
+                    fontFamily: "'Inter',sans-serif",
+                    fontSize: 10,
+                    color: '#555',
+                    lineHeight: 1.5,
+                  }}>{s.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Rotary selectors preview */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {/* Steps 1 & 2 side by side */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              {/* Step 1 */}
+              <div style={{ ...cardBase, background: 'linear-gradient(160deg,#131008 0%,#111111 60%)', padding: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                  <div style={{
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: 'linear-gradient(135deg,#CC7000,#FF8C00)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 12, color: '#fff',
+                    boxShadow: '0 0 8px rgba(255,140,0,0.5)',
+                  }}>1</div>
+                  <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', color: '#FFA500' }}>
+                    TIPO DI INTERVENTO
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <RotarySelector
+                    items={STEP1_ITEMS}
+                    activeIndex={step1Index}
+                    onChange={setStep1Index}
+                    theme="orange"
+                    stepNum="1"
+                    centerLabel="TIPO INTERVENTO"
+                    centerSub="Seleziona il servizio richiesto"
+                  />
+                </div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', textAlign: 'center', marginTop: 8 }}>
+                  Usa le frecce ‹ › o clicca direttamente sull'elemento desiderato.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div style={{ ...cardBase, background: 'linear-gradient(160deg,#081008 0%,#111111 60%)', padding: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                  <div style={{
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: 'linear-gradient(135deg,#008040,#00E676)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 12, color: '#000',
+                    boxShadow: '0 0 8px rgba(0,230,118,0.5)',
+                  }}>2</div>
+                  <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', color: '#00E676' }}>
+                    SETTORE DI RIFERIMENTO
+                  </span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <RotarySelector
+                    items={STEP2_ITEMS}
+                    activeIndex={step2Index}
+                    onChange={setStep2Index}
+                    theme="green"
+                    stepNum="2"
+                    centerLabel="SETTORE"
+                    centerSub="Seleziona il settore di riferimento"
+                  />
+                </div>
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', textAlign: 'center', marginTop: 8 }}>
+                  Ruota la selezione e clicca sul settore corrispondente.
+                </p>
+              </div>
+            </div>
+
+            {/* Steps 3-6 mini cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 10 }}>
+              {MINI_STEPS.map((s, i) => (
+                <div key={i} style={{
+                  ...cardBase,
+                  padding: '12px 14px',
+                  position: 'relative',
+                }}>
+                  <div style={{
+                    position: 'absolute', top: 10, right: 12,
+                    fontFamily: "'Barlow Condensed',sans-serif",
+                    fontWeight: 700, fontSize: 32,
+                    color: 'rgba(255,255,255,0.03)',
+                    lineHeight: 1,
+                    pointerEvents: 'none',
                   }}>{s.num}</div>
-                  <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 8 }}>
                     <div style={{
-                      fontFamily: "'Rajdhani', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 11,
-                      letterSpacing: '0.06em',
-                      color: s.color,
-                    }}>{s.label}</div>
-                    <div style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", lineHeight: 1.3 }}>{s.desc}</div>
+                      width: 20, height: 20, borderRadius: '50%',
+                      background: '#1E1E1E', border: '1px solid #2A2A2A',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 10, color: '#555',
+                      flexShrink: 0,
+                    }}>{s.num}</div>
+                    <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: '0.08em', color: '#9A9A9A' }}>{s.title}</span>
                   </div>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', lineHeight: 1.5 }}>{s.desc}</p>
                 </div>
               ))}
             </div>
-            <div style={{
-              marginTop: 20,
-              paddingTop: 14,
-              borderTop: '1px solid #1A1A1A',
-              fontSize: 11,
-              color: '#777',
-              fontFamily: "'Inter', sans-serif",
-              lineHeight: 1.5,
-            }}>
-              Se tutto è corretto, clicca su <span style={{ color: '#FF8C00', fontWeight: 600 }}>"ATTIVA ONE CALL™"</span> e invia la richiesta.
-            </div>
-          </div>
-
-          {/* Center: two rotary selectors */}
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
-              <div style={{ ...cardStyle, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 12,
-                  letterSpacing: '0.1em',
-                  color: '#FF8C00',
-                  marginBottom: 10,
-                  alignSelf: 'flex-start',
-                }}>1. TIPO INTERVENTO</div>
-                <RotarySelector
-                  items={STEP1_ITEMS}
-                  activeIndex={step1}
-                  onChange={setStep1}
-                  theme="orange"
-                  stepNum="1"
-                  centerLabel="TIPO INTERVENTO"
-                  centerSub="Seleziona il servizio richiesto"
-                />
-              </div>
-              <div style={{ ...cardStyle, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 12,
-                  letterSpacing: '0.1em',
-                  color: '#00E676',
-                  marginBottom: 10,
-                  alignSelf: 'flex-start',
-                }}>2. SETTORE</div>
-                <RotarySelector
-                  items={STEP2_ITEMS}
-                  activeIndex={step2}
-                  onChange={setStep2}
-                  theme="green"
-                  stepNum="2"
-                  centerLabel="SETTORE"
-                  centerSub="Seleziona il settore di riferimento"
-                />
-              </div>
-            </div>
-
-            {/* Steps 3-5 */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-              <div style={cardStyle}>
-                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, color: '#9A9A9A', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  3. DOVE SI TROVA L'INTERVENTO E QUANDO È PREVISTO?
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <div style={{ background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 3, padding: '6px 10px', fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif" }}>
-                    📍 Es. Taranto, Genova, ecc.
-                  </div>
-                  <div style={{ background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 3, padding: '6px 10px', fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif" }}>
-                    + Via, n°, stabilimento, ecc.
-                  </div>
-                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.1em', color: '#555', marginTop: 4 }}>TEMPISTICA INDICATIVA</div>
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    {[{ c: '#FF3333', l: 'URGENTE' }, { c: '#FF8C00', l: 'BREVE TERMINE', sel: true }, { c: '#00CC66', l: 'PROGRAMMABILE' }].map((p, i) => (
-                      <div key={i} style={{
-                        flex: 1,
-                        padding: '5px 3px',
-                        border: `1px solid ${p.sel ? p.c : '#2A2A2A'}`,
-                        borderRadius: 4,
-                        background: p.sel ? `${p.c}15` : '#0A0A0A',
-                        textAlign: 'center',
-                        fontSize: 8,
-                        fontFamily: "'Rajdhani', sans-serif",
-                        fontWeight: 700,
-                        color: p.sel ? p.c : '#555',
-                      }}>{p.l}</div>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
-                    <span style={{ fontSize: 9, color: '#555', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, letterSpacing: '0.06em' }}>RICHIEDO SOPRALLUOGO</span>
-                    <div style={{ width: 32, height: 16, background: '#00CC66', borderRadius: 8, position: 'relative' }}>
-                      <div style={{ position: 'absolute', top: 2, left: 16, width: 12, height: 12, background: '#fff', borderRadius: '50%' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div style={cardStyle}>
-                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, color: '#9A9A9A', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  4. CARICA FOTO, VIDEO E DESCRIZIONE AUDIO
-                </div>
-                <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
-                  {['📷 SCATTA', '🖼 FOTO', '🎥 VIDEO', '🎙 AUDIO', '📎 ALL.'].map((b, i) => (
-                    <div key={i} style={{
-                      flex: 1,
-                      padding: '8px 3px',
-                      border: '1px solid #2A2A2A',
-                      borderRadius: 4,
-                      background: '#0A0A0A',
-                      textAlign: 'center',
-                      fontSize: 8,
-                      fontFamily: "'Rajdhani', sans-serif",
-                      fontWeight: 600,
-                      color: '#555',
-                    }}>{b}</div>
-                  ))}
-                </div>
-                <div style={{ fontSize: 9, color: '#555', fontFamily: "'Inter', sans-serif" }}>
-                  Formati supportati: JPG, PNG, MP4, MP3, PDF (max 100MB)
-                </div>
-              </div>
-
-              <div style={cardStyle}>
-                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, color: '#9A9A9A', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  5. DESCRIVI LA RICHIESTA
-                </div>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <div style={{ flex: 1, background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 3, padding: '6px 8px', minHeight: 70 }}>
-                    <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.06em', color: '#555', marginBottom: 4 }}>COSA VUOI OTTENERE?</div>
-                    <div style={{ fontSize: 9, color: '#333', fontFamily: "'Inter', sans-serif" }}>Descrivi brevemente l'intervento...</div>
-                    <div style={{ fontSize: 8, color: '#333', textAlign: 'right', marginTop: 4 }}>0 / 2000</div>
-                  </div>
-                  <div style={{ flex: 1, background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 3, padding: '6px 8px', minHeight: 70 }}>
-                    <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.06em', color: '#555', marginBottom: 4 }}>CONDIZIONI PARTICOLARI</div>
-                    <div style={{ fontSize: 9, color: '#333', fontFamily: "'Inter', sans-serif" }}>Eventuali vincoli, esigenze...</div>
-                    <div style={{ fontSize: 8, color: '#333', textAlign: 'right', marginTop: 4 }}>0 / 1000</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Steps 6-7 */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
-              <div style={cardStyle}>
-                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, color: '#9A9A9A', letterSpacing: '0.08em', marginBottom: 8 }}>
-                  6. I TUOI CONTATTI
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 6 }}>
-                  {[
-                    { l: 'NOME E COGNOME', ph: 'Es. Mario Rossi', icon: '👤' },
-                    { l: 'AZIENDA', ph: 'Nome azienda', icon: '🏢' },
-                    { l: 'TELEFONO', ph: 'Es. +39 333 1234567', icon: '📞' },
-                    { l: 'EMAIL', ph: 'Es. mario.rossi@azienda.it', icon: '✉' },
-                  ].map((f, i) => (
-                    <div key={i}>
-                      <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 8, letterSpacing: '0.1em', color: '#555', marginBottom: 3 }}>{f.l}</div>
-                      <div style={{ background: '#0A0A0A', border: '1px solid #2A2A2A', borderRadius: 3, padding: '5px 8px', fontSize: 9, color: '#333', fontFamily: "'Inter', sans-serif" }}>
-                        {f.icon} {f.ph}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ ...cardStyle, display: 'flex', alignItems: 'center', gap: 16 }}>
-                <div>
-                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, color: '#9A9A9A', letterSpacing: '0.08em', marginBottom: 8 }}>7. RIEPILOGO RICHIESTA</div>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    {['⚙ TIPO', '🏭 SETTORE', '📍 DOVE', '📷 FOTO', '📝 DESC.', '👤 CONT.'].map((s, i) => (
-                      <div key={i} style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: 12 }}>{s.split(' ')[0]}</div>
-                        <div style={{ fontSize: 8, color: '#555', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600 }}>{s.split(' ')[1]}</div>
-                        <div style={{ fontSize: 7, color: '#333', fontFamily: "'Inter', sans-serif" }}>Da definire</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <button
-                  onClick={() => navigate('/')}
-                  style={{
-                    background: 'linear-gradient(135deg, #CC6600, #FF8C00, #FFA500)',
-                    border: 'none',
-                    borderRadius: 5,
-                    padding: '12px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    cursor: 'pointer',
-                    boxShadow: '0 0 20px rgba(255,140,0,0.5)',
-                    flexShrink: 0,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, color: '#fff', letterSpacing: '0.06em' }}>ATTIVA ONE CALL™</div>
-                    <div style={{ fontSize: 8, color: 'rgba(255,255,255,0.75)', fontFamily: "'Inter', sans-serif" }}>Invia richiesta tecnica a Palmisano</div>
-                  </div>
-                  <span style={{ fontSize: 16, color: '#fff' }}>→</span>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
-      </main>
 
-      {/* Footer bar */}
+        {/* CTA Section */}
+        <div style={{
+          ...cardBase,
+          padding: '18px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'linear-gradient(135deg, rgba(255,140,0,0.08) 0%, #111111 60%)',
+          borderColor: 'rgba(255,140,0,0.2)',
+        }}>
+          <div>
+            <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 22, color: '#fff', letterSpacing: '0.08em' }}>
+              PRONTO PER INVIARE LA TUA RICHIESTA?
+            </div>
+            <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: '#555', marginTop: 4 }}>
+              Compila il modulo ONE CALL™ e ricevi una risposta tecnica entro pochi minuti. Nessuna registrazione richiesta.
+            </div>
+          </div>
+          <button
+            onClick={() => navigate('/')}
+            style={{
+              background: 'linear-gradient(135deg,#CC6600,#FF8C00,#FFA500)',
+              border: 'none',
+              borderRadius: 6,
+              padding: '14px 28px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              cursor: 'pointer',
+              boxShadow: '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)',
+              transition: 'all 0.2s',
+              flexShrink: 0,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(255,140,0,0.7), 0 0 72px rgba(255,140,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)' }}
+          >
+            <div style={{ textAlign: 'left' }}>
+              <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 18, color: '#fff', letterSpacing: '0.06em', lineHeight: 1 }}>
+                ATTIVA ONE CALL™
+              </div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontFamily: "'Inter',sans-serif", marginTop: 2 }}>
+                Vai alla richiesta tecnica →
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* FOOTER */}
       <div style={{
-        background: '#050505',
-        borderTop: '1px solid #141414',
+        background: '#060606',
+        borderTop: '1px solid #111',
         padding: '10px 20px',
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
         gap: 0,
-        overflow: 'hidden',
+        flexShrink: 0,
       }}>
-        {FOOTER_ITEMS.map((f, i, arr) => (
-          <div key={i} style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            flex: 1,
-            borderRight: i < arr.length - 1 ? '1px solid #1A1A1A' : 'none',
-            paddingRight: i < arr.length - 1 ? 16 : 0,
-            marginRight: i < arr.length - 1 ? 16 : 0,
-          }}>
-            <span style={{ fontSize: 18 }}>{f.icon}</span>
-            <div>
-              <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: '0.08em', color: '#9A9A9A' }}>{f.label}</div>
-              <div style={{ fontSize: 9, color: '#555', fontFamily: "'Inter', sans-serif" }}>{f.sub}</div>
+        {FOOTER_BADGES.map((b, i) => (
+          <React.Fragment key={i}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2,
+              padding: '0 24px',
+              borderRight: i < FOOTER_BADGES.length - 1 ? '1px solid #1A1A1A' : 'none',
+            }}>
+              <span style={{
+                fontFamily: "'Rajdhani',sans-serif",
+                fontWeight: 700,
+                fontSize: 11,
+                letterSpacing: '0.1em',
+                color: i % 2 === 0 ? '#FF8C00' : '#9A9A9A',
+                whiteSpace: 'nowrap',
+              }}>{b.label}</span>
+              <span style={{
+                fontFamily: "'Inter',sans-serif",
+                fontSize: 10,
+                color: '#444',
+                whiteSpace: 'nowrap',
+              }}>{b.sub}</span>
             </div>
-          </div>
+          </React.Fragment>
         ))}
-        <div style={{ borderLeft: '1px solid #1A1A1A', paddingLeft: 16, marginLeft: 8 }}>
-          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: '#FF8C00', letterSpacing: '0.06em', lineHeight: 1.2 }}>
-            ONE CALL™<br />
-            <span style={{ fontSize: 8, color: '#555', letterSpacing: '0.1em', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600 }}>IL TUO ACCESSO DIRETTO<br />ALLE SOLUZIONI INDUSTRIALI</span>
-          </div>
-        </div>
       </div>
     </div>
   )

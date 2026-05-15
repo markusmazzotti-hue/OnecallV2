@@ -1,20 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ItalyMap from '../components/ItalyMap.jsx'
+import DonutChart from '../components/DonutChart.jsx'
 
-const NAV_ITEMS = [
-  { icon: '⊞', label: 'DASHBOARD', active: true },
-  { icon: '≡', label: 'RICHIESTE' },
-  { icon: '📅', label: 'CALENDARIO' },
-  { icon: '🗺', label: 'MAPPA INTERVENTI' },
-  { icon: '👥', label: 'PARTNER & NETWORK' },
-  { icon: '⛏', label: 'CANTIERI ATTIVI' },
-  { icon: '📊', label: 'STATISTICHE' },
-  { icon: '🗄', label: 'ARCHIVIO' },
-  { icon: '⚙', label: 'IMPOSTAZIONI' },
-  { icon: '🔔', label: 'NOTIFICHE', badge: 12 },
-]
-
-const REQUESTS = [
+/* ============================================================
+   DATA
+   ============================================================ */
+const RECENT_REQUESTS = [
   { id: '#OC-2024-0128', type: 'Taglio Termico Rottami', city: 'Taranto (TA)', status: 'In valutazione', statusColor: '#0088FF', priority: 'Urgente', priorityColor: '#FF3333', date: '22/05/2024' },
   { id: '#OC-2024-0127', type: 'Demolizione Industriale', city: 'Genova (GE)', status: 'Sopralluogo', statusColor: '#FF8C00', priority: 'Breve termine', priorityColor: '#FF8C00', date: '21/05/2024' },
   { id: '#OC-2024-0126', type: 'Smantellamento Impianti', city: 'Brescia (BS)', status: 'In esecuzione', statusColor: '#00CC66', priority: 'Programmabile', priorityColor: '#00CC66', date: '21/05/2024' },
@@ -22,650 +14,721 @@ const REQUESTS = [
   { id: '#OC-2024-0124', type: 'Caso Complesso', city: 'Venezia (VE)', status: 'In attesa info', statusColor: '#9A9A9A', priority: 'Urgente', priorityColor: '#FF3333', date: '20/05/2024' },
 ]
 
-const TYPE_DATA = [
-  { label: 'Taglio Termico Rottami', count: 34, pct: 26.6 },
-  { label: 'Demolizione Industriale', count: 28, pct: 21.9 },
-  { label: 'Smantellamento Impianti', count: 23, pct: 18.0 },
-  { label: 'Strip-out', count: 17, pct: 13.3 },
-  { label: 'Amb. Produttivo', count: 14, pct: 10.9 },
-  { label: 'Caso Complesso', count: 12, pct: 9.4 },
+const DONUT_DATA = [
+  { label: 'Urgenti', value: 8, color: '#FF3333', pct: '6.3%' },
+  { label: 'Breve termine', value: 46, color: '#FF8C00', pct: '35.9%' },
+  { label: 'Programmabili', value: 61, color: '#00CC66', pct: '47.7%' },
+  { label: 'Da valutare', value: 13, color: '#0088FF', pct: '10.1%' },
 ]
 
-const SECTOR_DATA = [
-  { label: 'Industria', count: 52, pct: 40.6 },
-  { label: 'Centro Riciclo Rottami', count: 23, pct: 18.0 },
-  { label: 'Trader & Mandatari', count: 18, pct: 14.1 },
-  { label: 'Acciaieria & Fonderia', count: 15, pct: 11.7 },
-  { label: 'General Contractor', count: 12, pct: 9.4 },
-  { label: 'Impianto Industriale', count: 8, pct: 6.2 },
+const INTERVENTO_BARS = [
+  { label: 'Taglio Termico Rottami', value: 34, pct: '26.6%' },
+  { label: 'Demolizione Industriale', value: 28, pct: '21.9%' },
+  { label: 'Smantellamento Impianti', value: 23, pct: '18.0%' },
+  { label: 'Strip-out', value: 17, pct: '13.3%' },
+  { label: 'Intervento Amb. Produttivo', value: 14, pct: '10.9%' },
+  { label: 'Caso Complesso', value: 12, pct: '9.4%' },
+]
+
+const SETTORE_ITEMS = [
+  { label: 'Industria', value: 52, pct: '40.6%', color: '#FF8C00' },
+  { label: 'Centro Riciclo Rottami', value: 23, pct: '18.0%', color: '#FF8C00' },
+  { label: 'Trader & Mandatari Acciaierie', value: 18, pct: '14.1%', color: '#FF8C00' },
+  { label: 'Acciaieria & Fonderia', value: 15, pct: '11.7%', color: '#9A9A9A' },
+  { label: 'General Contractor Industriale', value: 12, pct: '9.4%', color: '#9A9A9A' },
+  { label: 'Impianto Ind. e Sito Produttivo', value: 8, pct: '6.2%', color: '#9A9A9A' },
 ]
 
 const ACTIVITIES = [
-  { icon: '+', color: '#00CC66', desc: 'Nuova richiesta ricevuta', id: '#OC-2024-0128', sub: 'Taglio Termico Rottami', time: '10:24' },
-  { icon: '👁', color: '#0088FF', desc: 'Richiesta visualizzata', id: '#OC-2024-0127', sub: 'Demolizione Industriale', time: '09:48' },
-  { icon: '✏', color: '#FF8C00', desc: 'Richiesta assegnata a partner', id: '#OC-2024-0126', sub: 'Smantellamento Impianti', time: '09:15' },
-  { icon: '✓', color: '#00CC66', desc: 'Richiesta completata', id: '#OC-2024-0123', sub: 'Strip-out', time: 'Ieri 17:32' },
-  { icon: '📄', color: '#9A9A9A', desc: 'Scheda partner inviata', id: '#OC-2024-0125', sub: 'Caso Complesso', time: 'Ieri 15:20' },
+  { icon: '+', color: '#00CC66', text: 'Nuova richiesta ricevuta', id: '#OC-2024-0128', subtext: 'Taglio Termico Rottami', time: '10:24' },
+  { icon: '👁', color: '#0088FF', text: 'Richiesta visualizzata', id: '#OC-2024-0127', subtext: 'Demolizione Industriale', time: '09:48' },
+  { icon: '✏', color: '#FF8C00', text: 'Richiesta assegnata a partner', id: '#OC-2024-0126', subtext: 'Smantellamento Impianti', time: '09:15' },
+  { icon: '✓', color: '#00CC66', text: 'Richiesta completata', id: '#OC-2024-0123', subtext: 'Strip-out', time: 'Ieri 17:32' },
+  { icon: '📄', color: '#9A9A9A', text: 'Scheda partner inviata', id: '#OC-2024-0125', subtext: 'Caso Complesso', time: 'Ieri 15:20' },
 ]
 
-const ITALY_CITIES = [
-  { name: 'Milano', x: 98, y: 72, count: 6, color: '#FF8C00' },
-  { name: 'Venezia', x: 135, y: 78, count: 5, color: '#FF8C00' },
-  { name: 'Torino', x: 72, y: 80, count: 4, color: '#00CC66' },
-  { name: 'Genova', x: 88, y: 102, count: 3, color: '#00CC66' },
-  { name: 'Bologna', x: 118, y: 105, count: 7, color: '#FF8C00' },
-  { name: 'Firenze', x: 112, y: 130, count: 4, color: '#0088FF' },
-  { name: 'Roma', x: 118, y: 175, count: 12, color: '#FF8C00' },
-  { name: 'Napoli', x: 128, y: 210, count: 15, color: '#FF3333' },
-  { name: 'Bari', x: 158, y: 205, count: 18, color: '#FF3333' },
-  { name: 'Taranto', x: 160, y: 225, count: 21, color: '#FF3333' },
-  { name: 'Cagliari', x: 68, y: 235, count: 7, color: '#FF8C00' },
-  { name: 'Palermo', x: 102, y: 260, count: 9, color: '#0088FF' },
-]
-
-function CircularProgress({ value, max, color, size = 80 }) {
-  const pct = Math.min(value / max, 1)
-  const r = (size - 10) / 2
-  const circ = 2 * Math.PI * r
-  const dash = circ * pct
-  return (
-    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#1E1E1E" strokeWidth="5" />
-      <circle
-        cx={size/2} cy={size/2} r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="5"
-        strokeDasharray={`${dash} ${circ}`}
-        strokeLinecap="round"
-        style={{ filter: `drop-shadow(0 0 4px ${color})` }}
-      />
+const KPIS = [
+  { label: 'RICHIESTE TOTALI', value: 128, sub: '+18% rispetto al mese scorso', color: '#0088FF', icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
     </svg>
-  )
-}
+  ), pct: 100 },
+  { label: 'IN VALUTAZIONE', value: 24, sub: '18.8% del totale', color: '#0088FF', icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
+    </svg>
+  ), pct: 18.8 },
+  { label: 'IN ESECUZIONE', value: 15, sub: '11.7% del totale', color: '#FF8C00', icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 20h20M6 20V10M10 20V4M14 20V8M18 20V14"/>
+    </svg>
+  ), pct: 11.7 },
+  { label: 'COMPLETATE', value: 89, sub: '69.5% del totale', color: '#00CC66', icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20,6 9,17 4,12"/>
+    </svg>
+  ), pct: 69.5 },
+  { label: 'URGENTI', value: 8, sub: '6.3% del totale', color: '#FF3333', icon: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+  ), pct: 6.3 },
+]
 
-function KpiCard({ label, value, sub, color, icon, max = 130 }) {
+const BOTTOM_STATS = [
+  { label: 'PARTNER ATTIVI', value: 27, icon: '👥' },
+  { label: 'CANTIERI ATTIVI', value: 15, icon: '⛑' },
+  { label: 'SOPRALLUOGHI PIANIFICATI', value: 9, icon: '📋' },
+  { label: 'DOCUMENTI ALLEGATI', value: 312, icon: '📎' },
+  { label: 'MEDIA RISPOSTA', value: '2h 15m', icon: '⏱' },
+]
+
+const NAV_ITEMS = [
+  { label: 'DASHBOARD', active: true, icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+      <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+    </svg>
+  )},
+  { label: 'RICHIESTE', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+      <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+    </svg>
+  )},
+  { label: 'CALENDARIO', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  )},
+  { label: 'MAPPA INTERVENTI', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2 1,6"/>
+      <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+    </svg>
+  )},
+  { label: 'PARTNER & NETWORK', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+      <circle cx="9" cy="7" r="4"/>
+      <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+    </svg>
+  )},
+  { label: 'CANTIERI ATTIVI', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+      <path d="M18 2l4 4-4 4"/>
+      <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/>
+      <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/>
+    </svg>
+  )},
+  { label: 'STATISTICHE', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+    </svg>
+  )},
+  { label: 'ARCHIVIO', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="21,8 21,21 3,21 3,8"/>
+      <rect x="1" y="3" width="22" height="5"/>
+      <line x1="10" y1="12" x2="14" y2="12"/>
+    </svg>
+  )},
+  { label: 'IMPOSTAZIONI', icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+    </svg>
+  )},
+  { label: 'NOTIFICHE', badge: 12, icon: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 01-3.46 0"/>
+    </svg>
+  )},
+]
+
+/* ============================================================
+   SUB-COMPONENTS
+   ============================================================ */
+function Card({ children, style = {} }) {
   return (
     <div style={{
       background: '#111111',
       border: '1px solid #1E1E1E',
-      borderRadius: 6,
-      padding: '14px 16px',
+      borderRadius: 8,
+      overflow: 'hidden',
+      position: 'relative',
+      ...style,
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse at top left, rgba(255,140,0,0.02) 0%, transparent 60%)',
+        pointerEvents: 'none',
+      }} />
+      {children}
+    </div>
+  )
+}
+
+function CardHeader({ title, action }) {
+  return (
+    <div style={{
+      padding: '12px 16px',
+      borderBottom: '1px solid #1A1A1A',
       display: 'flex',
       alignItems: 'center',
-      gap: 14,
-      position: 'relative',
-      overflow: 'hidden',
+      justifyContent: 'space-between',
+      background: 'linear-gradient(90deg, rgba(255,140,0,0.04) 0%, transparent 70%)',
     }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, transparent, ${color}, transparent)` }} />
-      <div style={{ position: 'relative', flexShrink: 0 }}>
-        <CircularProgress value={value} max={max} color={color} size={68} />
+      <span style={{
+        fontFamily: "'Rajdhani',sans-serif",
+        fontWeight: 700,
+        fontSize: 12,
+        letterSpacing: '0.1em',
+        color: '#9A9A9A',
+      }}>{title}</span>
+      {action && (
+        <button style={{
+          background: 'transparent', border: 'none', cursor: 'pointer',
+          fontFamily: "'Rajdhani',sans-serif", fontWeight: 600,
+          fontSize: 11, color: '#FF8C00', letterSpacing: '0.06em',
+        }}>{action}</button>
+      )}
+    </div>
+  )
+}
+
+function KpiCard({ label, value, sub, color, icon, pct }) {
+  const size = 90
+  const r = 36
+  const circ = 2 * Math.PI * r
+  const dash = (pct / 100) * circ
+
+  return (
+    <Card style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+        {/* Circular gauge */}
+        <div style={{ position: 'relative', width: size, height: size }}>
+          <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+            <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#1A1A1A" strokeWidth="6" />
+            <circle
+              cx={size/2} cy={size/2} r={r}
+              fill="none"
+              stroke={color}
+              strokeWidth="6"
+              strokeDasharray={`${dash} ${circ - dash}`}
+              strokeLinecap="round"
+              style={{ filter: `drop-shadow(0 0 4px ${color}88)` }}
+            />
+          </svg>
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%',
+            transform: 'translate(-50%,-50%)',
+            textAlign: 'center',
+          }}>
+            <div style={{ color: icon.props ? color : color }}>{icon}</div>
+          </div>
+        </div>
+
+        {/* Big number */}
         <div style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 18,
-        }}>{icon}</div>
-      </div>
-      <div>
-        <div style={{
-          fontFamily: "'Barlow Condensed', sans-serif",
+          fontFamily: "'Barlow Condensed',sans-serif",
           fontWeight: 700,
-          fontSize: 38,
-          color,
+          fontSize: 56,
           lineHeight: 1,
-          textShadow: `0 0 20px ${color}88`,
+          color: color,
+          textShadow: `0 0 20px ${color}66`,
         }}>{value}</div>
+
         <div style={{
-          fontFamily: "'Rajdhani', sans-serif",
+          fontFamily: "'Rajdhani',sans-serif",
           fontWeight: 700,
           fontSize: 11,
-          letterSpacing: '0.08em',
+          letterSpacing: '0.1em',
           color: '#9A9A9A',
-          marginTop: 2,
+          textAlign: 'center',
         }}>{label}</div>
-        <div style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>{sub}</div>
+
+        <div style={{
+          fontFamily: "'Inter',sans-serif",
+          fontSize: 10,
+          color: '#555',
+          textAlign: 'center',
+          lineHeight: 1.4,
+        }}>{sub}</div>
       </div>
-    </div>
+    </Card>
   )
 }
 
-function DonutChart() {
-  const segments = [
-    { label: 'Urgenti', value: 8, pct: 6.3, color: '#FF3333' },
-    { label: 'Breve termine', value: 46, pct: 35.9, color: '#FF8C00' },
-    { label: 'Programmabili', value: 61, pct: 47.7, color: '#00CC66' },
-    { label: 'Da valutare', value: 13, pct: 10.1, color: '#0088FF' },
-  ]
-  const total = segments.reduce((s, x) => s + x.pct, 0)
-  let cumulPct = 0
-  const r = 70
-  const cx = 90
-  const cy = 90
-  const paths = segments.map(seg => {
-    const start = (cumulPct / total) * 360
-    const end = ((cumulPct + seg.pct) / total) * 360
-    cumulPct += seg.pct
-    const startRad = (start - 90) * Math.PI / 180
-    const endRad = (end - 90) * Math.PI / 180
-    const x1 = cx + r * Math.cos(startRad)
-    const y1 = cy + r * Math.sin(startRad)
-    const x2 = cx + r * Math.cos(endRad)
-    const y2 = cy + r * Math.sin(endRad)
-    const large = seg.pct / total > 0.5 ? 1 : 0
-    const ri = 42
-    const xi1 = cx + ri * Math.cos(startRad)
-    const yi1 = cy + ri * Math.sin(startRad)
-    const xi2 = cx + ri * Math.cos(endRad)
-    const yi2 = cy + ri * Math.sin(endRad)
-    return { ...seg, d: `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} L ${xi2} ${yi2} A ${ri} ${ri} 0 ${large} 0 ${xi1} ${yi1} Z` }
-  })
-
+function StatusBadge({ label, color }) {
+  const rgba = color === '#FF3333' ? '255,51,51' : color === '#FF8C00' ? '255,140,0' : color === '#00CC66' ? '0,204,102' : color === '#0088FF' ? '0,136,255' : '100,100,100'
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-      <div style={{ position: 'relative', flexShrink: 0 }}>
-        <svg width={180} height={180}>
-          {paths.map((p, i) => (
-            <path key={i} d={p.d} fill={p.color} opacity={0.85}
-              style={{ filter: `drop-shadow(0 0 4px ${p.color}88)` }} />
-          ))}
-          <circle cx={cx} cy={cy} r={38} fill="#0E0E0E" />
-          <text x={cx} y={cy - 8} textAnchor="middle" fill="#fff"
-            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 26 }}>128</text>
-          <text x={cx} y={cy + 8} textAnchor="middle" fill="#9A9A9A"
-            style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 9, letterSpacing: '0.06em' }}>TOTALI</text>
-        </svg>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {segments.map((s, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: s.color, boxShadow: `0 0 6px ${s.color}`, flexShrink: 0 }} />
-            <div>
-              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 12, color: '#fff' }}>{s.label}: </span>
-              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 14, color: s.color }}>{s.value}</span>
-              <span style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif" }}> ({s.pct}%)</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <span style={{
+      display: 'inline-flex', alignItems: 'center',
+      padding: '2px 7px',
+      borderRadius: 3,
+      background: `rgba(${rgba},0.12)`,
+      border: `1px solid rgba(${rgba},0.3)`,
+      fontFamily: "'Rajdhani',sans-serif",
+      fontWeight: 600,
+      fontSize: 10,
+      letterSpacing: '0.05em',
+      color: color,
+      whiteSpace: 'nowrap',
+    }}>{label}</span>
   )
 }
 
-const card = {
-  background: '#111111',
-  border: '1px solid #1E1E1E',
-  borderRadius: 6,
-  padding: '14px',
-  overflow: 'hidden',
-}
-
-const cardHeader = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  marginBottom: 12,
-}
-
-const cardTitle = {
-  fontFamily: "'Rajdhani', sans-serif",
-  fontWeight: 700,
-  fontSize: 12,
-  letterSpacing: '0.1em',
-  color: '#9A9A9A',
-  textTransform: 'uppercase',
-}
-
+/* ============================================================
+   MAIN COMPONENT
+   ============================================================ */
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [activeNav, setActiveNav] = useState(0)
+  const [activeNav, setActiveNav] = useState('DASHBOARD')
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080808', display: 'flex' }}>
-      {/* Sidebar */}
-      <div style={{
-        width: 200,
-        background: '#090909',
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#080808' }}>
+
+      {/* SIDEBAR */}
+      <aside style={{
+        width: 220,
+        background: '#0A0A0A',
         borderRight: '1px solid #1A1A1A',
         display: 'flex',
         flexDirection: 'column',
         flexShrink: 0,
       }}>
         {/* Logo */}
-        <div style={{ padding: '16px 14px 12px', borderBottom: '1px solid #1A1A1A' }}>
-          <div style={{
-            fontFamily: "'Barlow Condensed', sans-serif",
-            fontWeight: 700,
-            fontSize: 16,
-            color: '#fff',
-            letterSpacing: '0.04em',
-            lineHeight: 1.1,
-          }}>PALMISANO<br />
-            <span style={{ color: '#FF8C00' }}>ONE CALL™</span>
-          </div>
-          <div style={{ fontSize: 9, color: '#555', letterSpacing: '0.1em', fontFamily: "'Rajdhani', sans-serif", fontWeight: 500, marginTop: 2 }}>
-            DEMOLIZIONI & TAGLIO TERMICO
+        <div style={{
+          padding: '16px',
+          borderBottom: '1px solid #1A1A1A',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 32, height: 32,
+              background: 'linear-gradient(135deg,#CC7000,#FF8C00)',
+              borderRadius: 4,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 10px rgba(255,140,0,0.5)',
+              flexShrink: 0,
+            }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 17l2-8h14l2 8H3z"/>
+                <path d="M8 9V7a4 4 0 018 0v2"/>
+                <rect x="1" y="17" width="22" height="4" rx="1"/>
+              </svg>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 14, color: '#fff', lineHeight: 1 }}>PALMISANO</div>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: 9, color: '#FF8C00', letterSpacing: '0.12em', lineHeight: 1 }}>ONE CALL™</div>
+            </div>
           </div>
         </div>
 
-        {/* Nav */}
-        <nav style={{ flex: 1, padding: '8px 0', overflow: 'auto' }}>
-          {NAV_ITEMS.map((item, i) => (
-            <div
-              key={i}
-              onClick={() => setActiveNav(i)}
+        {/* Nav items */}
+        <nav style={{ flex: 1, padding: '8px 0', overflowY: 'auto' }}>
+          {NAV_ITEMS.map(item => (
+            <button
+              key={item.label}
+              onClick={() => setActiveNav(item.label)}
               style={{
+                width: '100%',
+                padding: '9px 16px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                padding: '10px 14px',
+                justifyContent: 'space-between',
+                background: item.label === activeNav ? 'rgba(255,140,0,0.08)' : 'transparent',
+                border: 'none',
+                borderLeft: item.label === activeNav ? '2px solid #FF8C00' : '2px solid transparent',
                 cursor: 'pointer',
-                background: i === activeNav ? 'rgba(255,140,0,0.08)' : 'transparent',
-                borderLeft: `3px solid ${i === activeNav ? '#FF8C00' : 'transparent'}`,
                 transition: 'all 0.15s',
+                color: item.label === activeNav ? '#FFA500' : '#555',
               }}
-              onMouseEnter={e => { if (i !== activeNav) e.currentTarget.style.background = '#131313' }}
-              onMouseLeave={e => { if (i !== activeNav) e.currentTarget.style.background = 'transparent' }}
+              onMouseEnter={e => { if (item.label !== activeNav) e.currentTarget.style.background = 'rgba(255,255,255,0.03)' }}
+              onMouseLeave={e => { if (item.label !== activeNav) e.currentTarget.style.background = 'transparent' }}
             >
-              <span style={{ fontSize: 14, width: 18, textAlign: 'center' }}>{item.icon}</span>
-              <span style={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 600,
-                fontSize: 11,
-                letterSpacing: '0.08em',
-                color: i === activeNav ? '#FF8C00' : '#777',
-                flex: 1,
-              }}>{item.label}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ color: item.label === activeNav ? '#FF8C00' : '#555', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{
+                  fontFamily: "'Rajdhani',sans-serif",
+                  fontWeight: 700,
+                  fontSize: 11,
+                  letterSpacing: '0.08em',
+                  color: item.label === activeNav ? '#FFA500' : '#555',
+                }}>{item.label}</span>
+              </div>
               {item.badge && (
                 <span style={{
                   background: '#FF3333',
                   color: '#fff',
                   borderRadius: 10,
-                  padding: '1px 6px',
-                  fontSize: 10,
-                  fontFamily: "'Barlow Condensed', sans-serif",
+                  padding: '1px 5px',
+                  fontSize: 9,
+                  fontFamily: "'Barlow Condensed',sans-serif",
                   fontWeight: 700,
+                  lineHeight: 1.4,
                 }}>{item.badge}</span>
               )}
-            </div>
+            </button>
           ))}
         </nav>
 
-        {/* Assistenza */}
+        {/* Assistenza box */}
         <div style={{
-          margin: 10,
-          background: '#0E0E0E',
-          border: '1px solid #1E1E1E',
-          borderRadius: 4,
-          padding: '10px',
+          margin: '12px',
+          padding: '12px',
+          background: 'rgba(255,140,0,0.05)',
+          border: '1px solid rgba(255,140,0,0.15)',
+          borderRadius: 6,
         }}>
-          <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: '0.1em', color: '#FF8C00', marginBottom: 6 }}>ASSISTENZA RAPIDA</div>
-          <div style={{ fontSize: 10, color: '#777', fontFamily: "'Inter', sans-serif", lineHeight: 1.6 }}>
-            📞 +39 099 1234567<br />
-            ✉ operativo@palmisano.it
+          <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 11, color: '#FF8C00', letterSpacing: '0.08em', marginBottom: 8 }}>ASSISTENZA RAPIDA</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012.18 1H5a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#9A9A9A' }}>+39 099 1234567</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, color: '#9A9A9A' }}>operativo@palmisano.it</span>
           </div>
         </div>
+      </aside>
 
-        {/* Back to form */}
-        <button
-          onClick={() => navigate('/')}
-          style={{
-            margin: '0 10px 10px',
-            background: 'transparent',
-            border: '1px solid #2A2A2A',
-            borderRadius: 4,
-            color: '#555',
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 600,
-            fontSize: 10,
-            letterSpacing: '0.06em',
-            padding: '7px',
-            cursor: 'pointer',
-            transition: 'all 0.15s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF8C00'; e.currentTarget.style.color = '#FF8C00' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = '#2A2A2A'; e.currentTarget.style.color = '#555' }}
-        >← MODULO CLIENTE</button>
-      </div>
+      {/* MAIN CONTENT */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', minWidth: 0 }}>
 
-      {/* Main content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        {/* Header */}
+        {/* Dashboard header */}
         <div style={{
-          background: '#090909',
-          borderBottom: '1px solid #1A1A1A',
           padding: '14px 20px',
+          borderBottom: '1px solid #1A1A1A',
+          background: '#0A0A0A',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexShrink: 0,
         }}>
           <div>
-            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 28, color: '#fff', letterSpacing: '0.04em', lineHeight: 1 }}>
-              DASHBOARD
-            </div>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 11, color: '#FF8C00', letterSpacing: '0.1em' }}>
-              PANORAMICA RICHIESTE TECNICHE
-            </div>
-            <div style={{ fontSize: 11, color: '#555', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
+            <h1 style={{
+              fontFamily: "'Barlow Condensed',sans-serif",
+              fontWeight: 700,
+              fontSize: 20,
+              letterSpacing: '0.08em',
+              color: '#fff',
+              lineHeight: 1,
+            }}>DASHBOARD <span style={{ color: '#FF8C00' }}>—</span> PANORAMICA RICHIESTE TECNICHE</h1>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#555', marginTop: 4 }}>
               Gestisci, assegna e monitora tutte le richieste in modo semplice e veloce.
-            </div>
+            </p>
           </div>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                background: 'linear-gradient(135deg,#CC7000,#FF8C00)',
+                border: 'none', borderRadius: 5,
+                padding: '8px 14px',
+                fontFamily: "'Rajdhani',sans-serif",
+                fontWeight: 700,
+                fontSize: 11,
+                letterSpacing: '0.08em',
+                color: '#fff',
+                cursor: 'pointer',
+                boxShadow: '0 0 12px rgba(255,140,0,0.4)',
+                whiteSpace: 'nowrap',
+              }}
+            >ONE CALL™ — ACCESSO DIRETTO</button>
+
             <div style={{
-              background: '#0E0E0E',
-              border: '1px solid #FF8C00',
-              borderRadius: 4,
-              padding: '10px 14px',
-              boxShadow: '0 0 12px rgba(255,140,0,0.2)',
-            }}>
-              <div style={{ fontSize: 9, color: '#FF8C00', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, letterSpacing: '0.1em' }}>
-                ONE CALL™ — ACCESSO DIRETTO PER RICHIESTE TECNICHE
-              </div>
-              <button
-                onClick={() => navigate('/')}
-                style={{
-                  marginTop: 6,
-                  background: 'linear-gradient(135deg, #CC6600, #FF8C00)',
-                  border: 'none',
-                  borderRadius: 3,
-                  color: '#fff',
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 11,
-                  letterSpacing: '0.08em',
-                  padding: '5px 12px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                }}
-              >NUOVA RICHIESTA +</button>
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
+              display: 'flex', alignItems: 'center', gap: 10,
               background: '#0E0E0E',
               border: '1px solid #1E1E1E',
-              borderRadius: 4,
-              padding: '8px 12px',
+              borderRadius: 5,
+              padding: '7px 12px',
             }}>
               <div style={{
-                width: 34, height: 34,
-                background: 'linear-gradient(135deg, #CC6600, #FF8C00)',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 700,
-                fontSize: 16,
-                color: '#fff',
-              }}>P</div>
+                width: 30, height: 30, borderRadius: '50%',
+                background: 'linear-gradient(135deg,#1A1A1A,#2A2A2A)',
+                border: '1px solid #3A3A3A',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 14, color: '#FF8C00',
+              }}>A</div>
               <div>
-                <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 12, color: '#fff' }}>ADMIN PALMISANO</div>
-                <div style={{ fontSize: 10, color: '#FF8C00', fontFamily: "'Inter', sans-serif" }}>Amministratore</div>
+                <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 12, color: '#fff', lineHeight: 1 }}>ADMIN PALMISANO</div>
+                <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555' }}>Amministratore</div>
               </div>
-              <span style={{ color: '#555', fontSize: 12 }}>∨</span>
             </div>
           </div>
         </div>
 
-        <div style={{ flex: 1, overflow: 'auto', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ flex: 1, padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-          {/* KPI row */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10 }}>
-            <KpiCard label="RICHIESTE TOTALI" value={128} sub="+18% rispetto al mese scorso" color="#0088FF" icon="📋" max={200} />
-            <KpiCard label="IN VALUTAZIONE" value={24} sub="18.8% del totale" color="#0088FF" icon="⏱" max={130} />
-            <KpiCard label="IN ESECUZIONE" value={15} sub="11.7% del totale" color="#FF8C00" icon="⛏" max={130} />
-            <KpiCard label="COMPLETATE" value={89} sub="69.5% del totale" color="#00CC66" icon="✓" max={130} />
-            <KpiCard label="URGENTI" value={8} sub="6.3% del totale" color="#FF3333" icon="⚠" max={130} />
+          {/* KPI ROW */}
+          <div style={{ display: 'flex', gap: 12 }}>
+            {KPIS.map((kpi, i) => (
+              <KpiCard key={i} {...kpi} />
+            ))}
           </div>
 
-          {/* Middle row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10 }}>
+          {/* MIDDLE ROW: Requests, Donut, Bars */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 14 }}>
 
             {/* Recent requests */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>RICHIESTE RECENTI</span>
-                <button style={{ background: 'transparent', border: '1px solid #2A2A2A', borderRadius: 3, color: '#9A9A9A', fontSize: 10, padding: '3px 8px', cursor: 'pointer', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, letterSpacing: '0.06em' }}>
-                  VEDI TUTTE ∨
-                </button>
-              </div>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr>
-                    {['ID RICHIESTA', 'TIPO INTERVENTO', 'LOCALITÀ', 'STATO', 'PRIORITÀ', 'DATA'].map(h => (
-                      <th key={h} style={{
-                        textAlign: 'left',
-                        padding: '4px 8px',
-                        fontFamily: "'Rajdhani', sans-serif",
-                        fontWeight: 700,
-                        fontSize: 9,
-                        letterSpacing: '0.08em',
-                        color: '#555',
-                        borderBottom: '1px solid #1A1A1A',
-                        whiteSpace: 'nowrap',
-                      }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {REQUESTS.map((r, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #161616' }}>
-                      <td style={{ padding: '8px 8px', fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: '#FF8C00' }}>{r.id}</td>
-                      <td style={{ padding: '8px 8px', fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#fff', whiteSpace: 'nowrap' }}>{r.type}</td>
-                      <td style={{ padding: '8px 8px', fontSize: 11, color: '#9A9A9A', fontFamily: "'Inter', sans-serif", whiteSpace: 'nowrap' }}>{r.city}</td>
-                      <td style={{ padding: '8px 8px' }}>
-                        <span style={{
-                          background: `${r.statusColor}22`,
-                          border: `1px solid ${r.statusColor}55`,
-                          borderRadius: 3,
-                          padding: '2px 6px',
-                          fontSize: 10,
-                          color: r.statusColor,
-                          fontFamily: "'Rajdhani', sans-serif",
-                          fontWeight: 600,
-                          letterSpacing: '0.04em',
+            <Card>
+              <CardHeader title="RICHIESTE RECENTI" action="VEDI TUTTE ∨" />
+              <div style={{ padding: '0 0 8px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid #1A1A1A' }}>
+                      {['ID RICHIESTA','TIPO','LOCALITÀ','STATO','PRIORITÀ','DATA'].map(h => (
+                        <th key={h} style={{
+                          padding: '7px 10px',
+                          fontFamily: "'Rajdhani',sans-serif",
+                          fontWeight: 700, fontSize: 9,
+                          letterSpacing: '0.08em',
+                          color: '#555',
+                          textAlign: 'left',
                           whiteSpace: 'nowrap',
-                        }}>{r.status}</span>
-                      </td>
-                      <td style={{ padding: '8px 8px' }}>
-                        <span style={{
-                          background: `${r.priorityColor}22`,
-                          border: `1px solid ${r.priorityColor}55`,
-                          borderRadius: 3,
-                          padding: '2px 6px',
-                          fontSize: 10,
-                          color: r.priorityColor,
-                          fontFamily: "'Rajdhani', sans-serif",
-                          fontWeight: 600,
-                          letterSpacing: '0.04em',
-                          whiteSpace: 'nowrap',
-                        }}>{r.priority}</span>
-                      </td>
-                      <td style={{ padding: '8px 8px', fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif', whiteSpace: 'nowrap'" }}>{r.date}</td>
+                        }}>{h}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Priority donut */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>RICHIESTE PER PRIORITÀ</span>
-                <span style={{ fontSize: 10, color: '#555' }}>QUESTO MESE</span>
+                  </thead>
+                  <tbody>
+                    {RECENT_REQUESTS.map((r, i) => (
+                      <tr
+                        key={i}
+                        style={{ borderBottom: '1px solid #141414', transition: 'background 0.15s', cursor: 'pointer' }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
+                        <td style={{ padding: '8px 10px' }}>
+                          <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 12, color: '#FF8C00' }}>{r.id}</span>
+                        </td>
+                        <td style={{ padding: '8px 10px' }}>
+                          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#9A9A9A', whiteSpace: 'nowrap' }}>{r.type}</span>
+                        </td>
+                        <td style={{ padding: '8px 10px' }}>
+                          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#777' }}>{r.city}</span>
+                        </td>
+                        <td style={{ padding: '8px 10px' }}>
+                          <StatusBadge label={r.status} color={r.statusColor} />
+                        </td>
+                        <td style={{ padding: '8px 10px' }}>
+                          <StatusBadge label={r.priority} color={r.priorityColor} />
+                        </td>
+                        <td style={{ padding: '8px 10px' }}>
+                          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', whiteSpace: 'nowrap' }}>{r.date}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <DonutChart />
-            </div>
+            </Card>
 
-            {/* By type */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>PER TIPO INTERVENTO</span>
-                <span style={{ fontSize: 10, color: '#555' }}>QUESTO MESE</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {TYPE_DATA.map((t, i) => (
-                  <div key={i}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
-                      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, color: '#9A9A9A' }}>{t.label}</span>
-                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 12, color: '#FF8C00' }}>{t.count}</span>
+            {/* Donut chart */}
+            <Card>
+              <CardHeader title="RICHIESTE PER PRIORITÀ" />
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+                <DonutChart data={DONUT_DATA} total={128} size={160} thickness={24} />
+                {/* Legend */}
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {DONUT_DATA.map((d, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', background: d.color, flexShrink: 0 }} />
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#9A9A9A' }}>{d.label}</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 14, color: '#fff' }}>{d.value}</span>
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', minWidth: 36, textAlign: 'right' }}>{d.pct}</span>
+                      </div>
                     </div>
-                    <div style={{ height: 4, background: '#1A1A1A', borderRadius: 2 }}>
+                  ))}
+                </div>
+              </div>
+            </Card>
+
+            {/* Bar chart */}
+            <Card>
+              <CardHeader title="RICHIESTE PER TIPO INTERVENTO" action="QUESTO MESE ∨" />
+              <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {INTERVENTO_BARS.map((b, i) => (
+                  <div key={i}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#9A9A9A', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{b.label}</span>
+                      <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                        <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 13, color: '#fff' }}>{b.value}</span>
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555' }}>{b.pct}</span>
+                      </div>
+                    </div>
+                    <div style={{ height: 4, background: '#1A1A1A', borderRadius: 2, overflow: 'hidden' }}>
                       <div style={{
                         height: '100%',
-                        width: `${t.pct}%`,
-                        background: `linear-gradient(90deg, #CC6600, #FF8C00)`,
+                        width: b.pct,
+                        background: i < 2 ? 'linear-gradient(90deg,#CC7000,#FF8C00)' : '#2A2A2A',
                         borderRadius: 2,
-                        boxShadow: '0 0 4px rgba(255,140,0,0.4)',
+                        boxShadow: i < 2 ? '0 0 6px rgba(255,140,0,0.4)' : 'none',
+                        transition: 'width 0.5s ease',
                       }} />
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
 
-          {/* Bottom row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          {/* BOTTOM ROW: Map, Settore, Activities */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
 
-            {/* Italy map */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>MAPPA INTERVENTI</span>
-                <button style={{ background: 'transparent', border: '1px solid #2A2A2A', borderRadius: 3, color: '#9A9A9A', fontSize: 10, padding: '3px 8px', cursor: 'pointer', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, letterSpacing: '0.06em' }}>
-                  VEDI MAPPA COMPLETA ∨
-                </button>
-              </div>
-              <div style={{ display: 'flex', gap: 12 }}>
-                <div style={{ position: 'relative', flex: 1 }}>
-                  <svg viewBox="0 0 200 290" style={{ width: '100%' }} fill="none">
-                    <path d="M85 10 L90 8 L98 12 L105 10 L112 15 L110 22 L114 28 L117 35 L120 42 L122 50 L124 58 L126 65 L130 72 L134 80 L140 88 L144 95 L147 102 L150 110 L152 118 L150 126 L147 132 L144 138 L140 142 L136 148 L132 154 L127 160 L120 165 L114 168 L108 170 L102 172 L96 170 L90 166 L85 162 L80 156 L76 150 L74 144 L72 138 L70 130 L72 122 L75 115 L78 108 L80 100 L80 92 L78 85 L76 78 L75 70 L74 62 L75 55 L78 48 L80 40 L82 32 L83 22 Z" stroke="#2A2A2A" strokeWidth="1.5" fill="#141414" />
-                    <path d="M150 118 L155 122 L162 130 L166 138 L164 146 L158 150 L153 146 L151 140 L150 132 Z" stroke="#2A2A2A" strokeWidth="1.5" fill="#141414" />
-                    <path d="M78 172 L83 178 L86 185 L85 193 L79 197 L73 193 L71 185 L74 178 Z" stroke="#2A2A2A" strokeWidth="1.5" fill="#141414" />
-                    <path d="M90 255 L100 250 L114 252 L120 260 L114 268 L100 270 L90 265 Z" stroke="#2A2A2A" strokeWidth="1.5" fill="#141414" />
-                    {ITALY_CITIES.map((c, i) => (
-                      <g key={i}>
-                        <circle cx={c.x} cy={c.y} r={Math.max(4, Math.min(10, c.count / 3))} fill={c.color} opacity={0.75}
-                          style={{ filter: `drop-shadow(0 0 4px ${c.color})` }} />
-                        <text x={c.x + 7} y={c.y + 4} fill="#888" style={{ fontFamily: "'Inter', sans-serif", fontSize: 7 }}>{c.count}</text>
-                      </g>
+            {/* Map */}
+            <Card>
+              <CardHeader title="MAPPA INTERVENTI" action="VEDI MAPPA COMPLETA ∨" />
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+                <ItalyMap width={160} height={220} showDots={true} />
+                {/* Legend */}
+                <div style={{ width: '100%' }}>
+                  <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 10, letterSpacing: '0.1em', color: '#555', marginBottom: 7 }}>LEGENDA PRIORITÀ</div>
+                  <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                    {[
+                      { label: 'Urgente', color: '#FF3333' },
+                      { label: 'Breve termine', color: '#FF8C00' },
+                      { label: 'Programmabile', color: '#00CC66' },
+                      { label: 'Da valutare', color: '#0088FF' },
+                    ].map((l, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <div style={{ width: 7, height: 7, borderRadius: '50%', background: l.color }} />
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555' }}>{l.label}</span>
+                      </div>
                     ))}
-                  </svg>
-                </div>
-                <div>
-                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', color: '#555', marginBottom: 8 }}>LEGENDA PRIORITÀ</div>
-                  {[
-                    { label: 'Urgente', color: '#FF3333' },
-                    { label: 'Breve termine', color: '#FF8C00' },
-                    { label: 'Programmabile', color: '#00CC66' },
-                    { label: 'Da valutare', color: '#0088FF' },
-                  ].map((l, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: l.color, boxShadow: `0 0 4px ${l.color}` }} />
-                      <span style={{ fontSize: 10, color: '#777', fontFamily: "'Inter', sans-serif" }}>{l.label}</span>
-                    </div>
-                  ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            {/* By sector */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>RICHIESTE PER SETTORE</span>
-                <span style={{ fontSize: 10, color: '#555' }}>QUESTO MESE</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {SECTOR_DATA.map((s, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 6, borderBottom: '1px solid #161616' }}>
-                    <span style={{ fontSize: 11, color: '#9A9A9A', fontFamily: "'Inter', sans-serif" }}>{s.label}</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 16, color: '#fff' }}>{s.count}</span>
-                      <span style={{ fontSize: 10, color: '#555' }}>({s.pct}%)</span>
+            {/* Settore */}
+            <Card>
+              <CardHeader title="RICHIESTE PER SETTORE — QUESTO MESE ∨" />
+              <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {SETTORE_ITEMS.map((s, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '7px 10px',
+                    background: i < 3 ? 'rgba(255,140,0,0.04)' : 'rgba(255,255,255,0.01)',
+                    borderRadius: 4,
+                    border: `1px solid ${i < 3 ? 'rgba(255,140,0,0.1)' : '#1A1A1A'}`,
+                  }}>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: i < 3 ? '#9A9A9A' : '#555', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 8 }}>{s.label}</span>
+                    <div style={{ display: 'flex', gap: 8, flexShrink: 0, alignItems: 'center' }}>
+                      <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 16, color: i < 2 ? '#FFA500' : '#fff' }}>{s.value}</span>
+                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555', minWidth: 36, textAlign: 'right' }}>{s.pct}</span>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
 
             {/* Activity feed */}
-            <div style={card}>
-              <div style={cardHeader}>
-                <span style={cardTitle}>ATTIVITÀ RECENTI</span>
-                <button style={{ background: 'transparent', border: '1px solid #2A2A2A', borderRadius: 3, color: '#9A9A9A', fontSize: 10, padding: '3px 8px', cursor: 'pointer', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, letterSpacing: '0.06em' }}>
-                  VEDI TUTTE ∨
-                </button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <Card>
+              <CardHeader title="ATTIVITÀ RECENTI" action="VEDI TUTTE ∨" />
+              <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {ACTIVITIES.map((a, i) => (
-                  <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <div key={i} style={{
+                    display: 'flex', gap: 10,
+                    padding: '9px 0',
+                    borderBottom: i < ACTIVITIES.length - 1 ? '1px solid #141414' : 'none',
+                  }}>
                     <div style={{
-                      width: 24, height: 24,
-                      background: `${a.color}22`,
-                      border: `1px solid ${a.color}44`,
+                      width: 26, height: 26,
+                      background: `rgba(${a.color === '#00CC66' ? '0,204,102' : a.color === '#0088FF' ? '0,136,255' : a.color === '#FF8C00' ? '255,140,0' : '100,100,100'},0.1)`,
+                      border: `1px solid rgba(${a.color === '#00CC66' ? '0,204,102' : a.color === '#0088FF' ? '0,136,255' : a.color === '#FF8C00' ? '255,140,0' : '100,100,100'},0.25)`,
                       borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 11,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 12,
                       color: a.color,
                       flexShrink: 0,
                     }}>{a.icon}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 11, color: '#9A9A9A' }}>{a.desc}</div>
-                      <div style={{ fontSize: 10, color: '#FF8C00', fontFamily: "'Inter', sans-serif" }}>{a.id} - {a.sub}</div>
+                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#9A9A9A', lineHeight: 1.3 }}>
+                        {a.text}
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, marginTop: 2 }}>
+                        <span style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 600, fontSize: 11, color: '#FF8C00' }}>{a.id}</span>
+                        <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#555' }}>— {a.subtext}</span>
+                      </div>
                     </div>
-                    <span style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", flexShrink: 0 }}>{a.time}</span>
+                    <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#444', flexShrink: 0, whiteSpace: 'nowrap' }}>{a.time}</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           </div>
 
-          {/* Bottom stats bar */}
-          <div style={{
-            background: '#0E0E0E',
-            border: '1px solid #1A1A1A',
-            borderRadius: 6,
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 0,
-          }}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 11, letterSpacing: '0.1em', color: '#FF8C00', paddingRight: 24, borderRight: '1px solid #1A1A1A', marginRight: 24, whiteSpace: 'nowrap' }}>
-              PANORAMICA GENERALE
-            </div>
-            {[
-              { icon: '👥', label: 'PARTNER ATTIVI', value: '27' },
-              { icon: '⛏', label: 'CANTIERI ATTIVI', value: '15' },
-              { icon: '📋', label: 'SOPRALLUOGHI', value: '9' },
-              { icon: '📎', label: 'DOC. ALLEGATI', value: '312' },
-              { icon: '⏱', label: 'MEDIA RISPOSTA', value: '2h 15m' },
-            ].map((s, i, arr) => (
-              <div key={i} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                flex: 1,
-                borderRight: i < arr.length - 1 ? '1px solid #1A1A1A' : 'none',
-                marginRight: i < arr.length - 1 ? 24 : 0,
-                paddingRight: i < arr.length - 1 ? 24 : 0,
-              }}>
-                <span style={{ fontSize: 20 }}>{s.icon}</span>
-                <div>
-                  <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 24, color: '#fff', lineHeight: 1 }}>{s.value}</div>
-                  <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 9, letterSpacing: '0.08em', color: '#555' }}>{s.label}</div>
-                </div>
+          {/* BOTTOM STATS BAR */}
+          <Card>
+            <div style={{
+              padding: '10px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0,
+            }}>
+              <span style={{
+                fontFamily: "'Rajdhani',sans-serif",
+                fontWeight: 700,
+                fontSize: 11,
+                letterSpacing: '0.1em',
+                color: '#FF8C00',
+                flexShrink: 0,
+                paddingRight: 20,
+                borderRight: '1px solid #1E1E1E',
+                marginRight: 20,
+              }}>PANORAMICA GENERALE</span>
+              <div style={{ flex: 1, display: 'flex', gap: 0 }}>
+                {BOTTOM_STATS.map((s, i) => (
+                  <React.Fragment key={i}>
+                    <div style={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      padding: '4px 16px',
+                    }}>
+                      <span style={{ fontSize: 18, flexShrink: 0 }}>{s.icon}</span>
+                      <div>
+                        <div style={{
+                          fontFamily: "'Barlow Condensed',sans-serif",
+                          fontWeight: 700,
+                          fontSize: 20,
+                          color: '#fff',
+                          lineHeight: 1,
+                        }}>{s.value}</div>
+                        <div style={{
+                          fontFamily: "'Rajdhani',sans-serif",
+                          fontWeight: 700,
+                          fontSize: 9,
+                          letterSpacing: '0.08em',
+                          color: '#555',
+                        }}>{s.label}</div>
+                      </div>
+                    </div>
+                    {i < BOTTOM_STATS.length - 1 && (
+                      <div style={{ width: 1, background: '#1E1E1E', margin: '4px 0', alignSelf: 'stretch' }} />
+                    )}
+                  </React.Fragment>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          </Card>
 
         </div>
       </div>
