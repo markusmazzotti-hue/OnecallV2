@@ -316,9 +316,12 @@ export default function ClientForm() {
   const navigate = useNavigate()
 
   const priorities = [
-    { id: 'urgente', label: 'URGENTE', color: '#FF3333', icon: '⚠' },
-    { id: 'breve', label: 'BREVE TERMINE', color: '#FF8C00', icon: '⏱' },
-    { id: 'programmabile', label: 'PROGRAMMABILE', color: '#00CC66', icon: '📅' },
+    { id: 'urgente',       label: 'URGENTE',       color: '#FF3333', rgb: '255,51,51',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> },
+    { id: 'breve',         label: 'BREVE\nTERMINE', color: '#FF8C00', rgb: '255,140,0',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> },
+    { id: 'programmabile', label: 'PROGRAMMABILE', color: '#00CC66', rgb: '0,204,102',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
   ]
 
   const summaryItems = [
@@ -461,15 +464,19 @@ export default function ClientForm() {
             padding: '10px 16px',
             boxShadow: '0 0 14px rgba(255,140,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}>
-            {/* Shield with star icon */}
+            {/* Shield with star icon — heraldic pointed-bottom shape */}
             <div style={{ flexShrink: 0, filter: 'drop-shadow(0 0 6px rgba(255,140,0,0.7))' }}>
-              <svg width="34" height="38" viewBox="0 0 34 38" fill="none">
-                <path d="M17 2L3 8v10c0 9.5 6.1 18.4 14 20.7C24.9 36.4 31 27.5 31 18V8L17 2z"
-                  fill="rgba(255,140,0,0.18)" stroke="#FF8C00" strokeWidth="1.5" strokeLinejoin="round"/>
-                <path d="M17 4.5L5 9.8V18c0 8.1 5.2 15.7 12 17.8C23.8 33.7 29 26.1 29 18V9.8L17 4.5z"
-                  fill="rgba(255,140,0,0.10)"/>
-                <polygon points="17,11 18.8,15.5 23.5,15.5 19.9,18.3 21.2,23 17,20.3 12.8,23 14.1,18.3 10.5,15.5 15.2,15.5"
-                  fill="#FF8C00" opacity="0.92"/>
+              <svg width="34" height="40" viewBox="0 0 34 40" fill="none">
+                {/* Outer shield — pointed bottom via quadratic bezier */}
+                <path d="M17 1L2 6.5V19C2 28 8 35 17 39C26 35 32 28 32 19V6.5L17 1Z"
+                  fill="rgba(255,140,0,0.15)" stroke="#FF8C00" strokeWidth="1.5" strokeLinejoin="round"/>
+                {/* Inner shield fill */}
+                <path d="M17 4L4.5 8.5V19C4.5 27 9.5 33 17 36.5C24.5 33 29.5 27 29.5 19V8.5L17 4Z"
+                  fill="rgba(255,140,0,0.08)"/>
+                {/* Star */}
+                <polygon
+                  points="17,11 18.9,16 24,16 19.9,19.1 21.5,24.2 17,21.2 12.5,24.2 14.1,19.1 10,16 15.1,16"
+                  fill="#FF8C00" opacity="0.95"/>
               </svg>
             </div>
             {/* Text */}
@@ -581,28 +588,50 @@ export default function ClientForm() {
                         onClick={() => setPriority(p.id)}
                         style={{
                           flex: 1,
-                          padding: '8px 4px',
-                          borderRadius: 6,
-                          border: `1px solid ${priority === p.id ? p.color : '#2A2A2A'}`,
-                          background: priority === p.id ? `rgba(${p.color === '#FF3333' ? '255,51,51' : p.color === '#FF8C00' ? '255,140,0' : '0,204,102'},0.12)` : '#0A0A0A',
+                          background: 'transparent',
+                          border: 'none',
                           cursor: 'pointer',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: 4,
+                          gap: 7,
+                          padding: '4px 2px',
                           transition: 'all 0.2s',
-                          boxShadow: priority === p.id ? `0 0 8px ${p.color}44` : 'none',
                         }}
                       >
-                        <span style={{ fontSize: 16 }}>{p.icon}</span>
+                        {/* Circular disc */}
+                        <div style={{
+                          width: 68,
+                          height: 68,
+                          borderRadius: '50%',
+                          background: priority === p.id
+                            ? `radial-gradient(circle at 40% 35%, rgba(${p.rgb},0.22), rgba(${p.rgb},0.06) 70%, #060606)`
+                            : 'radial-gradient(circle at 40% 35%, #181818, #060606)',
+                          border: `2px solid ${priority === p.id ? p.color : '#252525'}`,
+                          boxShadow: priority === p.id
+                            ? `0 0 16px rgba(${p.rgb},0.65), 0 0 32px rgba(${p.rgb},0.25), inset 0 0 10px rgba(${p.rgb},0.08)`
+                            : '0 0 0 1px #1A1A1A inset',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: priority === p.id ? p.color : '#3A3A3A',
+                          filter: priority === p.id ? `drop-shadow(0 0 5px rgba(${p.rgb},0.8))` : 'none',
+                          transition: 'all 0.25s',
+                          flexShrink: 0,
+                        }}>
+                          {p.icon}
+                        </div>
+                        {/* Label */}
                         <span style={{
                           fontFamily: "'Rajdhani', sans-serif",
                           fontWeight: 700,
-                          fontSize: 9,
+                          fontSize: 9.5,
                           letterSpacing: '0.06em',
-                          color: priority === p.id ? p.color : '#555',
+                          color: priority === p.id ? p.color : '#444',
                           textAlign: 'center',
-                          lineHeight: 1.2,
+                          lineHeight: 1.25,
+                          whiteSpace: 'pre-line',
+                          transition: 'color 0.25s',
                         }}>{p.label}</span>
                       </button>
                     ))}
