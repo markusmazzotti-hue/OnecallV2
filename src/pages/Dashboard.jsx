@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ItalyMap from '../components/ItalyMap.jsx'
 import DonutChart from '../components/DonutChart.jsx'
+import Logo from '../components/Logo.jsx'
 import { supabase } from '../lib/supabase.js'
 
 /* ============================================================
@@ -397,10 +398,7 @@ export default function Dashboard() {
                 <rect x="1" y="17" width="22" height="4" rx="1"/>
               </svg>
             </div>
-            <div>
-              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 14, color: '#fff', lineHeight: 1 }}>PALMISANO</div>
-              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 600, fontSize: 9, color: '#FF8C00', letterSpacing: '0.12em', lineHeight: 1 }}>ONE CALL™</div>
-            </div>
+            <Logo size={15} subtitle={false} />
           </div>
         </div>
 

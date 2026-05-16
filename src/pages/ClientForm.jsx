@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import StepNav from '../components/StepNav.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
 import ItalyMapLeaflet from '../components/ItalyMapLeaflet.jsx'
+import Logo from '../components/Logo.jsx'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 
@@ -411,31 +412,7 @@ export default function ClientForm() {
         justifyContent: 'space-between',
         flexShrink: 0,
       }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 22,
-              color: '#fff',
-              letterSpacing: '0.04em',
-            }}>PALMISANO</span>
-            <span style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 22,
-              color: '#FF8C00',
-              letterSpacing: '0.04em',
-            }}>ONE CALL™</span>
-          </div>
-          <div style={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: 11,
-            color: '#555',
-            letterSpacing: '0.12em',
-          }}>DEMOLIZIONI & TAGLIO TERMICO</div>
-        </div>
+        <Logo size={24} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
