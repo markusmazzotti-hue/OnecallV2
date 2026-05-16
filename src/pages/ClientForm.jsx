@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react'
 import StepNav from '../components/StepNav.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
+import ItalyMapLeaflet from '../components/ItalyMapLeaflet.jsx'
+import Logo from '../components/Logo.jsx'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 
@@ -145,43 +147,140 @@ function TextArea({ label, placeholder, max, value, onChange }) {
   )
 }
 
-function UploadBtn({ icon, label, optional, onClick }) {
+/* SVG icons for Step 4 upload buttons */
+const UPLOAD_ICONS = {
+  camera: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  ),
+  image: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+  ),
+  video: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="23 7 16 12 23 17 23 7"/>
+      <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+    </svg>
+  ),
+  mic: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+      <path d="M19 10v2a7 7 0 01-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="23"/>
+      <line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+  ),
+  clip: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/>
+    </svg>
+  ),
+}
+
+function UploadBtn({ iconKey, label, optional, onClick }) {
   const [hover, setHover] = useState(false)
+  const BLUE = '#0088FF'
+  const RGB  = '0,136,255'
+  const SZ   = 86
+  const CX   = SZ / 2
+  const TICKS = 28
+  const R_OUTER = SZ / 2 - 2
+  const R_INNER = SZ / 2 - 9
+  const R_DISC  = SZ / 2 - 11
+
   return (
-    <button
+    <div
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, cursor: 'pointer', flex: 1 }}
       onClick={onClick}
-      style={{
-        flex: 1,
-        background: hover ? '#1A1A1A' : '#0E0E0E',
-        border: `1px solid ${hover ? '#FF8C00' : '#2A2A2A'}`,
-        borderRadius: 6,
-        padding: '12px 6px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 6,
-        cursor: 'pointer',
-        transition: 'all 0.2s',
-        boxShadow: hover ? '0 0 10px rgba(255,140,0,0.2)' : 'none',
-      }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      <span style={{ fontSize: 20, color: hover ? '#FF8C00' : '#555' }}>{icon}</span>
-      <span style={{
-        fontFamily: "'Rajdhani', sans-serif",
-        fontWeight: 700,
-        fontSize: 10,
-        letterSpacing: '0.06em',
-        color: hover ? '#FF8C00' : '#777',
-        textTransform: 'uppercase',
-        textAlign: 'center',
-        lineHeight: 1.2,
-      }}>{label}</span>
-      {optional && (
-        <span style={{ fontSize: 9, color: '#555', fontFamily: "'Inter', sans-serif" }}>(opzionale)</span>
-      )}
-    </button>
+      <div style={{ position: 'relative', width: SZ, height: SZ }}>
+        <svg width={SZ} height={SZ} viewBox={`0 0 ${SZ} ${SZ}`} style={{ position: 'absolute', top: 0, left: 0 }}>
+          {/* Outer glow ring */}
+          {hover && (
+            <circle cx={CX} cy={CX} r={R_OUTER - 1}
+              fill="none"
+              stroke={`rgba(${RGB},0.18)`}
+              strokeWidth="8"
+            />
+          )}
+          {/* Tick marks */}
+          {Array.from({ length: TICKS }).map((_, i) => {
+            const angle = (i / TICKS) * 360
+            const rad   = ((angle - 90) * Math.PI) / 180
+            const long  = i % 4 === 0
+            const r1 = R_OUTER
+            const r2 = long ? R_OUTER - 7 : R_OUTER - 4
+            return (
+              <line
+                key={i}
+                x1={CX + r1 * Math.cos(rad)} y1={CX + r1 * Math.sin(rad)}
+                x2={CX + r2 * Math.cos(rad)} y2={CX + r2 * Math.sin(rad)}
+                stroke={hover ? `rgba(${RGB},0.75)` : '#252525'}
+                strokeWidth={long ? 1.5 : 1}
+                style={{ transition: 'stroke 0.25s' }}
+              />
+            )
+          })}
+          {/* Inner border circle */}
+          <circle cx={CX} cy={CX} r={R_INNER}
+            fill="#080808"
+            stroke={hover ? `rgba(${RGB},0.55)` : '#1C1C1C'}
+            strokeWidth="1.5"
+            style={{ transition: 'stroke 0.25s' }}
+          />
+          {/* Center disc */}
+          <circle cx={CX} cy={CX} r={R_DISC}
+            fill="radial-gradient(#111,#060606)"
+            style={{ transition: 'all 0.25s' }}
+          />
+        </svg>
+
+        {/* Icon centered over SVG */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: hover ? BLUE : '#333',
+          filter: hover ? `drop-shadow(0 0 8px rgba(${RGB},0.85))` : 'none',
+          transition: 'color 0.25s, filter 0.25s',
+        }}>
+          {UPLOAD_ICONS[iconKey]}
+        </div>
+      </div>
+
+      {/* Label */}
+      <div style={{ textAlign: 'center', lineHeight: 1.25 }}>
+        <div style={{
+          fontFamily: "'Rajdhani', sans-serif",
+          fontWeight: 700,
+          fontSize: 10,
+          letterSpacing: '0.07em',
+          color: hover ? '#FFFFFF' : '#555',
+          textTransform: 'uppercase',
+          transition: 'color 0.25s',
+        }}>{label}</div>
+        {optional && (
+          <div style={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontWeight: 600,
+            fontSize: 8.5,
+            letterSpacing: '0.04em',
+            color: '#0066CC',
+            textTransform: 'uppercase',
+          }}>(OPZIONALE)</div>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -313,31 +412,7 @@ export default function ClientForm() {
         justifyContent: 'space-between',
         flexShrink: 0,
       }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 22,
-              color: '#fff',
-              letterSpacing: '0.04em',
-            }}>PALMISANO</span>
-            <span style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontWeight: 700,
-              fontSize: 22,
-              color: '#FF8C00',
-              letterSpacing: '0.04em',
-            }}>ONE CALL™</span>
-          </div>
-          <div style={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: 11,
-            color: '#555',
-            letterSpacing: '0.12em',
-          }}>DEMOLIZIONI & TAGLIO TERMICO</div>
-        </div>
+        <Logo size={24} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
@@ -400,7 +475,7 @@ export default function ClientForm() {
       <main style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, overflow: 'auto' }}>
 
         {/* Top row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 380px', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
 
           {/* Step 1 */}
           <div style={{ ...card, alignItems: 'center' }}>
@@ -470,7 +545,7 @@ export default function ClientForm() {
               </span>
             </div>
 
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: 'flex', gap: 12, flex: 1 }}>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
                 <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
@@ -540,21 +615,46 @@ export default function ClientForm() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <ItalyMapSVG />
+              <div style={{ flex: '0 0 155px', height: 220 }}>
+                <ItalyMapLeaflet
+                  localita={localita}
+                  onLocationChange={setLocalita}
+                />
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 380px', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
 
           {/* Step 4 */}
           <div style={card}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
-              STEP <span style={{ color: '#FF8C00' }}>4</span> — CARICA FOTO, VIDEO E DESCRIZIONE AUDIO
+            {/* Header matching mockup: blue STEP 4 badge + title */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 2 }}>
+              <div style={{
+                background: 'rgba(0,136,255,0.15)',
+                border: '1px solid rgba(0,136,255,0.4)',
+                borderRadius: 4,
+                padding: '2px 10px',
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                letterSpacing: '0.1em',
+                color: '#0088FF',
+                boxShadow: '0 0 10px rgba(0,136,255,0.25)',
+                whiteSpace: 'nowrap',
+              }}>STEP 4</div>
+              <div style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontWeight: 700,
+                fontSize: 13,
+                letterSpacing: '0.08em',
+                color: '#CCCCCC',
+                textTransform: 'uppercase',
+              }}>CARICA FOTO, VIDEO E DESCRIZIONE AUDIO</div>
             </div>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -563,12 +663,12 @@ export default function ClientForm() {
               style={{ display: 'none' }}
               onChange={handleFileChange}
             />
-            <div style={{ display: 'flex', gap: 6 }}>
-              <UploadBtn icon="📷" label="SCATTA FOTO" onClick={() => fileInputRef.current?.click()} />
-              <UploadBtn icon="🖼" label="CARICA FOTO" onClick={() => fileInputRef.current?.click()} />
-              <UploadBtn icon="🎥" label="CARICA VIDEO" onClick={() => fileInputRef.current?.click()} />
-              <UploadBtn icon="🎙" label="AUDIO" onClick={() => fileInputRef.current?.click()} />
-              <UploadBtn icon="📎" label="ALLEGATI" optional onClick={() => fileInputRef.current?.click()} />
+            <div style={{ display: 'flex', gap: 4, justifyContent: 'space-between', padding: '6px 0' }}>
+              <UploadBtn iconKey="camera" label="SCATTA FOTO"  onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn iconKey="image"  label="CARICA FOTO"  onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn iconKey="video"  label="CARICA VIDEO" onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn iconKey="mic"    label="AUDIO"        onClick={() => fileInputRef.current?.click()} />
+              <UploadBtn iconKey="clip"   label="ALLEGATI" optional onClick={() => fileInputRef.current?.click()} />
             </div>
             {files.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
@@ -587,8 +687,9 @@ export default function ClientForm() {
                 ))}
               </div>
             )}
-            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", margin: 0 }}>
-              Puoi caricare più file alla volta. Formati supportati: JPG, PNG, MP4, MP3 (max 100MB)
+            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", margin: 0, lineHeight: 1.6 }}>
+              Puoi caricare più file alla volta.<br/>
+              Formati supportati: JPG, PNG, MP4, MP3 (max 100MB)
             </p>
           </div>
 

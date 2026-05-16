@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RotarySelector from '../components/RotarySelector.jsx'
 import StepNav from '../components/StepNav.jsx'
+import Logo from '../components/Logo.jsx'
 
 const STEP1_ITEMS = [
   'Demolizione Industriale',
@@ -106,13 +107,7 @@ export default function Instructions() {
         minHeight: 72,
       }}>
         {/* Left: logo */}
-        <div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 22, color: '#fff', letterSpacing: '0.04em' }}>PALMISANO</span>
-            <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 22, color: '#FF8C00', letterSpacing: '0.04em' }}>ONE CALL™</span>
-          </div>
-          <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 500, fontSize: 11, color: '#555', letterSpacing: '0.12em' }}>DEMOLIZIONI & TAGLIO TERMICO</div>
-        </div>
+        <Logo size={22} />
 
         {/* Center: big title */}
         <div style={{ textAlign: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
