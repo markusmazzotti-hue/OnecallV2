@@ -454,16 +454,34 @@ export default function ClientForm() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 10,
-            background: '#0E0E0E',
-            border: '1px solid rgba(255,140,0,0.2)',
-            borderRadius: 6,
-            padding: '8px 14px',
+            gap: 12,
+            background: 'linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #1C1C1C 100%)',
+            border: '1px solid rgba(255,140,0,0.55)',
+            borderRadius: 8,
+            padding: '10px 16px',
+            boxShadow: '0 0 14px rgba(255,140,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}>
-            <span style={{ fontSize: 20, color: '#FF8C00' }}>🛡</span>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#777', lineHeight: 1.4 }}>
+            {/* Shield with star icon */}
+            <div style={{ flexShrink: 0, filter: 'drop-shadow(0 0 6px rgba(255,140,0,0.7))' }}>
+              <svg width="34" height="38" viewBox="0 0 34 38" fill="none">
+                <path d="M17 2L3 8v10c0 9.5 6.1 18.4 14 20.7C24.9 36.4 31 27.5 31 18V8L17 2z"
+                  fill="rgba(255,140,0,0.18)" stroke="#FF8C00" strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M17 4.5L5 9.8V18c0 8.1 5.2 15.7 12 17.8C23.8 33.7 29 26.1 29 18V9.8L17 4.5z"
+                  fill="rgba(255,140,0,0.10)"/>
+                <polygon points="17,11 18.8,15.5 23.5,15.5 19.9,18.3 21.2,23 17,20.3 12.8,23 14.1,18.3 10.5,15.5 15.2,15.5"
+                  fill="#FF8C00" opacity="0.92"/>
+              </svg>
+            </div>
+            {/* Text */}
+            <div style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 11.5,
+              color: '#D0D0D0',
+              lineHeight: 1.5,
+              letterSpacing: '0.01em',
+            }}>
               I tuoi dati sono al sicuro.<br />
-              Le richieste vengono gestite con priorità tecnica.
+              Le richieste vengono gestite<br />con priorità tecnica.
             </div>
           </div>
         </div>
