@@ -295,7 +295,7 @@ export default function RotarySelector({
             >
               {/* Icon */}
               <div style={{
-                color: isActive ? COLOR : '#3A3A3A',
+                color: isActive ? COLOR : '#606060',
                 filter: isActive ? `drop-shadow(0 0 7px ${COLOR}) drop-shadow(0 0 14px ${COLOR})` : 'none',
                 transition: 'color 0.35s, filter 0.35s',
                 lineHeight: 0,
@@ -311,15 +311,15 @@ export default function RotarySelector({
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700,
-                fontSize: 8,
+                fontSize: isActive ? 10 : 9,
                 letterSpacing: '0.04em',
-                color: isActive ? '#FFFFFF' : '#383838',
+                color: isActive ? '#FFFFFF' : '#888888',
                 textAlign: 'center',
-                lineHeight: 1.2,
+                lineHeight: 1.25,
                 textShadow: isActive ? `0 0 12px ${COLOR}, 0 0 6px ${COLOR}` : 'none',
                 whiteSpace: 'pre-line',
-                maxWidth: 78,
-                transition: 'color 0.35s, text-shadow 0.35s',
+                maxWidth: 82,
+                transition: 'color 0.35s, text-shadow 0.35s, font-size 0.35s',
               }}>
                 {SHORT_LABEL[item] || item.toUpperCase()}
               </span>
@@ -328,11 +328,11 @@ export default function RotarySelector({
               {subtitle && (
                 <span style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: 6.5,
-                  color: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.1)',
+                  fontSize: 7,
+                  color: isActive ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.18)',
                   textAlign: 'center',
                   lineHeight: 1.2,
-                  maxWidth: 76,
+                  maxWidth: 80,
                   transition: 'color 0.35s',
                 }}>
                   {subtitle}

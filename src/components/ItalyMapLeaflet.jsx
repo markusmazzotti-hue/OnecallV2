@@ -33,7 +33,7 @@ export default function ItalyMapLeaflet({ localita, onLocationChange }) {
     if (instanceRef.current) return
 
     const map = L.map(mapRef.current, {
-      center: [41.9, 12.5],
+      center: [42.5, 12.5],
       zoom: 5,
       zoomControl: true,
       attributionControl: false,
