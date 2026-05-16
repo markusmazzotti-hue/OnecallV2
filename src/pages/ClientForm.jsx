@@ -475,7 +475,7 @@ export default function ClientForm() {
       <main style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, overflow: 'auto' }}>
 
         {/* Top row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 380px', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
 
           {/* Step 1 */}
           <div style={{ ...card, alignItems: 'center' }}>
@@ -626,7 +626,7 @@ export default function ClientForm() {
         </div>
 
         {/* Bottom row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 380px', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
 
           {/* Step 4 */}
           <div style={card}>
