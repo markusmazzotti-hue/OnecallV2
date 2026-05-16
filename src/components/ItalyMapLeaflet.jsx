@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 
 // Fix default marker icons (webpack/vite asset issue)
 delete L.Icon.Default.prototype._getIconUrl
@@ -110,8 +109,7 @@ export default function ItalyMapLeaflet({ localita, onLocationChange }) {
       ref={mapRef}
       style={{
         width: '100%',
-        height: '100%',
-        minHeight: 180,
+        height: 220,
         borderRadius: 6,
         overflow: 'hidden',
         border: '1px solid #2A2A2A',

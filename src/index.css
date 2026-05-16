@@ -2,6 +2,9 @@
    PALMISANO ONE CALL™ — Global Styles
    ============================================================ */
 
+/* Leaflet map */
+@import 'leaflet/dist/leaflet.css';
+
 :root {
   --bg: #080808;
   --card-bg: #111111;

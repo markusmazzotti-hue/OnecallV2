@@ -541,7 +541,7 @@ export default function ClientForm() {
                 </div>
               </div>
 
-              <div style={{ flex: '0 0 160px', height: '100%', minHeight: 180 }}>
+              <div style={{ flex: '0 0 155px', height: 220 }}>
                 <ItalyMapLeaflet
                   localita={localita}
                   onLocationChange={setLocalita}
