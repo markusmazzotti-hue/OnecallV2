@@ -17,56 +17,69 @@ export default function StepNav({ activeSteps = [1, 2] }) {
       alignItems: 'center',
       background: '#0A0A0A',
       borderBottom: '1px solid #1A1A1A',
-      padding: '0 24px',
+      padding: '0 16px',
       height: 44,
-      gap: 0,
+      gap: 3,
       overflowX: 'auto',
+      flexShrink: 0,
     }}>
-      {STEPS.map((step, idx) => {
-        const isActive = activeSteps.includes(step.num)
+      {STEPS.map((step) => {
+        const isPrimary = activeSteps[0] === step.num
+        const isSecondary = activeSteps.length > 1 && activeSteps[1] === step.num
+
         return (
-          <React.Fragment key={step.num}>
-            <div style={{
+          <div
+            key={step.num}
+            style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
-              padding: '0 16px',
-              height: '100%',
-              borderBottom: isActive ? '2px solid #FF8C00' : '2px solid transparent',
-              opacity: isActive ? 1 : 0.45,
+              gap: 7,
+              padding: '5px 14px',
+              borderRadius: 4,
+              background: isPrimary
+                ? 'rgba(255,140,0,0.14)'
+                : isSecondary
+                ? 'rgba(255,140,0,0.04)'
+                : 'transparent',
+              border: isPrimary
+                ? '1px solid rgba(255,140,0,0.55)'
+                : isSecondary
+                ? '1px solid rgba(255,140,0,0.25)'
+                : '1px solid transparent',
               flexShrink: 0,
-            }}>
-              <div style={{
-                width: 22,
-                height: 22,
-                borderRadius: '50%',
-                background: isActive
-                  ? 'linear-gradient(135deg, #CC7000, #FF8C00)'
-                  : '#1E1E1E',
-                border: isActive ? 'none' : '1px solid #2A2A2A',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 700,
-                fontSize: 12,
-                color: isActive ? '#fff' : '#555',
-                boxShadow: isActive ? '0 0 8px rgba(255,140,0,0.5)' : 'none',
-                flexShrink: 0,
-              }}>{step.num}</div>
-              <span style={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 600,
-                fontSize: 11,
-                letterSpacing: '0.08em',
-                color: isActive ? '#FFA500' : '#555',
-                whiteSpace: 'nowrap',
-              }}>{step.label}</span>
-            </div>
-            {idx < STEPS.length - 1 && (
-              <div style={{ width: 1, height: 20, background: '#1E1E1E', flexShrink: 0 }} />
-            )}
-          </React.Fragment>
+            }}
+          >
+            <div style={{
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              background: isPrimary
+                ? 'linear-gradient(135deg, #CC7000, #FF8C00)'
+                : 'transparent',
+              border: isPrimary
+                ? 'none'
+                : isSecondary
+                ? '1px solid #FF8C00'
+                : '1px solid #2A2A2A',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: "'Barlow Condensed', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              color: isPrimary ? '#fff' : isSecondary ? '#FF8C00' : '#3A3A3A',
+              boxShadow: isPrimary ? '0 0 8px rgba(255,140,0,0.5)' : 'none',
+              flexShrink: 0,
+            }}>{step.num}</div>
+            <span style={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: isPrimary || isSecondary ? 700 : 600,
+              fontSize: 11,
+              letterSpacing: '0.08em',
+              color: isPrimary ? '#FFA500' : isSecondary ? '#CC8800' : '#333',
+              whiteSpace: 'nowrap',
+            }}>{step.label}</span>
+          </div>
         )
       })}
     </div>

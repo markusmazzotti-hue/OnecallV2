@@ -339,54 +339,54 @@ export default function ClientForm() {
           }}>DEMOLIZIONI & TAGLIO TERMICO</div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
             onClick={() => navigate('/istruzioni')}
             style={{
               background: 'transparent',
-              border: '1px solid #2A2A2A',
+              border: '1px solid #222',
               borderRadius: 4,
-              color: '#9A9A9A',
+              color: '#444',
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 600,
-              fontSize: 11,
+              fontSize: 10,
               letterSpacing: '0.08em',
-              padding: '6px 12px',
+              padding: '5px 10px',
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF8C00'; e.currentTarget.style.color = '#FF8C00' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = '#2A2A2A'; e.currentTarget.style.color = '#9A9A9A' }}
-          >ISTRUZIONI D'USO</button>
+            onMouseLeave={e => { e.currentTarget.style.borderColor = '#222'; e.currentTarget.style.color = '#444' }}
+          >ISTRUZIONI</button>
           <button
             onClick={() => navigate('/dashboard')}
             style={{
               background: 'transparent',
-              border: '1px solid #2A2A2A',
+              border: '1px solid #222',
               borderRadius: 4,
-              color: '#9A9A9A',
+              color: '#444',
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 600,
-              fontSize: 11,
+              fontSize: 10,
               letterSpacing: '0.08em',
-              padding: '6px 12px',
+              padding: '5px 10px',
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF8C00'; e.currentTarget.style.color = '#FF8C00' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = '#2A2A2A'; e.currentTarget.style.color = '#9A9A9A' }}
-          >DASHBOARD ADMIN</button>
+            onMouseLeave={e => { e.currentTarget.style.borderColor = '#222'; e.currentTarget.style.color = '#444' }}
+          >ADMIN</button>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 10,
             background: '#0E0E0E',
-            border: '1px solid #1E1E1E',
-            borderRadius: 4,
-            padding: '8px 12px',
+            border: '1px solid rgba(255,140,0,0.2)',
+            borderRadius: 6,
+            padding: '8px 14px',
           }}>
-            <span style={{ fontSize: 18 }}>🛡</span>
-            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#9A9A9A', lineHeight: 1.4 }}>
+            <span style={{ fontSize: 20, color: '#FF8C00' }}>🛡</span>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: 11, color: '#777', lineHeight: 1.4 }}>
               I tuoi dati sono al sicuro.<br />
               Le richieste vengono gestite con priorità tecnica.
             </div>
