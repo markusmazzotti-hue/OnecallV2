@@ -545,8 +545,12 @@ export default function ClientForm() {
               </span>
             </div>
 
-            <div style={{ display: 'flex', gap: 12, flex: 1 }}>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* Map on top, full width */}
+            <div style={{ width: '100%', height: 200 }}>
+              <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} />
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
                 <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
 
@@ -613,14 +617,6 @@ export default function ClientForm() {
                     }} />
                   </div>
                 </div>
-              </div>
-
-              <div style={{ flex: '0 0 155px', height: 220 }}>
-                <ItalyMapLeaflet
-                  localita={localita}
-                  onLocationChange={setLocalita}
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -775,35 +771,104 @@ export default function ClientForm() {
               {submitError}
             </div>
           )}
+          {/* ATTIVA ONE CALL — industrial hazard-stripe button */}
           <button
             onClick={handleSubmit}
             disabled={submitting}
             style={{
-              background: submitting ? '#333' : 'linear-gradient(135deg, #CC6600, #FF8C00, #FFA500)',
-              border: 'none',
-              borderRadius: 6,
-              padding: '14px 28px',
               display: 'flex',
-              alignItems: 'center',
-              gap: 10,
+              alignItems: 'stretch',
+              height: 82,
+              border: '2px solid #1A1A1A',
+              borderRadius: 8,
+              overflow: 'hidden',
               cursor: submitting ? 'not-allowed' : 'pointer',
-              boxShadow: submitting ? 'none' : '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)',
-              transition: 'all 0.2s',
-              opacity: submitting ? 0.6 : 1,
+              opacity: submitting ? 0.7 : 1,
+              boxShadow: submitting ? 'none' : '0 0 28px rgba(255,165,0,0.45), 0 0 56px rgba(255,165,0,0.18)',
+              transition: 'box-shadow 0.25s, opacity 0.2s',
+              minWidth: 380,
+              background: 'transparent',
+              padding: 0,
             }}
-            onMouseEnter={e => { if (!submitting) { e.currentTarget.style.boxShadow = '0 0 36px rgba(255,140,0,0.7), 0 0 72px rgba(255,140,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'scale(1.02)' } }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 0 24px rgba(255,140,0,0.5), 0 0 48px rgba(255,140,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'scale(1)' }}
+            onMouseEnter={e => { if (!submitting) e.currentTarget.style.boxShadow = '0 0 44px rgba(255,165,0,0.7), 0 0 88px rgba(255,165,0,0.3)' }}
+            onMouseLeave={e => { if (!submitting) e.currentTarget.style.boxShadow = '0 0 28px rgba(255,165,0,0.45), 0 0 56px rgba(255,165,0,0.18)' }}
           >
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 18, color: '#fff', letterSpacing: '0.06em', lineHeight: 1 }}>
-                {submitting ? 'INVIO IN CORSO...' : 'ATTIVA ONE CALL™'}
+            {/* Left hazard stripe */}
+            <div style={{
+              width: 64,
+              flexShrink: 0,
+              background: 'repeating-linear-gradient(-45deg, #E8A000 0px, #E8A000 10px, #0A0A0A 10px, #0A0A0A 20px)',
+              borderRight: '2px solid rgba(0,0,0,0.4)',
+            }} />
+
+            {/* Main amber panel */}
+            <div style={{
+              flex: 1,
+              background: 'linear-gradient(180deg, #F0AE10 0%, #CC8800 55%, #B87A00 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              padding: '0 22px',
+            }}>
+              <div style={{
+                fontFamily: "'Barlow Condensed', sans-serif",
+                fontWeight: 900,
+                fontSize: 30,
+                letterSpacing: '0.04em',
+                color: '#0A0A0A',
+                lineHeight: 1,
+                textTransform: 'uppercase',
+              }}>
+                {submitting ? 'INVIO IN CORSO…' : 'ATTIVA ONE CALL™'}
               </div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.75)', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
-                Invia richiesta tecnica a Palmisano Demolizioni & Taglio Termico
+              <div style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 11,
+                color: 'rgba(0,0,0,0.62)',
+                marginTop: 4,
+                lineHeight: 1.3,
+              }}>
+                Invia richiesta tecnica a<br/>Palmisano Demolizioni &amp; Taglio Termico
               </div>
             </div>
-            <div style={{ width: 36, height: 36, background: 'rgba(0,0,0,0.25)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, color: '#fff', flexShrink: 0 }}>
-              {submitting ? '⏳' : '→'}
+
+            {/* Right hazard stripe */}
+            <div style={{
+              width: 64,
+              flexShrink: 0,
+              background: 'repeating-linear-gradient(-45deg, #E8A000 0px, #E8A000 10px, #0A0A0A 10px, #0A0A0A 20px)',
+              borderLeft: '2px solid rgba(0,0,0,0.4)',
+              borderRight: '2px solid rgba(0,0,0,0.25)',
+            }} />
+
+            {/* Arrow circle button */}
+            <div style={{
+              width: 90,
+              flexShrink: 0,
+              background: '#080808',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <div style={{
+                width: 58,
+                height: 58,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle at 40% 35%, #1A1A1A, #060606)',
+                border: '2px solid #FFA500',
+                boxShadow: '0 0 16px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.3), inset 0 0 8px rgba(255,165,0,0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFA500" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  {submitting
+                    ? <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></>
+                    : <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>
+                  }
+                </svg>
+              </div>
             </div>
           </button>
         </div>
