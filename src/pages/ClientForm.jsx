@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import StepNav from '../components/StepNav.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
+import ItalyMapLeaflet from '../components/ItalyMapLeaflet.jsx'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 
@@ -470,7 +471,7 @@ export default function ClientForm() {
               </span>
             </div>
 
-            <div style={{ display: 'flex', gap: 12 }}>
+            <div style={{ display: 'flex', gap: 12, flex: 1 }}>
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
                 <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
@@ -540,8 +541,11 @@ export default function ClientForm() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <ItalyMapSVG />
+              <div style={{ flex: '0 0 160px', height: '100%', minHeight: 180 }}>
+                <ItalyMapLeaflet
+                  localita={localita}
+                  onLocationChange={setLocalita}
+                />
               </div>
             </div>
           </div>
