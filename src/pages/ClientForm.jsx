@@ -412,7 +412,7 @@ export default function ClientForm() {
         justifyContent: 'space-between',
         flexShrink: 0,
       }}>
-        <Logo size={24} />
+        <Logo size={29} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
