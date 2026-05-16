@@ -155,7 +155,7 @@ export default function RotarySelector({
           }}
         />
 
-        {/* ── Layer 2: ON image (top segment illuminated, always shown) ── */}
+        {/* ── Layer 2: ON image — rotates to point the lit segment at the active item ── */}
         <img
           src="/selector-on.png"
           alt=""
@@ -166,19 +166,20 @@ export default function RotarySelector({
             objectFit: 'contain',
             filter: onFilter,
             userSelect: 'none', pointerEvents: 'none',
+            transform: `rotate(${activeIndex * (360 / n)}deg)`,
+            transformOrigin: 'center center',
+            transition: 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
 
-        {/* ── HTML items: icon + label, rotate to show active at top ── */}
+        {/* ── HTML items: FIXED positions — the image rotates, not the text ── */}
         {items.map((item, i) => {
-          const pos      = (i - activeIndex + n) % n
-          const angleDeg = pos * (360 / n) - 90   // 0° → right, -90° → top
+          const angleDeg = i * (360 / n) - 90   // fixed: item 0 at top, rest clockwise
           const angleRad = (angleDeg * Math.PI) / 180
           const x        = CX + RITEM * Math.cos(angleRad)
           const y        = CY + RITEM * Math.sin(angleRad)
           const isActive = i === activeIndex
-          const diff     = Math.min(pos, n - pos)
-          const opacity  = isActive ? 1 : Math.max(0.22, 0.62 - diff * 0.14)
+          const diff     = Math.min(i, n - i)   // distance from item 0 for opacity
           const subtitle = SUBTITLE[item]
 
           return (
@@ -193,9 +194,9 @@ export default function RotarySelector({
                 background: 'transparent', border: 'none',
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: 3,
-                opacity,
+                opacity: isActive ? 1 : 0.55,
                 cursor: 'pointer',
-                transition: 'opacity 0.4s ease',
+                transition: 'opacity 0.35s ease',
                 zIndex: 10,
                 width: 82, padding: '2px',
               }}
