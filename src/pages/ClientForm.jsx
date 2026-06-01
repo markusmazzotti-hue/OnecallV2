@@ -563,19 +563,17 @@ export default function ClientForm() {
           </div>
 
           {/* Step 3 */}
-          <div style={card}>
+          <div style={{ ...card }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
                 STEP <span style={{ color: '#FF8C00' }}>3</span> — DOVE SI TROVA L'INTERVENTO E QUANDO È PREVISTO?
               </span>
             </div>
 
-            {/* Map on top, full width */}
-            <div style={{ width: '100%', height: 200 }}>
-              <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* Content row: form fields left, map right */}
+            <div style={{ display: 'flex', gap: 12, flex: 1, minHeight: 280 }}>
+              {/* LEFT — stacked form fields */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
                 <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
 
@@ -601,8 +599,8 @@ export default function ClientForm() {
                       >
                         {/* Circular disc */}
                         <div style={{
-                          width: 68,
-                          height: 68,
+                          width: 56,
+                          height: 56,
                           borderRadius: '50%',
                           background: priority === p.id
                             ? `radial-gradient(circle at 40% 35%, rgba(${p.rgb},0.22), rgba(${p.rgb},0.06) 70%, #060606)`
@@ -664,6 +662,12 @@ export default function ClientForm() {
                     }} />
                   </div>
                 </div>
+              </div>
+
+              {/* RIGHT — Italy map */}
+              <div style={{ flex: '0 0 155px', alignSelf: 'stretch', display: 'flex', flexDirection: 'column' }}>
+                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height="100%" />
+              </div>
             </div>
           </div>
         </div>

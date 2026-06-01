@@ -24,7 +24,7 @@ const CUSTOM_ICON = L.divIcon({
   popupAnchor: [0, -30],
 })
 
-export default function ItalyMapLeaflet({ localita, onLocationChange }) {
+export default function ItalyMapLeaflet({ localita, onLocationChange, height = 220 }) {
   const mapRef = useRef(null)
   const instanceRef = useRef(null)
   const markerRef = useRef(null)
@@ -109,7 +109,7 @@ export default function ItalyMapLeaflet({ localita, onLocationChange }) {
       ref={mapRef}
       style={{
         width: '100%',
-        height: 220,
+        height: height,
         borderRadius: 6,
         overflow: 'hidden',
         border: '1px solid #2A2A2A',
