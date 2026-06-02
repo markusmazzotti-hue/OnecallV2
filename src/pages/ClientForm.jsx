@@ -89,6 +89,14 @@ const labelStyle = {
   textTransform: 'uppercase',
 }
 
+const boltStyle = (left, top) => ({
+  position: 'absolute', left, top,
+  width: 6, height: 6, borderRadius: '50%',
+  background: 'radial-gradient(circle at 35% 30%, #6A6A6A, #0E0E0E)',
+  boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.55), 0 1px 1px rgba(0,0,0,0.5)',
+  zIndex: 3,
+})
+
 function InputField({ label, placeholder, icon, value, onChange, type = 'text' }) {
   const [focused, setFocused] = useState(false)
   return (
@@ -312,6 +320,7 @@ export default function ClientForm() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(null)
+  const [ctaHover, setCtaHover] = useState(false)
 
   const navigate = useNavigate()
 
@@ -823,103 +832,127 @@ export default function ClientForm() {
               {submitError}
             </div>
           )}
-          {/* ATTIVA ONE CALL — industrial hazard-stripe button */}
+          {/* ATTIVA ONE CALL — industrial metal CTA with runner ring */}
           <button
+            className="oc-cta"
             onClick={handleSubmit}
             disabled={submitting}
+            onMouseEnter={() => !submitting && setCtaHover(true)}
+            onMouseLeave={() => setCtaHover(false)}
             style={{
+              position: 'relative',
               display: 'flex',
               alignItems: 'stretch',
-              height: 82,
-              border: '2px solid #1A1A1A',
-              borderRadius: 8,
-              overflow: 'hidden',
+              height: 88,
+              minWidth: 420,
+              padding: 0,
+              border: 'none',
+              background: 'linear-gradient(180deg,#3A3A3E 0%,#1C1C1F 48%,#0E0E10 100%)',
+              borderRadius: 6,
               cursor: submitting ? 'not-allowed' : 'pointer',
               opacity: submitting ? 0.7 : 1,
-              boxShadow: submitting ? 'none' : '0 0 28px rgba(255,165,0,0.45), 0 0 56px rgba(255,165,0,0.18)',
-              transition: 'box-shadow 0.25s, opacity 0.2s',
-              minWidth: 380,
-              background: 'transparent',
-              padding: 0,
+              overflow: 'hidden',
+              clipPath: 'polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%)',
+              boxShadow: ctaHover
+                ? '0 0 40px rgba(255,150,0,0.6), 0 0 80px rgba(255,150,0,0.25)'
+                : '0 0 22px rgba(255,150,0,0.32), 0 4px 14px rgba(0,0,0,0.6)',
+              transition: 'box-shadow 0.3s',
             }}
-            onMouseEnter={e => { if (!submitting) e.currentTarget.style.boxShadow = '0 0 44px rgba(255,165,0,0.7), 0 0 88px rgba(255,165,0,0.3)' }}
-            onMouseLeave={e => { if (!submitting) e.currentTarget.style.boxShadow = '0 0 28px rgba(255,165,0,0.45), 0 0 56px rgba(255,165,0,0.18)' }}
           >
-            {/* Left hazard stripe */}
+            {/* Left hazard chevron edge */}
             <div style={{
-              width: 64,
-              flexShrink: 0,
-              background: 'repeating-linear-gradient(-45deg, #E8A000 0px, #E8A000 10px, #0A0A0A 10px, #0A0A0A 20px)',
-              borderRight: '2px solid rgba(0,0,0,0.4)',
-            }} />
+              width: 60, flexShrink: 0, position: 'relative',
+              background: 'repeating-linear-gradient(-45deg,#F2B505 0 12px,#141414 12px 24px)',
+              clipPath: 'polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%)',
+            }}>
+              {/* corner bolts */}
+              <span style={boltStyle(8, 8)} />
+              <span style={boltStyle(8, 'calc(100% - 14px)')} />
+            </div>
 
             {/* Main amber panel */}
             <div style={{
-              flex: 1,
-              background: 'linear-gradient(180deg, #F0AE10 0%, #CC8800 55%, #B87A00 100%)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              padding: '0 22px',
+              flex: 1, position: 'relative',
+              background: 'linear-gradient(180deg,#FFC21A 0%,#F2A410 42%,#C9820A 100%)',
+              display: 'flex', flexDirection: 'column', justifyContent: 'center',
+              padding: '0 24px',
+              boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3), inset 0 -3px 8px rgba(120,70,0,0.4)',
             }}>
+              {/* top + bottom hazard trims */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5,
+                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 8px,#F2B505 8px 16px)', opacity: 0.9 }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 5,
+                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 8px,#F2B505 8px 16px)', opacity: 0.9 }} />
+
               <div style={{
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 900,
-                fontSize: 30,
-                letterSpacing: '0.04em',
-                color: '#0A0A0A',
-                lineHeight: 1,
-                textTransform: 'uppercase',
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
+                fontSize: 32, letterSpacing: '0.03em', color: '#141414',
+                lineHeight: 1, textTransform: 'uppercase',
+                textShadow: '0 1px 0 rgba(255,255,255,0.25)',
               }}>
                 {submitting ? 'INVIO IN CORSO…' : 'ATTIVA ONE CALL™'}
               </div>
               <div style={{
-                fontFamily: "'Inter', sans-serif",
-                fontSize: 11,
-                color: 'rgba(0,0,0,0.62)',
-                marginTop: 4,
-                lineHeight: 1.3,
+                fontFamily: "'Inter', sans-serif", fontSize: 11,
+                color: 'rgba(20,20,20,0.7)', marginTop: 5, lineHeight: 1.3, fontWeight: 500,
               }}>
                 Invia richiesta tecnica a<br/>Palmisano Demolizioni &amp; Taglio Termico
               </div>
             </div>
 
-            {/* Right hazard stripe */}
+            {/* Right circular runner button */}
             <div style={{
-              width: 64,
-              flexShrink: 0,
-              background: 'repeating-linear-gradient(-45deg, #E8A000 0px, #E8A000 10px, #0A0A0A 10px, #0A0A0A 20px)',
-              borderLeft: '2px solid rgba(0,0,0,0.4)',
-              borderRight: '2px solid rgba(0,0,0,0.25)',
-            }} />
-
-            {/* Arrow circle button */}
-            <div style={{
-              width: 90,
-              flexShrink: 0,
-              background: '#080808',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 96, flexShrink: 0,
+              background: 'linear-gradient(180deg,#2C2C30 0%,#141416 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              position: 'relative',
+              boxShadow: 'inset 2px 0 6px rgba(0,0,0,0.6)',
             }}>
-              <div style={{
-                width: 58,
-                height: 58,
-                borderRadius: '50%',
-                background: 'radial-gradient(circle at 40% 35%, #1A1A1A, #060606)',
-                border: '2px solid #FFA500',
-                boxShadow: '0 0 16px rgba(255,165,0,0.7), 0 0 32px rgba(255,165,0,0.3), inset 0 0 8px rgba(255,165,0,0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFA500" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  {submitting
-                    ? <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></>
-                    : <><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>
-                  }
+              <span style={boltStyle(8, 8)} />
+              <span style={boltStyle(8, 'calc(100% - 14px)')} />
+
+              <div style={{ position: 'relative', width: 72, height: 72 }}>
+                <svg width="72" height="72" viewBox="0 0 72 72" style={{ position: 'absolute', inset: 0 }}>
+                  <defs>
+                    <filter id="ctaGlow" x="-60%" y="-60%" width="220%" height="220%">
+                      <feGaussianBlur stdDeviation="3.2" result="b" />
+                      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                  </defs>
+                  {/* dim track ring */}
+                  <circle cx="36" cy="36" r="29" fill="none"
+                    stroke={ctaHover ? 'rgba(255,150,0,0.45)' : 'rgba(255,150,0,0.30)'}
+                    strokeWidth="3" />
+                  {/* dark inner disc */}
+                  <circle cx="36" cy="36" r="24"
+                    fill="radial-gradient(#1A1A1A,#060606)" stroke="rgba(255,150,0,0.5)" strokeWidth="1" />
+                  {/* runner comet (hover) */}
+                  {ctaHover && (
+                    <g className="oc-runner" style={{ transformOrigin: '36px 36px' }}>
+                      <circle cx="36" cy="36" r="29" fill="none"
+                        stroke="#FFB000" strokeWidth="3.6" strokeLinecap="round"
+                        strokeDasharray="44 138" filter="url(#ctaGlow)" />
+                    </g>
+                  )}
                 </svg>
+                {/* arrow */}
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: ctaHover ? '#FFC24A' : '#FF9500',
+                  filter: ctaHover
+                    ? 'drop-shadow(0 0 8px rgba(255,165,0,0.95)) drop-shadow(0 0 16px rgba(255,165,0,0.5))'
+                    : 'drop-shadow(0 0 5px rgba(255,165,0,0.6))',
+                  transition: 'color 0.25s, filter 0.25s',
+                }}>
+                  <svg className="oc-cta-arrow" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                    {submitting
+                      ? <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></>
+                      : <><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>
+                    }
+                  </svg>
+                </div>
               </div>
             </div>
           </button>
