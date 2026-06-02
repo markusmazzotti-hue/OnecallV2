@@ -342,7 +342,7 @@ export default function Dashboard() {
         </div>
 
         {/* Middle row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1.1fr', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.35fr 1.2fr 1.05fr', gap: 14 }}>
           {/* Recent table */}
           <Panel title="RICHIESTE RECENTI" action="VEDI TUTTE">
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -369,16 +369,16 @@ export default function Dashboard() {
           </Panel>
 
           {/* Donut */}
-          <Panel title="RICHIESTE PER PRIORITÀ" action="QUESTO MESE">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <DonutChart data={donutData} total={donutTotal} size={150} thickness={26} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 9, flex: 1 }}>
+          <Panel title="RICHIESTE PER PRIORITÀ" action="QUESTO MESE" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: 18 }}>
+              <DonutChart data={donutData} total={donutTotal} size={196} thickness={34} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, flex: 1, maxWidth: 170 }}>
                 {donutData.map((d, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ width: 9, height: 9, borderRadius: '50%', background: d.color, flexShrink: 0, boxShadow: `0 0 6px ${d.color}` }} />
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                    <span style={{ width: 11, height: 11, borderRadius: '50%', background: d.color, flexShrink: 0, boxShadow: `0 0 8px ${d.color}` }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#CFCFD4' }}>{d.label}</div>
-                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: '#777' }}>{d.value} ({donutPct(d.value)}%)</div>
+                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 12.5, color: '#CFCFD4' }}>{d.label}</div>
+                      <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: '#888', marginTop: 1 }}>{d.value} ({donutPct(d.value)}%)</div>
                     </div>
                   </div>
                 ))}
