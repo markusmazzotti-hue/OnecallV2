@@ -73,8 +73,7 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
           color: '#9A9A9A',
           textTransform: 'uppercase',
           width: '100%',
-          textAlign: 'justify',
-          textAlignLast: 'justify',
+          textAlign: 'right',
           lineHeight: 1,
         }}>
           DEMOLIZIONI &amp; TAGLIO TERMICO
