@@ -1,66 +1,73 @@
 import React from 'react'
 
 /*
- * Official PALMISANO ONE CALL™ logo, recreated as crisp scalable text.
- *  - "PALMISANO"  : brushed-silver vertical gradient
- *  - "ONE CALL"   : amber/orange vertical gradient
- *  - "™"          : small superscript
- *  - subtitle     : "DEMOLIZIONI & TAGLIO TERMICO" (white, wide tracking)
+ * PALMISANO ONE CALL™ logo — 3D metallic bevel (matches PDF reference)
  *
- * `size` scales the whole lockup. Default 22 ≈ header size.
+ * PALMISANO : chrome steel — 7-stop vertical gradient (bright→dark→bright)
+ * ONE CALL  : gold/amber  — same bevel in orange-gold
+ * ™         : small grey superscript
+ * subtitle  : DEMOLIZIONI & TAGLIO TERMICO — silver-grey, wide tracking
  */
-export default function Logo({ size = 22, subtitle = true }) {
-  const main = {
-    fontFamily: "'Barlow Condensed', sans-serif",
-    fontWeight: 800,
+export default function Logo({ size = 32, subtitle = true }) {
+  const chrome =
+    'linear-gradient(180deg,' +
+    '#FFFFFF 0%,#DEDEDE 12%,#A8A8A8 32%,#686868 50%,#ABABAB 68%,#D8D8D8 84%,#F2F2F2 100%)'
+
+  const gold =
+    'linear-gradient(180deg,' +
+    '#FFE070 0%,#FFC030 12%,#C87800 32%,#7A4400 50%,#C87A00 68%,#FFC030 84%,#FFE070 100%)'
+
+  const base = {
+    fontFamily: "'Barlow Condensed', 'Impact', sans-serif",
+    fontWeight: 900,
     fontSize: size,
     lineHeight: 1,
-    letterSpacing: '0.01em',
+    letterSpacing: '-0.01em',
     WebkitBackgroundClip: 'text',
     backgroundClip: 'text',
     color: 'transparent',
     WebkitTextFillColor: 'transparent',
+    display: 'inline-block',
   }
 
   return (
-    <div style={{ display: 'inline-flex', flexDirection: 'column', gap: size * 0.14 }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: size * 0.34 }}>
-        {/* PALMISANO — brushed silver */}
-        <span style={{
-          ...main,
-          backgroundImage:
-            'linear-gradient(180deg,#FFFFFF 0%,#F0F0F0 38%,#9A9A9A 62%,#E8E8E8 100%)',
-        }}>PALMISANO</span>
+    <div style={{ display: 'inline-flex', flexDirection: 'column', gap: size * 0.09 }}>
 
-        {/* ONE CALL — amber/orange */}
+      {/* Main row */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: size * 0.22 }}>
+
+        {/* PALMISANO — chrome */}
+        <span style={{ ...base, backgroundImage: chrome }}>PALMISANO</span>
+
+        {/* ONE CALL™ — gold */}
         <span style={{ display: 'inline-flex', alignItems: 'flex-start' }}>
-          <span style={{
-            ...main,
-            backgroundImage:
-              'linear-gradient(180deg,#FFB347 0%,#FF9500 45%,#FF8C00 70%,#E07800 100%)',
-          }}>ONE&nbsp;CALL</span>
+          <span style={{ ...base, backgroundImage: gold }}>ONE&nbsp;CALL</span>
           <span style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontWeight: 700,
-            fontSize: size * 0.34,
-            color: '#FFFFFF',
+            fontSize: size * 0.30,
+            color: '#BBBBBB',
             lineHeight: 1,
+            marginTop: size * 0.03,
             marginLeft: size * 0.04,
-            marginTop: size * 0.02,
           }}>™</span>
         </span>
       </div>
 
+      {/* Subtitle */}
       {subtitle && (
         <div style={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontWeight: 600,
-          fontSize: size * 0.42,
-          color: '#FFFFFF',
-          letterSpacing: `${size * 0.012}em`,
+          fontFamily: "'Barlow Condensed', sans-serif",
+          fontWeight: 500,
+          fontSize: size * 0.37,
+          letterSpacing: `${size * 0.018}em`,
+          color: '#868686',
           textTransform: 'uppercase',
           whiteSpace: 'nowrap',
-        }}>DEMOLIZIONI &amp; TAGLIO TERMICO</div>
+          paddingLeft: 1,
+        }}>
+          DEMOLIZIONI &amp; TAGLIO TERMICO
+        </div>
       )}
     </div>
   )
