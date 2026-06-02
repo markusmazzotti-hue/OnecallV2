@@ -1,30 +1,21 @@
 import React, { useEffect, useRef } from 'react'
 import L from 'leaflet'
 
-// Fix default marker icons (webpack/vite asset issue)
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-})
-
-const CUSTOM_ICON = L.divIcon({
+/* Blinking orange location pin (pulse animation defined in index.css) */
+const PIN = L.divIcon({
   className: '',
-  html: `<div style="
-    width: 28px; height: 28px;
-    background: radial-gradient(circle at 40% 35%, #FFB800, #CC6600);
-    border: 2px solid rgba(255,180,0,0.8);
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    box-shadow: 0 0 12px rgba(255,140,0,0.7), 0 0 24px rgba(255,140,0,0.3);
-  "></div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 28],
-  popupAnchor: [0, -30],
+  html: `<div class="oc-pin">
+    <span class="oc-pin-ring"></span>
+    <span class="oc-pin-ring oc-pin-ring2"></span>
+    <span class="oc-pin-core"></span>
+  </div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
 })
 
-export default function ItalyMapLeaflet({ localita, onLocationChange, height = 220 }) {
+const ROME = [41.9028, 12.4964]
+
+export default function ItalyMapLeaflet({ localita, onLocationChange, height = 210 }) {
   const mapRef = useRef(null)
   const instanceRef = useRef(null)
   const markerRef = useRef(null)
@@ -32,59 +23,58 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
   useEffect(() => {
     if (instanceRef.current) return
 
+    // Static, non-interactive map (no scroll / drag / zoom controls)
     const map = L.map(mapRef.current, {
-      center: [42.5, 12.5],
+      center: ROME,
       zoom: 5,
-      zoomControl: true,
+      zoomControl: false,
       attributionControl: false,
+      scrollWheelZoom: false,
+      dragging: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false,
+      touchZoom: false,
+      tap: false,
     })
 
-    // Dark tile layer from CartoDB
+    // Dark CartoDB tiles
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 18,
     }).addTo(map)
 
-    // Attribution minimal
-    L.control.attribution({ prefix: false }).addTo(map)
+    // Default blinking pin on Rome
+    markerRef.current = L.marker(ROME, { icon: PIN, interactive: false }).addTo(map)
 
-    // Click to place marker + reverse geocode
+    // Click still places the pin + reverse-geocodes (optional)
     map.on('click', async (e) => {
       const { lat, lng } = e.latlng
-
-      if (markerRef.current) {
-        markerRef.current.setLatLng(e.latlng)
-      } else {
-        markerRef.current = L.marker(e.latlng, { icon: CUSTOM_ICON }).addTo(map)
-      }
-
+      markerRef.current.setLatLng(e.latlng)
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=it`
         )
         const data = await res.json()
         const city =
-          data.address?.city ||
-          data.address?.town ||
-          data.address?.village ||
-          data.address?.municipality ||
-          data.address?.county ||
-          ''
+          data.address?.city || data.address?.town || data.address?.village ||
+          data.address?.municipality || data.address?.county || ''
         if (city && onLocationChange) onLocationChange(city)
       } catch {}
     })
 
     instanceRef.current = map
-
-    return () => {
-      map.remove()
-      instanceRef.current = null
-      markerRef.current = null
-    }
+    return () => { map.remove(); instanceRef.current = null; markerRef.current = null }
   }, [])
 
-  // Geocode when localita changes externally (typed input)
+  // When the city is selected/typed, move the pin there and recenter
   useEffect(() => {
-    if (!localita || !instanceRef.current) return
+    if (!instanceRef.current) return
+    if (!localita) {
+      // empty -> back to Rome
+      instanceRef.current.setView(ROME, 5, { animate: true })
+      if (markerRef.current) markerRef.current.setLatLng(ROME)
+      return
+    }
     fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(localita + ', Italia')}&format=json&limit=1`
     )
@@ -93,12 +83,9 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
         if (data[0] && instanceRef.current) {
           const lat = parseFloat(data[0].lat)
           const lng = parseFloat(data[0].lon)
-          instanceRef.current.setView([lat, lng], 9)
-          if (markerRef.current) {
-            markerRef.current.setLatLng([lat, lng])
-          } else {
-            markerRef.current = L.marker([lat, lng], { icon: CUSTOM_ICON }).addTo(instanceRef.current)
-          }
+          instanceRef.current.setView([lat, lng], 8, { animate: true })
+          if (markerRef.current) markerRef.current.setLatLng([lat, lng])
+          else markerRef.current = L.marker([lat, lng], { icon: PIN, interactive: false }).addTo(instanceRef.current)
         }
       })
       .catch(() => {})
@@ -109,11 +96,12 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
       ref={mapRef}
       style={{
         width: '100%',
-        height: height,
+        height,
         borderRadius: 6,
         overflow: 'hidden',
-        border: '1px solid #2A2A2A',
-        filter: 'brightness(0.85) contrast(1.1)',
+        border: 'none',
+        background: 'transparent',
+        filter: 'brightness(0.92) contrast(1.05)',
       }}
     />
   )

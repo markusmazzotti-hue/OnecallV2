@@ -659,9 +659,9 @@ export default function ClientForm() {
             </div>
 
             {/* Content row: form fields left, map right */}
-            <div style={{ display: 'flex', gap: 12, flex: 1, minHeight: 280 }}>
-              {/* LEFT — stacked form fields */}
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
+              {/* Form fields */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <InputField label="LOCALITÀ" placeholder="Es. Taranto, Genova, ecc." icon="📍" value={localita} onChange={setLocalita} />
                 <InputField label="INDIRIZZO (FACOLTATIVO)" placeholder="Via, n°, stabilimento, ecc." icon="+" value={indirizzo} onChange={setIndirizzo} />
 
@@ -685,27 +685,47 @@ export default function ClientForm() {
                           transition: 'all 0.2s',
                         }}
                       >
-                        {/* Circular disc */}
-                        <div style={{
-                          width: 56,
-                          height: 56,
-                          borderRadius: '50%',
-                          background: priority === p.id
-                            ? `radial-gradient(circle at 40% 35%, rgba(${p.rgb},0.22), rgba(${p.rgb},0.06) 70%, #060606)`
-                            : 'radial-gradient(circle at 40% 35%, #181818, #060606)',
-                          border: `2px solid ${priority === p.id ? p.color : '#252525'}`,
-                          boxShadow: priority === p.id
-                            ? `0 0 16px rgba(${p.rgb},0.65), 0 0 32px rgba(${p.rgb},0.25), inset 0 0 10px rgba(${p.rgb},0.08)`
-                            : '0 0 0 1px #1A1A1A inset',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: priority === p.id ? p.color : '#3A3A3A',
-                          filter: priority === p.id ? `drop-shadow(0 0 5px rgba(${p.rgb},0.8))` : 'none',
-                          transition: 'all 0.25s',
-                          flexShrink: 0,
-                        }}>
-                          {p.icon}
+                        {/* Animated dial — tick ring + always-on runner */}
+                        <div style={{ position: 'relative', width: 60, height: 60, flexShrink: 0 }}>
+                          <svg width="60" height="60" viewBox="0 0 60 60" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
+                            <defs>
+                              <filter id={`dial-${p.id}`} x="-60%" y="-60%" width="220%" height="220%">
+                                <feGaussianBlur stdDeviation="2.6" result="b" />
+                                <feMerge><feMergeNode in="b" /><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                              </filter>
+                            </defs>
+                            {Array.from({ length: 24 }).map((_, k) => {
+                              const a = ((k / 24) * 360 - 90) * Math.PI / 180
+                              const long = k % 3 === 0
+                              const r1 = 28, r2 = long ? 22 : 24.5
+                              const sel = priority === p.id
+                              return (
+                                <line key={k}
+                                  x1={30 + r1 * Math.cos(a)} y1={30 + r1 * Math.sin(a)}
+                                  x2={30 + r2 * Math.cos(a)} y2={30 + r2 * Math.sin(a)}
+                                  stroke={`rgba(${p.rgb},${sel ? 0.95 : 0.5})`}
+                                  strokeWidth={long ? 1.6 : 1} />
+                              )
+                            })}
+                            <circle cx="30" cy="30" r="21" fill="#0C0C0C"
+                              stroke={`rgba(${p.rgb},${priority === p.id ? 0.9 : 0.4})`} strokeWidth="1.5" />
+                            <g className="oc-runner-slow" style={{ transformOrigin: '30px 30px' }}>
+                              <circle cx="30" cy="30" r="28" fill="none"
+                                stroke={p.color} strokeWidth={priority === p.id ? 3 : 2.2}
+                                strokeLinecap="round" strokeDasharray="30 146"
+                                opacity={priority === p.id ? 0.95 : 0.55}
+                                filter={`url(#dial-${p.id})`} />
+                            </g>
+                          </svg>
+                          <div style={{
+                            position: 'absolute', inset: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: p.color,
+                            filter: `drop-shadow(0 0 ${priority === p.id ? '6px' : '3px'} rgba(${p.rgb},${priority === p.id ? 1 : 0.7}))`,
+                            transition: 'filter 0.25s',
+                          }}>
+                            {p.icon}
+                          </div>
                         </div>
                         {/* Label */}
                         <span style={{
@@ -713,7 +733,8 @@ export default function ClientForm() {
                           fontWeight: 700,
                           fontSize: 9.5,
                           letterSpacing: '0.06em',
-                          color: priority === p.id ? p.color : '#444',
+                          color: p.color,
+                          textShadow: `0 0 8px rgba(${p.rgb},${priority === p.id ? 0.9 : 0.45})`,
                           textAlign: 'center',
                           lineHeight: 1.25,
                           whiteSpace: 'pre-line',
@@ -752,9 +773,9 @@ export default function ClientForm() {
                 </div>
               </div>
 
-              {/* RIGHT — Italy map */}
-              <div style={{ flex: '0 0 155px', alignSelf: 'stretch', display: 'flex', flexDirection: 'column' }}>
-                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height="100%" />
+              {/* Italy map — full width, integrated, no frame */}
+              <div style={{ width: '100%' }}>
+                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height={210} />
               </div>
             </div>
           </div>
