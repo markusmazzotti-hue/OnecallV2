@@ -64,8 +64,8 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
         <div style={{
           fontFamily: "'Barlow Condensed', sans-serif",
           fontWeight: 500,
-          fontSize: size * 0.37,
-          letterSpacing: `${size * 0.018}em`,
+          fontSize: stacked ? size * 0.285 : size * 0.34,
+          letterSpacing: '0.04em',
           color: '#868686',
           textTransform: 'uppercase',
           whiteSpace: 'nowrap',
