@@ -14,8 +14,10 @@ const PIN = L.divIcon({
 })
 
 const ROME = [41.9028, 12.4964]
+// Bounds covering the whole Italian peninsula + islands
+const ITALY_BOUNDS = [[36.5, 6.5], [47.2, 18.6]]
 
-export default function ItalyMapLeaflet({ localita, onLocationChange, height = 210 }) {
+export default function ItalyMapLeaflet({ localita, onLocationChange, height = 250 }) {
   const mapRef = useRef(null)
   const instanceRef = useRef(null)
   const markerRef = useRef(null)
@@ -25,8 +27,6 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
 
     // Static, non-interactive map (no scroll / drag / zoom controls)
     const map = L.map(mapRef.current, {
-      center: ROME,
-      zoom: 5,
       zoomControl: false,
       attributionControl: false,
       scrollWheelZoom: false,
@@ -42,6 +42,9 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 18,
     }).addTo(map)
+
+    // Fit the whole of Italy in view
+    map.fitBounds(ITALY_BOUNDS, { padding: [6, 6] })
 
     // Default blinking pin on Rome
     markerRef.current = L.marker(ROME, { icon: PIN, interactive: false }).addTo(map)
@@ -70,8 +73,8 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
   useEffect(() => {
     if (!instanceRef.current) return
     if (!localita) {
-      // empty -> back to Rome
-      instanceRef.current.setView(ROME, 5, { animate: true })
+      // empty -> show all of Italy, pin back on Rome
+      instanceRef.current.fitBounds(ITALY_BOUNDS, { padding: [6, 6], animate: true })
       if (markerRef.current) markerRef.current.setLatLng(ROME)
       return
     }

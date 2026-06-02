@@ -468,7 +468,7 @@ export default function ClientForm() {
         justifyContent: 'space-between',
         flexShrink: 0,
       }}>
-        <Logo size={29} />
+        <Logo size={33} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
@@ -741,7 +741,7 @@ export default function ClientForm() {
 
               {/* Italy map — full width, integrated, no frame */}
               <div style={{ width: '100%' }}>
-                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height={210} />
+                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height={250} />
               </div>
             </div>
           </div>

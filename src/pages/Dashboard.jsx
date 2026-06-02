@@ -398,7 +398,7 @@ export default function Dashboard() {
                 <rect x="1" y="17" width="22" height="4" rx="1"/>
               </svg>
             </div>
-            <Logo size={18} subtitle={false} />
+            <Logo size={20} subtitle={false} />
           </div>
         </div>
 

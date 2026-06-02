@@ -191,14 +191,14 @@ export default function RotarySelector({
   const GLOW_TEXT  = `0 0 14px rgba(${RGB},0.9), 0 0 28px rgba(${RGB},0.4)`
 
   /* ── Ring geometry ── */
-  const SZ      = 392
-  const CX      = 196, CY = 196
-  const ROUT    = 190          // outer rim outer edge
-  const RIM_IN  = 184          // outer rim inner edge
-  const RO      = 180          // segment band outer
-  const RI      = 106          // segment band inner
-  const RCTR    = 98           // center disc radius
-  const RITEM   = 143          // icon/label radius
+  const SZ      = 470
+  const CX      = 235, CY = 235
+  const ROUT    = 228          // outer rim outer edge
+  const RIM_IN  = 221          // outer rim inner edge
+  const RO      = 216          // segment band outer
+  const RI      = 127          // segment band inner
+  const RCTR    = 118           // center disc radius
+  const RITEM   = 172          // icon/label radius
   const GAP     = 2.6          // degrees between segments
   const segHalf = 180 / n
 
@@ -339,7 +339,7 @@ export default function RotarySelector({
                 display: 'flex', flexDirection: 'column',
                 alignItems: 'center', gap: 2,
                 cursor: 'pointer', zIndex: 10,
-                width: 84, padding: '2px',
+                width: 98, padding: '2px',
                 pointerEvents: 'auto',
               }}
             >
@@ -348,7 +348,7 @@ export default function RotarySelector({
                 filter: on
                   ? `drop-shadow(0 0 6px rgba(${RGB},1)) drop-shadow(0 0 13px rgba(${RGB},0.6))`
                   : 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))',
-                transform: 'scale(1.12)',
+                transform: 'scale(1.3)',
                 transition: 'color 0.25s, filter 0.25s',
                 lineHeight: 0,
               }}>
@@ -362,7 +362,7 @@ export default function RotarySelector({
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700,
-                fontSize: 9.5,
+                fontSize: 11,
                 letterSpacing: '0.04em',
                 color: on ? '#FFFFFF' : '#EDEDED',
                 textAlign: 'center',
@@ -399,12 +399,12 @@ export default function RotarySelector({
         }}>
           <div style={{
             fontFamily: "'Barlow Condensed', sans-serif",
-            fontWeight: 700, fontSize: 60, lineHeight: 1,
+            fontWeight: 700, fontSize: 72, lineHeight: 1,
             color: NEON, textShadow: GLOW_TEXT,
           }}>{stepNum}</div>
           <div style={{
             fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 700, fontSize: 11, letterSpacing: '0.14em',
+            fontWeight: 700, fontSize: 12.5, letterSpacing: '0.14em',
             color: NEON, textTransform: 'uppercase', marginTop: 2,
           }}>{centerLabel}</div>
           <div style={{
