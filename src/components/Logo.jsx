@@ -9,10 +9,10 @@ import React from 'react'
  * subtitle  : DEMOLIZIONI & TAGLIO TERMICO — silver-grey, wide tracking
  */
 export default function Logo({ size = 32, subtitle = true, stacked = false }) {
-  // PALMISANO — white with a faint silver sheen (reads white, subtle metallic depth)
+  // PALMISANO — brushed silver: bright white top, grey sheen band mid, light bottom
   const chrome =
     'linear-gradient(180deg,' +
-    '#FFFFFF 0%,#FFFFFF 46%,#DADADA 72%,#FFFFFF 100%)'
+    '#FFFFFF 0%,#EDEDED 30%,#ACACAC 52%,#D6D6D6 72%,#FFFFFF 100%)'
 
   const gold =
     'linear-gradient(180deg,' +
@@ -53,13 +53,12 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
           <span style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontWeight: 700,
-            fontSize: size * 0.44,
-            color: '#C8C8C8',
+            fontSize: size * 0.34,
+            color: '#D2D2D2',
             lineHeight: 1,
-            marginTop: size * 0.02,
-            marginLeft: size * 0.05,
-            transform: 'scaleY(1.22)',
-            transformOrigin: 'top',
+            marginTop: size * 0.04,
+            marginLeft: size * 0.04,
+            alignSelf: 'flex-start',
           }}>™</span>
         </span>
       </div>
