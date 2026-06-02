@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase.js'
 import Logo from '../components/Logo.jsx'
 import DonutChart from '../components/DonutChart.jsx'
+import DashboardMap from '../components/DashboardMap.jsx'
 
 /* ════════════════════════════════════════════════════════════════
    ICONS
@@ -261,8 +262,8 @@ export default function Dashboard() {
 
       {/* ══ SIDEBAR ══ */}
       <aside style={{ width: 234, background: '#0A0A0C', borderRight: '1px solid #1A1A1E', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
-        <div style={{ padding: '18px 16px 16px' }}>
-          <Logo size={26} />
+        <div style={{ padding: '20px 16px 16px' }}>
+          <Logo size={34} stacked />
         </div>
         <div style={{ height: 1, background: '#1A1A1E', margin: '0 12px' }} />
 
@@ -408,24 +409,8 @@ export default function Dashboard() {
         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1.1fr', gap: 14 }}>
           {/* Map */}
           <Panel title="MAPPA INTERVENTI" action="VEDI MAPPA COMPLETA">
-            <div style={{ position: 'relative', display: 'flex', gap: 10 }}>
-              <svg viewBox="0 0 300 360" style={{ flex: 1, height: 280 }}>
-                <path d={ITALY_PATH} fill="#15161A" stroke="#2A2C32" strokeWidth="1.5" transform="translate(20,0)" />
-                {CITY_DOTS.map((c, i) => (
-                  <g key={i} transform="translate(20,0)">
-                    <circle cx={c.x} cy={c.y} r="2.5" fill="#FF8C00" opacity="0.6" />
-                    <text x={c.x + 5} y={c.y + 3} fontSize="8" fill="#888" fontFamily="Inter">{c.name}</text>
-                  </g>
-                ))}
-                {CITY_PINS.map((c, i) => (
-                  <g key={i} transform="translate(20,0)">
-                    <circle cx={c.x} cy={c.y} r="11" fill="#0E0E10" stroke="#FF8C00" strokeWidth="1.5" />
-                    <circle cx={c.x} cy={c.y} r="11" fill="none" stroke="#FF8C00" strokeOpacity="0.3" strokeWidth="4" />
-                    <text x={c.x} y={c.y + 4} fontSize="11" fontWeight="700" fill="#FF8C00" textAnchor="middle" fontFamily="Barlow Condensed">{c.num}</text>
-                    <text x={c.x + 14} y={c.y + 3} fontSize="8.5" fill="#AAA" fontFamily="Inter">{c.name}</text>
-                  </g>
-                ))}
-              </svg>
+            <div style={{ position: 'relative' }}>
+              <DashboardMap height={280} />
               {/* legend */}
               <div style={{ position: 'absolute', left: 8, bottom: 6, background: 'rgba(8,8,10,0.85)', border: '1px solid #222', borderRadius: 6, padding: '8px 10px' }}>
                 <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 8.5, letterSpacing: '0.06em', color: '#888', marginBottom: 6 }}>LEGENDA PRIORITÀ</div>

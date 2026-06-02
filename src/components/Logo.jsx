@@ -8,7 +8,7 @@ import React from 'react'
  * ™         : small grey superscript
  * subtitle  : DEMOLIZIONI & TAGLIO TERMICO — silver-grey, wide tracking
  */
-export default function Logo({ size = 32, subtitle = true }) {
+export default function Logo({ size = 32, subtitle = true, stacked = false }) {
   const chrome =
     'linear-gradient(180deg,' +
     '#FFFFFF 0%,#DEDEDE 12%,#A8A8A8 32%,#686868 50%,#ABABAB 68%,#D8D8D8 84%,#F2F2F2 100%)'
@@ -33,8 +33,13 @@ export default function Logo({ size = 32, subtitle = true }) {
   return (
     <div style={{ display: 'inline-flex', flexDirection: 'column', gap: size * 0.09 }}>
 
-      {/* Main row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: size * 0.22 }}>
+      {/* Main lockup — single row or stacked two lines */}
+      <div style={{
+        display: 'flex',
+        flexDirection: stacked ? 'column' : 'row',
+        alignItems: 'flex-start',
+        gap: stacked ? size * 0.04 : size * 0.22,
+      }}>
 
         {/* PALMISANO — chrome */}
         <span style={{ ...base, backgroundImage: chrome }}>PALMISANO</span>
