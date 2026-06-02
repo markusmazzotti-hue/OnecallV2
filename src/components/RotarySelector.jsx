@@ -13,12 +13,24 @@ const ICONS = {
     </svg>
   ),
   'Taglio Termico Rottami': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M13 3c3 0 4 2 3 4l-3 5"/>
-      <path d="M12.6 12.2l-1 2.4M13 12l2 1.4M13.2 11.8l2.3-.1"/>
-      <path d="M7 10.5l1.6 0.95v1.9L7 14.3l-1.6-.95v-1.9z"/>
-      <path d="M10.2 12.4l1.6 0.95v1.9l-1.6 .95-1.6-.95v-1.9z"/>
-      <path d="M7 14.3l1.6 0.95v1.9L7 18.1l-1.6-.95v-1.9z"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9.5 12.5V8.2c0-2.3 1.9-4.2 4.2-4.2 2.6 0 4.8 1.7 5 4.4"/>
+      <path d="M18.7 8.4c.2 2.4-1 4.6-3.2 6.2L13 16.6"/>
+      <path d="M13 16.6c-.5 1 -.2 2 .7 2.5M13 16.6c1 .4 2 0 2.3-1"/>
+      <path d="M7.6,13.7 L9.07,14.55 L9.07,16.25 L7.6,17.1 L6.13,16.25 L6.13,14.55 Z"/>
+      <path d="M7.6,10.35 L9.07,11.2 L9.07,12.9 L7.6,13.75 L6.13,12.9 L6.13,11.2 Z"/>
+      <path d="M10.5,12.03 L11.97,12.88 L11.97,14.58 L10.5,15.43 L9.03,14.58 L9.03,12.88 Z"/>
+      <path d="M10.5,15.37 L11.97,16.22 L11.97,17.92 L10.5,18.77 L9.03,17.92 L9.03,16.22 Z"/>
+      <path d="M7.6,17.05 L9.07,17.9 L9.07,19.6 L7.6,20.45 L6.13,19.6 L6.13,17.9 Z"/>
+      <path d="M4.7,15.37 L6.17,16.22 L6.17,17.92 L4.7,18.77 L3.23,17.92 L3.23,16.22 Z"/>
+      <path d="M4.7,12.02 L6.17,12.87 L6.17,14.57 L4.7,15.42 L3.23,14.57 L3.23,12.87 Z"/>
+      <circle cx="7.6" cy="15.4" r="0.45"/>
+      <circle cx="7.6" cy="12.05" r="0.45"/>
+      <circle cx="10.5" cy="13.73" r="0.45"/>
+      <circle cx="10.5" cy="17.07" r="0.45"/>
+      <circle cx="7.6" cy="18.75" r="0.45"/>
+      <circle cx="4.7" cy="17.07" r="0.45"/>
+      <circle cx="4.7" cy="13.72" r="0.45"/>
     </svg>
   ),
   'Smantellamento Impianti': (
@@ -152,14 +164,14 @@ export default function RotarySelector({
   const GLOW_TEXT  = `0 0 14px rgba(${RGB},0.9), 0 0 28px rgba(${RGB},0.4)`
 
   /* ── Ring geometry ── */
-  const SZ      = 372
-  const CX      = 186, CY = 186
-  const ROUT    = 182          // outer rim outer edge
-  const RIM_IN  = 170          // outer rim inner edge
-  const RO      = 166          // segment band outer
-  const RI      = 102          // segment band inner
-  const RCTR    = 94           // center disc radius
-  const RITEM   = 134          // icon/label radius
+  const SZ      = 392
+  const CX      = 196, CY = 196
+  const ROUT    = 190          // outer rim outer edge
+  const RIM_IN  = 184          // outer rim inner edge
+  const RO      = 180          // segment band outer
+  const RI      = 106          // segment band inner
+  const RCTR    = 98           // center disc radius
+  const RITEM   = 143          // icon/label radius
   const GAP     = 2.6          // degrees between segments
   const segHalf = 180 / n
 
@@ -305,10 +317,11 @@ export default function RotarySelector({
               }}
             >
               <div style={{
-                color: on ? NEON_HI : '#5A5B62',
+                color: on ? NEON_HI : '#F2F2F2',
                 filter: on
                   ? `drop-shadow(0 0 6px rgba(${RGB},1)) drop-shadow(0 0 13px rgba(${RGB},0.6))`
-                  : 'none',
+                  : 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))',
+                transform: 'scale(1.12)',
                 transition: 'color 0.25s, filter 0.25s',
                 lineHeight: 0,
               }}>
@@ -322,12 +335,12 @@ export default function RotarySelector({
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700,
-                fontSize: 9,
+                fontSize: 9.5,
                 letterSpacing: '0.04em',
-                color: on ? '#FFFFFF' : '#7C7D84',
+                color: on ? '#FFFFFF' : '#EDEDED',
                 textAlign: 'center',
                 lineHeight: 1.2,
-                textShadow: on ? `0 0 10px rgba(${RGB},0.85)` : 'none',
+                textShadow: on ? `0 0 10px rgba(${RGB},0.9)` : '0 1px 3px rgba(0,0,0,0.95)',
                 whiteSpace: 'pre-line',
                 maxWidth: 82,
                 transition: 'all 0.25s',
