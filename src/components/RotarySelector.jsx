@@ -3,76 +3,76 @@ import React from 'react'
 /* ── Icons ──────────────────────────────────────────────────────── */
 const ICONS = {
   'Demolizione Industriale': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 17l2-8h14l2 8H3z"/><path d="M7 17V9"/><path d="M12 17V9"/><path d="M17 17V9"/>
       <rect x="1" y="17" width="22" height="4" rx="1"/><path d="M8 9V7a4 4 0 018 0v2"/>
     </svg>
   ),
   'Taglio Termico Rottami': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2C6 8 4 12 8 16c1 1 2 1.5 3 1.5"/><path d="M12 2c6 6 8 10 4 14-1 1-2 1.5-3 1.5"/>
       <path d="M9 17.5C9 19.4 10.3 21 12 21s3-1.6 3-3.5"/>
       <line x1="2" y1="12" x2="22" y2="12" strokeDasharray="2 2"/>
     </svg>
   ),
   'Smantellamento Impianti': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
       <line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
     </svg>
   ),
   'Intervento in Ambiente Produttivo': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3"/>
       <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
     </svg>
   ),
   'Strip-out': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="3" width="20" height="4" rx="1"/><rect x="2" y="10" width="20" height="4" rx="1"/><rect x="2" y="17" width="20" height="4" rx="1"/>
     </svg>
   ),
   'Caso Complesso da Valutare': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
     </svg>
   ),
   'Industria': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M2 20V10l5-5v5l5-5v5l5-5v15H2z"/><line x1="2" y1="20" x2="22" y2="20"/>
       <rect x="14" y="14" width="4" height="6"/>
     </svg>
   ),
   'Trader & Mandatari Acciaierie': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
       <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
     </svg>
   ),
   'Acciaieria & Fonderia': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5m4 0h10m0-11v11m0 0h-4"/>
       <path d="M2 9h20"/><circle cx="12" cy="16" r="2"/>
     </svg>
   ),
   'Altro Settore': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
       <circle cx="5" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
     </svg>
   ),
   'Settore Commerciale': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
     </svg>
   ),
   'Impianto Industriale e Sito Produttivo': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20"/>
     </svg>
   ),
   'Centro Riciclo Rottami': (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
     </svg>
   ),
@@ -89,103 +89,192 @@ const SUBTITLE = {
   'Altro Settore': 'Specifica il settore',
 }
 
+/* ── Geometry helpers ────────────────────────────────────────────── */
+function toXY(cx, cy, r, degFromTop) {
+  const rad = ((degFromTop - 90) * Math.PI) / 180
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) }
+}
+function donutArc(cx, cy, r1, r2, a1, a2) {
+  const p1 = toXY(cx, cy, r2, a1)
+  const p2 = toXY(cx, cy, r2, a2)
+  const p3 = toXY(cx, cy, r1, a2)
+  const p4 = toXY(cx, cy, r1, a1)
+  const large = (a2 - a1) > 180 ? 1 : 0
+  return `M${p1.x},${p1.y} A${r2},${r2} 0 ${large},1 ${p2.x},${p2.y} L${p3.x},${p3.y} A${r1},${r1} 0 ${large},0 ${p4.x},${p4.y} Z`
+}
+
 /* ── Component ───────────────────────────────────────────────────── */
 /*
- * Uses two PNG renders as base layers (placed in /public/):
- *   /selector-off.png  — dark metallic ring, all segments unlit
- *   /selector-on.png   — same ring, TOP segment illuminated amber/orange
+ * Parametric metallic rotary selector (pure SVG — supports any N segments).
  *
- * The ON image is always shown at full opacity because the active
- * segment is always rendered at the top position.
- * For the green theme a CSS hue-rotate shifts amber → lime-green.
- *
- * Interactive icons + labels are absolutely positioned HTML on top.
- * Invisible <button> elements overlap the PNG arrow graphics.
+ * Props:
+ *   items     : string[]
+ *   selected  : number | number[]   (array when multiple=true)
+ *   onChange  : (next) => void       (next is index OR new array)
+ *   multiple  : boolean              (true = multi-select)
+ *   theme     : 'orange' | 'green'
+ *   stepNum, centerLabel, centerSub
  */
 export default function RotarySelector({
-  items, activeIndex, onChange,
-  theme = 'orange', stepNum, centerLabel, centerSub,
+  items,
+  selected,
+  onChange,
+  multiple = false,
+  theme = 'orange',
+  stepNum,
+  centerLabel,
+  centerSub,
 }) {
-  const n        = items.length
-  const isGreen  = theme === 'green'
-  const COLOR    = isGreen ? '#7EFF00' : '#FFA500'
-  const RGB      = isGreen ? '126,255,0' : '255,165,0'
-  const GLOW     = isGreen
-    ? '0 0 18px rgba(126,255,0,0.85), 0 0 36px rgba(126,255,0,0.35)'
-    : '0 0 18px rgba(255,165,0,0.85), 0 0 36px rgba(255,165,0,0.35)'
+  const n  = items.length
+  const id = stepNum || theme
 
-  /*
-   * SZ = PNG display size (the images include the frame + arrow buttons)
-   * CX/CY = center of the ring within the image (roughly centered)
-   * RITEM = radius at which icons/labels are positioned (ring band midpoint)
-   * RC    = center-void radius (where stepNum is rendered)
-   *
-   * Arrow hit-boxes: the PNG arrows sit at left ≈16px and right ≈16px,
-   * vertically centered, ~60px wide × 76px tall.
-   */
-  const SZ    = 440
-  const CX    = 220
-  const CY    = 220
-  const RITEM = 152   // midpoint between inner void and outer ring edge
-  const RC    = 96    // center-void radius
+  const isGreen = theme === 'green'
+  const NEON       = isGreen ? '#7CFF1A' : '#FF8C00'
+  const NEON_HI    = isGreen ? '#CCFF88' : '#FFC56B'
+  const NEON_DEEP  = isGreen ? '#1A5500' : '#6B3500'
+  const RGB        = isGreen ? '124,255,26' : '255,140,0'
+  const GLOW_TEXT  = `0 0 14px rgba(${RGB},0.9), 0 0 28px rgba(${RGB},0.4)`
 
-  const prev = () => onChange((activeIndex - 1 + n) % n)
-  const next = () => onChange((activeIndex + 1) % n)
+  /* ── Ring geometry ── */
+  const SZ      = 372
+  const CX      = 186, CY = 186
+  const ROUT    = 182          // outer rim outer edge
+  const RIM_IN  = 170          // outer rim inner edge
+  const RO      = 166          // segment band outer
+  const RI      = 102          // segment band inner
+  const RCTR    = 94           // center disc radius
+  const RITEM   = 134          // icon/label radius
+  const GAP     = 2.6          // degrees between segments
+  const segHalf = 180 / n
 
-  /* CSS filter that shifts the orange ON-image to green */
-  const greenFilter = 'hue-rotate(88deg) saturate(1.15)'
-  const onFilter    = isGreen
-    ? `${greenFilter} drop-shadow(0 0 18px rgba(100,255,0,0.4))`
-    : 'drop-shadow(0 0 18px rgba(255,165,0,0.35))'
+  /* ── Selection helpers ── */
+  const isSel = (i) =>
+    multiple ? Array.isArray(selected) && selected.includes(i) : selected === i
+
+  const toggle = (i) => {
+    if (multiple) {
+      const arr = Array.isArray(selected) ? selected : []
+      onChange(arr.includes(i) ? arr.filter(x => x !== i) : [...arr, i])
+    } else {
+      onChange(i)
+    }
+  }
+
+  const selCount = multiple
+    ? (Array.isArray(selected) ? selected.length : 0)
+    : (selected != null ? 1 : 0)
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
       <div style={{ position: 'relative', width: SZ, height: SZ, flexShrink: 0 }}>
 
-        {/* ── Layer 1: base OFF image (always dark, always shown) ── */}
-        <img
-          src="/selector-off.png"
-          alt=""
-          draggable={false}
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'contain',
-            userSelect: 'none', pointerEvents: 'none',
-          }}
-        />
+        <svg width={SZ} height={SZ} viewBox={`0 0 ${SZ} ${SZ}`} style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
+          <defs>
+            {/* Brushed-steel ring base */}
+            <radialGradient id={`steel${id}`} cx="50%" cy="28%" r="80%">
+              <stop offset="0%"  stopColor="#42434A" />
+              <stop offset="42%" stopColor="#24252A" />
+              <stop offset="100%" stopColor="#0B0B0D" />
+            </radialGradient>
 
-        {/* ── Layer 2: ON image — rotates to point the lit segment at the active item ── */}
-        <img
-          src="/selector-on.png"
-          alt=""
-          draggable={false}
-          style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'contain',
-            filter: onFilter,
-            userSelect: 'none', pointerEvents: 'none',
-            transform: `rotate(${activeIndex * (360 / n)}deg)`,
-            transformOrigin: 'center center',
-            transition: 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        />
+            {/* Unselected segment steel */}
+            <linearGradient id={`segOff${id}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stopColor="#32333A" />
+              <stop offset="50%"  stopColor="#1E1F24" />
+              <stop offset="100%" stopColor="#101116" />
+            </linearGradient>
 
-        {/* ── HTML items: FIXED positions — the image rotates, not the text ── */}
+            {/* Selected segment — fluorescent (bright at outer rim) */}
+            <radialGradient id={`segOn${id}`} cx="50%" cy="2%" r="118%">
+              <stop offset="0%"   stopColor={NEON_HI}  stopOpacity="1" />
+              <stop offset="32%"  stopColor={NEON}     stopOpacity="0.98" />
+              <stop offset="70%"  stopColor={NEON_DEEP} stopOpacity="0.92" />
+              <stop offset="100%" stopColor="#0A0A0C"  stopOpacity="0.95" />
+            </radialGradient>
+
+            {/* Center disc */}
+            <radialGradient id={`disc${id}`} cx="50%" cy="36%" r="65%">
+              <stop offset="0%"   stopColor="#2A2B31" />
+              <stop offset="100%" stopColor="#0A0A0C" />
+            </radialGradient>
+
+            {/* Neon glow filter */}
+            <filter id={`neon${id}`} x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="6" result="b1" />
+              <feGaussianBlur stdDeviation="13" result="b2" />
+              <feMerge>
+                <feMergeNode in="b2" />
+                <feMergeNode in="b1" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Outer rim */}
+          <circle cx={CX} cy={CY} r={ROUT + 4} fill="#050506" />
+          <circle cx={CX} cy={CY} r={ROUT} fill={`url(#steel${id})`} stroke="#000" strokeWidth="1" />
+          <circle cx={CX} cy={CY} r={RIM_IN} fill="#0A0A0C" stroke="#2C2D33" strokeWidth="1.2" />
+
+          {/* Bolts on the outer rim */}
+          {Array.from({ length: 8 }).map((_, k) => {
+            const p = toXY(CX, CY, (ROUT + RIM_IN) / 2, k * 45)
+            return <circle key={k} cx={p.x} cy={p.y} r="3.4" fill="#0D0E11" stroke="#3A3B42" strokeWidth="1" />
+          })}
+
+          {/* Segments */}
+          {items.map((_, i) => {
+            const ca  = i * (360 / n)               // segment center angle (top = 0)
+            const a1  = ca - segHalf + GAP / 2
+            const a2  = ca + segHalf - GAP / 2
+            const on  = isSel(i)
+            return (
+              <g key={i} onClick={() => toggle(i)} style={{ cursor: 'pointer' }}>
+                {/* segment plate */}
+                <path
+                  d={donutArc(CX, CY, RI, RO, a1, a2)}
+                  fill={on ? `url(#segOn${id})` : `url(#segOff${id})`}
+                  stroke={on ? `rgba(${RGB},0.55)` : '#0A0A0C'}
+                  strokeWidth={on ? 1.4 : 1}
+                  filter={on ? `url(#neon${id})` : undefined}
+                  style={{ transition: 'fill 0.25s' }}
+                />
+                {/* bright outer rim highlight when on */}
+                {on && (
+                  <path
+                    d={donutArc(CX, CY, RO - 14, RO - 2, a1 + 1.5, a2 - 1.5)}
+                    fill={NEON_HI}
+                    opacity="0.92"
+                    filter={`url(#neon${id})`}
+                  />
+                )}
+                {/* inner bevel line */}
+                <path
+                  d={donutArc(CX, CY, RI, RI + 2.5, a1, a2)}
+                  fill={on ? `rgba(${RGB},0.5)` : 'rgba(255,255,255,0.05)'}
+                />
+              </g>
+            )
+          })}
+
+          {/* Inner ring + center disc */}
+          <circle cx={CX} cy={CY} r={RI} fill="#0A0A0C" stroke="#2A2B31" strokeWidth="1.2" />
+          <circle cx={CX} cy={CY} r={RCTR} fill={`url(#disc${id})`} stroke={`rgba(${RGB},0.30)`} strokeWidth="1.4" />
+          <circle cx={CX} cy={CY} r={RCTR - 5} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.7" />
+        </svg>
+
+        {/* ── Icons + labels over each segment ── */}
         {items.map((item, i) => {
-          const angleDeg = i * (360 / n) - 90   // fixed: item 0 at top, rest clockwise
+          const angleDeg = i * (360 / n) - 90
           const angleRad = (angleDeg * Math.PI) / 180
-          const x        = CX + RITEM * Math.cos(angleRad)
-          const y        = CY + RITEM * Math.sin(angleRad)
-          const isActive = i === activeIndex
-          const diff     = Math.min(i, n - i)   // distance from item 0 for opacity
+          const x = CX + RITEM * Math.cos(angleRad)
+          const y = CY + RITEM * Math.sin(angleRad)
+          const on = isSel(i)
           const subtitle = SUBTITLE[item]
 
           return (
             <button
               key={i}
-              onClick={() => onChange(i)}
+              onClick={() => toggle(i)}
               title={item}
               style={{
                 position: 'absolute',
@@ -193,58 +282,50 @@ export default function RotarySelector({
                 transform: 'translate(-50%, -50%)',
                 background: 'transparent', border: 'none',
                 display: 'flex', flexDirection: 'column',
-                alignItems: 'center', gap: 3,
-                opacity: isActive ? 1 : 0.55,
-                cursor: 'pointer',
-                transition: 'opacity 0.35s ease',
-                zIndex: 10,
-                width: 82, padding: '2px',
+                alignItems: 'center', gap: 2,
+                cursor: 'pointer', zIndex: 10,
+                width: 84, padding: '2px',
+                pointerEvents: 'auto',
               }}
             >
-              {/* Icon */}
               <div style={{
-                color: isActive ? COLOR : '#5A5A5A',
-                filter: isActive
-                  ? `drop-shadow(0 0 7px rgba(${RGB},0.9)) drop-shadow(0 0 14px rgba(${RGB},0.5))`
+                color: on ? NEON_HI : '#5A5B62',
+                filter: on
+                  ? `drop-shadow(0 0 6px rgba(${RGB},1)) drop-shadow(0 0 13px rgba(${RGB},0.6))`
                   : 'none',
-                transition: 'color 0.35s, filter 0.35s',
+                transition: 'color 0.25s, filter 0.25s',
                 lineHeight: 0,
               }}>
                 {ICONS[item] || (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="1.6">
-                    <circle cx="12" cy="12" r="10"/>
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                    <circle cx="12" cy="12" r="10" />
                   </svg>
                 )}
               </div>
 
-              {/* Label */}
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700,
-                fontSize: isActive ? 10 : 9,
+                fontSize: 9,
                 letterSpacing: '0.04em',
-                color: isActive ? '#FFFFFF' : '#888',
+                color: on ? '#FFFFFF' : '#7C7D84',
                 textAlign: 'center',
-                lineHeight: 1.25,
-                textShadow: isActive ? `0 0 10px rgba(${RGB},0.8)` : 'none',
+                lineHeight: 1.2,
+                textShadow: on ? `0 0 10px rgba(${RGB},0.85)` : 'none',
                 whiteSpace: 'pre-line',
-                maxWidth: 80,
-                transition: 'all 0.35s',
+                maxWidth: 82,
+                transition: 'all 0.25s',
               }}>
                 {SHORT_LABEL[item] || item.toUpperCase()}
               </span>
 
-              {/* Per-item subtitle */}
               {subtitle && (
                 <span style={{
                   fontFamily: "'Inter', sans-serif",
                   fontSize: 7,
-                  color: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.12)',
-                  textAlign: 'center',
-                  lineHeight: 1.2,
-                  maxWidth: 78,
-                  transition: 'color 0.35s',
+                  color: on ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.12)',
+                  textAlign: 'center', lineHeight: 1.2, maxWidth: 80,
+                  transition: 'color 0.25s',
                 }}>
                   {subtitle}
                 </span>
@@ -253,78 +334,63 @@ export default function RotarySelector({
           )
         })}
 
-        {/* ── Center: step number + labels ── */}
+        {/* ── Center ── */}
         <div style={{
-          position: 'absolute',
-          left: CX, top: CY,
+          position: 'absolute', left: CX, top: CY,
           transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-          zIndex: 20,
-          pointerEvents: 'none',
-          width: RC * 2 - 12,
+          textAlign: 'center', zIndex: 20, pointerEvents: 'none',
+          width: RCTR * 2 - 14,
         }}>
           <div style={{
             fontFamily: "'Barlow Condensed', sans-serif",
-            fontWeight: 700, fontSize: 64, lineHeight: 1,
-            color: COLOR, textShadow: GLOW,
+            fontWeight: 700, fontSize: 60, lineHeight: 1,
+            color: NEON, textShadow: GLOW_TEXT,
           }}>{stepNum}</div>
           <div style={{
             fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 700, fontSize: 11,
-            letterSpacing: '0.15em',
-            color: COLOR, textTransform: 'uppercase', marginTop: 2,
+            fontWeight: 700, fontSize: 11, letterSpacing: '0.14em',
+            color: NEON, textTransform: 'uppercase', marginTop: 2,
           }}>{centerLabel}</div>
           <div style={{
             fontFamily: "'Inter', sans-serif",
-            fontSize: 8, color: 'rgba(255,255,255,0.28)',
-            marginTop: 4, lineHeight: 1.35,
+            fontSize: 7.5, color: 'rgba(255,255,255,0.30)',
+            marginTop: 4, lineHeight: 1.3,
           }}>{centerSub}</div>
+          {multiple && (
+            <div style={{
+              marginTop: 6,
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: 700, fontSize: 9, letterSpacing: '0.08em',
+              color: selCount ? NEON : 'rgba(255,255,255,0.25)',
+              textShadow: selCount ? `0 0 8px rgba(${RGB},0.7)` : 'none',
+            }}>
+              {selCount ? `${selCount} SELEZIONAT${selCount === 1 ? 'O' : 'I'}` : 'NESSUNA SCELTA'}
+            </div>
+          )}
         </div>
-
-        {/* ── Invisible click-targets over the PNG arrow buttons ──
-              Left arrow: ~16px from left, centered vertically, ~60×76px
-              Right arrow: ~16px from right, centered vertically, ~60×76px  ── */}
-        <button
-          onClick={prev}
-          aria-label="Precedente"
-          style={{
-            position: 'absolute',
-            left: 16, top: '50%',
-            transform: 'translateY(-50%)',
-            width: 60, height: 76,
-            background: 'transparent', border: 'none',
-            cursor: 'pointer', zIndex: 30,
-          }}
-        />
-        <button
-          onClick={next}
-          aria-label="Successivo"
-          style={{
-            position: 'absolute',
-            right: 16, top: '50%',
-            transform: 'translateY(-50%)',
-            width: 60, height: 76,
-            background: 'transparent', border: 'none',
-            cursor: 'pointer', zIndex: 30,
-          }}
-        />
       </div>
 
-      {/* ── Active item label strip below the wheel ── */}
+      {/* ── Bottom label strip ── */}
       <div style={{
         background: `linear-gradient(90deg, transparent, rgba(${RGB},0.07), transparent)`,
         border: `1px solid rgba(${RGB},0.22)`,
         borderRadius: 4,
-        padding: '5px 24px',
-        minWidth: 230,
+        padding: '6px 18px',
+        minWidth: 240, maxWidth: 300,
         textAlign: 'center',
       }}>
         <span style={{
           fontFamily: "'Rajdhani', sans-serif",
-          fontWeight: 700, fontSize: 13,
-          letterSpacing: '0.07em',
-          color: COLOR, textTransform: 'uppercase',
-        }}>{items[activeIndex]}</span>
+          fontWeight: 700, fontSize: 12, letterSpacing: '0.05em',
+          color: selCount ? NEON : 'rgba(255,255,255,0.35)',
+          textTransform: 'uppercase', lineHeight: 1.3,
+        }}>
+          {multiple
+            ? (selCount
+                ? selected.map(i => items[i]).join(' · ')
+                : (centerLabel === 'TIPO INTERVENTO' ? 'Seleziona uno o più tipi' : 'Seleziona'))
+            : (selected != null ? items[selected] : 'Seleziona il settore')}
+        </span>
       </div>
     </div>
   )

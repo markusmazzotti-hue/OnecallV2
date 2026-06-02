@@ -285,8 +285,8 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
 }
 
 export default function ClientForm() {
-  const [step1, setStep1] = useState(1)
-  const [step2, setStep2] = useState(0)
+  const [step1, setStep1] = useState([])     // multi-select: array of indices
+  const [step2, setStep2] = useState(null)   // single-select: index or null
   const [priority, setPriority] = useState('breve')
   const [sopralluogo, setSopralluogo] = useState(true)
 
@@ -325,8 +325,8 @@ export default function ClientForm() {
   ]
 
   const summaryItems = [
-    { icon: '⚙', label: 'TIPO INTERVENTO', value: STEP1_ITEMS[step1] },
-    { icon: '🏭', label: 'SETTORE', value: STEP2_ITEMS[step2] },
+    { icon: '⚙', label: 'TIPO INTERVENTO', value: step1.length ? (step1.length === 1 ? STEP1_ITEMS[step1[0]] : `${step1.length} selezionati`) : 'Da definire' },
+    { icon: '🏭', label: 'SETTORE', value: step2 != null ? STEP2_ITEMS[step2] : 'Da definire' },
     { icon: '📍', label: 'DOVE E QUANDO', value: localita || 'Da definire' },
     { icon: '📷', label: 'FOTO / VIDEO', value: files.length > 0 ? `${files.length} file` : 'Da caricare' },
     { icon: '📝', label: 'DESCRIZIONE', value: descrizione || 'Da definire' },
@@ -345,8 +345,8 @@ export default function ClientForm() {
     setSubmitError(null)
     try {
       const { error } = await supabase.from('richieste').insert({
-        tipo_intervento: STEP1_ITEMS[step1],
-        settore:         STEP2_ITEMS[step2],
+        tipo_intervento: step1.map(i => STEP1_ITEMS[i]).join(', ') || null,
+        settore:         step2 != null ? STEP2_ITEMS[step2] : null,
         localita:        localita || null,
         indirizzo:       indirizzo || null,
         tempistica:      priority === 'breve' ? 'breve_termine' : priority,
@@ -520,15 +520,16 @@ export default function ClientForm() {
             </div>
             <RotarySelector
               items={STEP1_ITEMS}
-              activeIndex={step1}
+              selected={step1}
               onChange={setStep1}
+              multiple
               theme="orange"
               stepNum="1"
               centerLabel="TIPO INTERVENTO"
-              centerSub="Seleziona il servizio richiesto"
+              centerSub="Selezione multipla"
             />
             <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
-              Ruota la selezione e clicca sulla voce desiderata.
+              Clicca per accendere uno o più tipi di intervento.
             </p>
           </div>
 
@@ -550,15 +551,15 @@ export default function ClientForm() {
             </div>
             <RotarySelector
               items={STEP2_ITEMS}
-              activeIndex={step2}
+              selected={step2}
               onChange={setStep2}
               theme="green"
               stepNum="2"
               centerLabel="SETTORE"
-              centerSub="Seleziona il settore di riferimento"
+              centerSub="Selezione singola"
             />
             <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
-              Ruota la selezione e clicca sul settore corrispondente.
+              Clicca per selezionare il settore di riferimento.
             </p>
           </div>
 
