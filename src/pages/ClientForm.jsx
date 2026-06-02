@@ -715,26 +715,26 @@ export default function ClientForm() {
                                 <line key={k}
                                   x1={30 + r1 * Math.cos(a)} y1={30 + r1 * Math.sin(a)}
                                   x2={30 + r2 * Math.cos(a)} y2={30 + r2 * Math.sin(a)}
-                                  stroke={`rgba(${p.rgb},${sel ? 0.95 : 0.5})`}
+                                  stroke={`rgba(${p.rgb},${sel ? 1 : 0.22})`}
                                   strokeWidth={long ? 1.6 : 1} />
                               )
                             })}
                             <circle cx="30" cy="30" r="21" fill="#0C0C0C"
-                              stroke={`rgba(${p.rgb},${priority === p.id ? 0.9 : 0.4})`} strokeWidth="1.5" />
+                              stroke={`rgba(${p.rgb},${priority === p.id ? 0.95 : 0.22})`} strokeWidth="1.5" />
                             <g className="oc-runner-slow" style={{ transformOrigin: '30px 30px' }}>
                               <circle cx="30" cy="30" r="28" fill="none"
-                                stroke={p.color} strokeWidth={priority === p.id ? 3 : 2.2}
+                                stroke={p.color} strokeWidth={priority === p.id ? 3.2 : 1.6}
                                 strokeLinecap="round" strokeDasharray="30 146"
-                                opacity={priority === p.id ? 0.95 : 0.55}
+                                opacity={priority === p.id ? 1 : 0.22}
                                 filter={`url(#dial-${p.id})`} />
                             </g>
                           </svg>
                           <div style={{
                             position: 'absolute', inset: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            color: p.color,
-                            filter: `drop-shadow(0 0 ${priority === p.id ? '6px' : '3px'} rgba(${p.rgb},${priority === p.id ? 1 : 0.7}))`,
-                            transition: 'filter 0.25s',
+                            color: priority === p.id ? p.color : '#555',
+                            filter: priority === p.id ? `drop-shadow(0 0 8px rgba(${p.rgb},1)) drop-shadow(0 0 16px rgba(${p.rgb},0.6))` : 'none',
+                            transition: 'color 0.25s, filter 0.25s',
                           }}>
                             {p.icon}
                           </div>
@@ -745,8 +745,8 @@ export default function ClientForm() {
                           fontWeight: 700,
                           fontSize: 9.5,
                           letterSpacing: '0.06em',
-                          color: p.color,
-                          textShadow: `0 0 8px rgba(${p.rgb},${priority === p.id ? 0.9 : 0.45})`,
+                          color: priority === p.id ? p.color : '#6A6A6A',
+                          textShadow: priority === p.id ? `0 0 10px rgba(${p.rgb},0.9)` : 'none',
                           textAlign: 'center',
                           lineHeight: 1.25,
                           whiteSpace: 'pre-line',
@@ -787,7 +787,7 @@ export default function ClientForm() {
 
               {/* Italy map — full width, integrated, no frame */}
               <div style={{ width: '100%' }}>
-                <ItalyMapLeaflet localita={localita} onLocationChange={setLocalita} height={250} />
+                <ItalyMapLeaflet localita={localita} indirizzo={indirizzo} onLocationChange={setLocalita} height={250} />
               </div>
             </div>
           </div>
@@ -947,7 +947,7 @@ export default function ClientForm() {
               {submitError}
             </div>
           )}
-          {/* ATTIVA ONE CALL — industrial metal CTA with runner ring */}
+          {/* ATTIVA ONE CALL — industrial metal CTA with glowing runner ring */}
           <button
             className="oc-cta"
             onClick={handleSubmit}
@@ -958,31 +958,30 @@ export default function ClientForm() {
               position: 'relative',
               display: 'flex',
               alignItems: 'stretch',
-              height: 88,
-              minWidth: 420,
+              height: 112,
+              minWidth: 520,
               padding: 0,
               border: 'none',
               background: 'linear-gradient(180deg,#3A3A3E 0%,#1C1C1F 48%,#0E0E10 100%)',
-              borderRadius: 6,
+              borderRadius: 8,
               cursor: submitting ? 'not-allowed' : 'pointer',
               opacity: submitting ? 0.7 : 1,
               overflow: 'hidden',
-              clipPath: 'polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%)',
+              clipPath: 'polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 50%)',
               boxShadow: ctaHover
-                ? '0 0 40px rgba(255,150,0,0.6), 0 0 80px rgba(255,150,0,0.25)'
-                : '0 0 22px rgba(255,150,0,0.32), 0 4px 14px rgba(0,0,0,0.6)',
+                ? '0 0 48px rgba(255,150,0,0.65), 0 0 96px rgba(255,150,0,0.28)'
+                : '0 0 26px rgba(255,150,0,0.35), 0 5px 16px rgba(0,0,0,0.6)',
               transition: 'box-shadow 0.3s',
             }}
           >
             {/* Left hazard chevron edge */}
             <div style={{
-              width: 60, flexShrink: 0, position: 'relative',
-              background: 'repeating-linear-gradient(-45deg,#F2B505 0 12px,#141414 12px 24px)',
-              clipPath: 'polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%)',
+              width: 70, flexShrink: 0, position: 'relative',
+              background: 'repeating-linear-gradient(-45deg,#F2B505 0 13px,#141414 13px 26px)',
+              clipPath: 'polygon(18px 0, 100% 0, 100% 100%, 18px 100%, 0 50%)',
             }}>
-              {/* corner bolts */}
-              <span style={boltStyle(8, 8)} />
-              <span style={boltStyle(8, 'calc(100% - 14px)')} />
+              <span style={boltStyle(10, 10)} />
+              <span style={boltStyle(10, 'calc(100% - 16px)')} />
             </div>
 
             {/* Main amber panel */}
@@ -990,26 +989,26 @@ export default function ClientForm() {
               flex: 1, position: 'relative',
               background: 'linear-gradient(180deg,#FFC21A 0%,#F2A410 42%,#C9820A 100%)',
               display: 'flex', flexDirection: 'column', justifyContent: 'center',
-              padding: '0 24px',
-              boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3), inset 0 -3px 8px rgba(120,70,0,0.4)',
+              padding: '0 28px',
+              boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.32), inset 0 -3px 10px rgba(120,70,0,0.4)',
             }}>
               {/* top + bottom hazard trims */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 5,
-                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 8px,#F2B505 8px 16px)', opacity: 0.9 }} />
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 5,
-                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 8px,#F2B505 8px 16px)', opacity: 0.9 }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 6,
+                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 9px,#F2B505 9px 18px)', opacity: 0.9 }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 6,
+                background: 'repeating-linear-gradient(-45deg,#1A1A1A 0 9px,#F2B505 9px 18px)', opacity: 0.9 }} />
 
               <div style={{
                 fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900,
-                fontSize: 32, letterSpacing: '0.03em', color: '#141414',
+                fontSize: 42, letterSpacing: '0.02em', color: '#141414',
                 lineHeight: 1, textTransform: 'uppercase',
-                textShadow: '0 1px 0 rgba(255,255,255,0.25)',
+                textShadow: '0 1px 0 rgba(255,255,255,0.28)',
               }}>
-                {submitting ? 'INVIO IN CORSO…' : 'ATTIVA ONE CALL™'}
+                {submitting ? 'INVIO IN CORSO…' : <>ATTIVA ONE CALL<sup style={{ fontSize: 18, verticalAlign: 'super' }}>™</sup></>}
               </div>
               <div style={{
-                fontFamily: "'Inter', sans-serif", fontSize: 11,
-                color: 'rgba(20,20,20,0.7)', marginTop: 5, lineHeight: 1.3, fontWeight: 500,
+                fontFamily: "'Inter', sans-serif", fontSize: 13,
+                color: 'rgba(20,20,20,0.78)', marginTop: 6, lineHeight: 1.35, fontWeight: 500,
               }}>
                 Invia richiesta tecnica a<br/>Palmisano Demolizioni &amp; Taglio Termico
               </div>
@@ -1017,51 +1016,49 @@ export default function ClientForm() {
 
             {/* Right circular runner button */}
             <div style={{
-              width: 96, flexShrink: 0,
+              width: 128, flexShrink: 0,
               background: 'linear-gradient(180deg,#2C2C30 0%,#141416 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               position: 'relative',
-              boxShadow: 'inset 2px 0 6px rgba(0,0,0,0.6)',
+              boxShadow: 'inset 2px 0 8px rgba(0,0,0,0.6)',
             }}>
-              <span style={boltStyle(8, 8)} />
-              <span style={boltStyle(8, 'calc(100% - 14px)')} />
+              <span style={boltStyle(10, 10)} />
+              <span style={boltStyle(10, 'calc(100% - 16px)')} />
 
-              <div style={{ position: 'relative', width: 72, height: 72 }}>
-                <svg width="72" height="72" viewBox="0 0 72 72" style={{ position: 'absolute', inset: 0 }}>
+              <div style={{ position: 'relative', width: 96, height: 96 }}>
+                <svg width="96" height="96" viewBox="0 0 96 96" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
                   <defs>
-                    <filter id="ctaGlow" x="-60%" y="-60%" width="220%" height="220%">
-                      <feGaussianBlur stdDeviation="3.2" result="b" />
-                      <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    <filter id="ctaGlow" x="-80%" y="-80%" width="260%" height="260%">
+                      <feGaussianBlur stdDeviation="3.5" result="b1" />
+                      <feGaussianBlur stdDeviation="8" result="b2" />
+                      <feMerge><feMergeNode in="b2"/><feMergeNode in="b1"/><feMergeNode in="SourceGraphic"/></feMerge>
                     </filter>
                   </defs>
-                  {/* dim track ring */}
-                  <circle cx="36" cy="36" r="29" fill="none"
-                    stroke={ctaHover ? 'rgba(255,150,0,0.45)' : 'rgba(255,150,0,0.30)'}
-                    strokeWidth="3" />
                   {/* dark inner disc */}
-                  <circle cx="36" cy="36" r="24"
-                    fill="radial-gradient(#1A1A1A,#060606)" stroke="rgba(255,150,0,0.5)" strokeWidth="1" />
-                  {/* runner comet (hover) */}
-                  {ctaHover && (
-                    <g className="oc-runner" style={{ transformOrigin: '36px 36px' }}>
-                      <circle cx="36" cy="36" r="29" fill="none"
-                        stroke="#FFB000" strokeWidth="3.6" strokeLinecap="round"
-                        strokeDasharray="44 138" filter="url(#ctaGlow)" />
-                    </g>
-                  )}
+                  <circle cx="48" cy="48" r="30" fill="#070707" stroke="rgba(255,150,0,0.4)" strokeWidth="1" />
+                  {/* bright glowing ring (always on) */}
+                  <circle cx="48" cy="48" r="38" fill="none"
+                    stroke="#FF8C00" strokeWidth={ctaHover ? 4 : 3.2}
+                    opacity={ctaHover ? 1 : 0.9} filter="url(#ctaGlow)" />
+                  {/* always-running bright comet highlight */}
+                  <g className="oc-runner" style={{ transformOrigin: '48px 48px' }}>
+                    <circle cx="48" cy="48" r="38" fill="none"
+                      stroke="#FFD27A" strokeWidth="4.2" strokeLinecap="round"
+                      strokeDasharray="40 200" filter="url(#ctaGlow)" />
+                  </g>
                 </svg>
                 {/* arrow */}
                 <div style={{
                   position: 'absolute', inset: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: ctaHover ? '#FFC24A' : '#FF9500',
+                  color: '#FFA500',
                   filter: ctaHover
-                    ? 'drop-shadow(0 0 8px rgba(255,165,0,0.95)) drop-shadow(0 0 16px rgba(255,165,0,0.5))'
-                    : 'drop-shadow(0 0 5px rgba(255,165,0,0.6))',
-                  transition: 'color 0.25s, filter 0.25s',
+                    ? 'drop-shadow(0 0 10px rgba(255,165,0,1)) drop-shadow(0 0 20px rgba(255,165,0,0.6))'
+                    : 'drop-shadow(0 0 7px rgba(255,165,0,0.8))',
+                  transition: 'filter 0.25s',
                 }}>
-                  <svg className="oc-cta-arrow" width="26" height="26" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="oc-cta-arrow" width="34" height="34" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
                     {submitting
                       ? <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></>
                       : <><line x1="4" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></>

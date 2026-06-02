@@ -26,7 +26,7 @@ const ROME = [41.9028, 12.4964]
 // Bounds covering the whole Italian peninsula + islands
 const ITALY_BOUNDS = [[36.5, 6.5], [47.2, 18.6]]
 
-export default function ItalyMapLeaflet({ localita, onLocationChange, height = 250 }) {
+export default function ItalyMapLeaflet({ localita, indirizzo, onLocationChange, height = 250 }) {
   const mapRef = useRef(null)
   const instanceRef = useRef(null)
   const markerRef = useRef(null)
@@ -87,21 +87,27 @@ export default function ItalyMapLeaflet({ localita, onLocationChange, height = 2
       if (markerRef.current) markerRef.current.setLatLng(ROME)
       return
     }
-    fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(localita + ', Italia')}&format=json&limit=1`
-    )
-      .then(r => r.json())
-      .then(data => {
-        if (data[0] && instanceRef.current) {
-          const lat = parseFloat(data[0].lat)
-          const lng = parseFloat(data[0].lon)
-          instanceRef.current.setView([lat, lng], 8, { animate: true })
-          if (markerRef.current) markerRef.current.setLatLng([lat, lng])
-          else markerRef.current = L.marker([lat, lng], { icon: PIN, interactive: false }).addTo(instanceRef.current)
-        }
-      })
-      .catch(() => {})
-  }, [localita])
+    // Build the most specific query available: address + city when present
+    const hasAddr = indirizzo && indirizzo.trim().length > 2
+    const query = hasAddr ? `${indirizzo}, ${localita}, Italia` : `${localita}, Italia`
+    const zoom = hasAddr ? 14 : 8
+
+    const t = setTimeout(() => {
+      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`)
+        .then(r => r.json())
+        .then(data => {
+          if (data[0] && instanceRef.current) {
+            const lat = parseFloat(data[0].lat)
+            const lng = parseFloat(data[0].lon)
+            instanceRef.current.setView([lat, lng], zoom, { animate: true })
+            if (markerRef.current) markerRef.current.setLatLng([lat, lng])
+            else markerRef.current = L.marker([lat, lng], { icon: PIN, interactive: false }).addTo(instanceRef.current)
+          }
+        })
+        .catch(() => {})
+    }, 500)  // debounce typing
+    return () => clearTimeout(t)
+  }, [localita, indirizzo])
 
   return (
     <div
