@@ -3,38 +3,54 @@ import React from 'react'
 /* ── Icons ──────────────────────────────────────────────────────── */
 const ICONS = {
   'Demolizione Industriale': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 17l2-8h14l2 8H3z"/><path d="M7 17V9"/><path d="M12 17V9"/><path d="M17 17V9"/>
-      <rect x="1" y="17" width="22" height="4" rx="1"/><path d="M8 9V7a4 4 0 018 0v2"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 4l5 2-2 5"/>
+      <path d="M14 4l-3 6"/>
+      <path d="M9.5 14a2 2 0 11-4 0 2 2 0 014 0z"/>
+      <path d="M11 10l-3.5 3"/>
+      <rect x="13" y="15" width="8" height="3" rx="0.5"/>
+      <path d="M15 15v-2h4v2"/>
     </svg>
   ),
   'Taglio Termico Rottami': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2C6 8 4 12 8 16c1 1 2 1.5 3 1.5"/><path d="M12 2c6 6 8 10 4 14-1 1-2 1.5-3 1.5"/>
-      <path d="M9 17.5C9 19.4 10.3 21 12 21s3-1.6 3-3.5"/>
-      <line x1="2" y1="12" x2="22" y2="12" strokeDasharray="2 2"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M13 3c3 0 4 2 3 4l-3 5"/>
+      <path d="M12.6 12.2l-1 2.4M13 12l2 1.4M13.2 11.8l2.3-.1"/>
+      <path d="M7 10.5l1.6 0.95v1.9L7 14.3l-1.6-.95v-1.9z"/>
+      <path d="M10.2 12.4l1.6 0.95v1.9l-1.6 .95-1.6-.95v-1.9z"/>
+      <path d="M7 14.3l1.6 0.95v1.9L7 18.1l-1.6-.95v-1.9z"/>
     </svg>
   ),
   'Smantellamento Impianti': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
-      <line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="10.5" y="4" width="3" height="16" rx="0.4"/>
+      <line x1="10.5" y1="7.5" x2="13.5" y2="7.5"/>
+      <path d="M3 20v-6l3 2v-2l3 2v6"/>
+      <path d="M15 20v-5l3 2v-2l3 2v3"/>
+      <line x1="2" y1="20" x2="22" y2="20"/>
+      <circle cx="5" cy="17.6" r="0.6"/><circle cx="7.4" cy="17.6" r="0.6"/>
     </svg>
   ),
   'Intervento in Ambiente Produttivo': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58z"/>
+      <circle cx="12" cy="12" r="3.2"/>
     </svg>
   ),
   'Strip-out': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="3" width="20" height="4" rx="1"/><rect x="2" y="10" width="20" height="4" rx="1"/><rect x="2" y="17" width="20" height="4" rx="1"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 4l7 3-7 3-7-3z"/>
+      <path d="M12 9.5l7 3-7 3-7-3z"/>
+      <path d="M12 15l7 3-7 3-7-3z"/>
     </svg>
   ),
   'Caso Complesso da Valutare': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="4" width="14" height="17" rx="2"/>
+      <rect x="9" y="2" width="6" height="3.2" rx="1"/>
+      <circle cx="9" cy="10" r="1"/><line x1="11.5" y1="10" x2="16" y2="10"/>
+      <circle cx="9" cy="13.5" r="1"/><line x1="11.5" y1="13.5" x2="16" y2="13.5"/>
+      <circle cx="9" cy="17" r="1"/><line x1="11.5" y1="17" x2="16" y2="17"/>
     </svg>
   ),
   'Industria': (
