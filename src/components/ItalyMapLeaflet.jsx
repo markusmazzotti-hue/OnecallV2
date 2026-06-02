@@ -1,16 +1,25 @@
 import React, { useEffect, useRef } from 'react'
 import L from 'leaflet'
 
-/* Blinking orange location pin (pulse animation defined in index.css) */
+/* Blinking orange sniper-scope crosshair (animations in index.css) */
 const PIN = L.divIcon({
   className: '',
   html: `<div class="oc-pin">
     <span class="oc-pin-ring"></span>
     <span class="oc-pin-ring oc-pin-ring2"></span>
-    <span class="oc-pin-core"></span>
+    <svg class="oc-sniper" width="44" height="44" viewBox="0 0 44 44" fill="none"
+      stroke="#FF8C00" stroke-width="1.6" stroke-linecap="round">
+      <circle cx="22" cy="22" r="13"/>
+      <circle cx="22" cy="22" r="8" stroke-opacity="0.5"/>
+      <line x1="22" y1="2"  x2="22" y2="11"/>
+      <line x1="22" y1="33" x2="22" y2="42"/>
+      <line x1="2"  y1="22" x2="11" y2="22"/>
+      <line x1="33" y1="22" x2="42" y2="22"/>
+      <circle cx="22" cy="22" r="1.6" fill="#FFB000" stroke="none"/>
+    </svg>
   </div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
+  iconSize: [44, 44],
+  iconAnchor: [22, 22],
 })
 
 const ROME = [41.9028, 12.4964]

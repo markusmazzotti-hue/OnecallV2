@@ -191,6 +191,49 @@ const UPLOAD_ICONS = {
   ),
 }
 
+/* Step 7 summary icons (colored line-art, matching reference) */
+const SUMMARY = {
+  tipo:        { color: '#FF9500', rgb: '255,149,0', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 4l5 2-2 5"/><path d="M14 4l-3 6"/>
+      <path d="M9.5 14a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M11 10l-3.5 3"/>
+      <rect x="13" y="15" width="8" height="3" rx="0.5"/><path d="M15 15v-2h4v2"/>
+    </svg>
+  )},
+  settore:     { color: '#7CFF1A', rgb: '124,255,26', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.4 9.6V3.6h3.2V9.6"/><path d="M10.9 3.6V2.2M13.1 3.6V2.2"/>
+      <path d="M3.6 19v-7l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3V19z"/>
+      <circle cx="6.7" cy="15" r="0.9"/><circle cx="10" cy="15" r="0.9"/><circle cx="13.3" cy="15" r="0.9"/><circle cx="16.6" cy="15" r="0.9"/>
+    </svg>
+  )},
+  dove:        { color: '#29B6FF', rgb: '41,182,255', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/>
+      <circle cx="12" cy="10" r="2.6"/>
+    </svg>
+  )},
+  foto:        { color: '#22D3EE', rgb: '34,211,238', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  )},
+  descrizione: { color: '#E040FB', rgb: '224,64,251', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="4" width="14" height="17" rx="2"/><rect x="9" y="2" width="6" height="3.2" rx="1"/>
+      <circle cx="9" cy="10" r="1"/><line x1="11.5" y1="10" x2="16" y2="10"/>
+      <circle cx="9" cy="13.5" r="1"/><line x1="11.5" y1="13.5" x2="16" y2="13.5"/>
+      <circle cx="9" cy="17" r="1"/><line x1="11.5" y1="17" x2="16" y2="17"/>
+    </svg>
+  )},
+  contatti:    { color: '#B388FF', rgb: '179,136,255', icon: (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+  )},
+}
+
 function UploadBtn({ iconKey, label, optional, onClick }) {
   const [hover, setHover] = useState(false)
   const BLUE = '#0088FF'
@@ -356,12 +399,12 @@ export default function ClientForm() {
   ]
 
   const summaryItems = [
-    { icon: '⚙', label: 'TIPO INTERVENTO', value: step1.length ? (step1.length === 1 ? STEP1_ITEMS[step1[0]] : `${step1.length} selezionati`) : 'Da definire' },
-    { icon: '🏭', label: 'SETTORE', value: step2 != null ? STEP2_ITEMS[step2] : 'Da definire' },
-    { icon: '📍', label: 'DOVE E QUANDO', value: localita || 'Da definire' },
-    { icon: '📷', label: 'FOTO / VIDEO', value: files.length > 0 ? `${files.length} file` : 'Da caricare' },
-    { icon: '📝', label: 'DESCRIZIONE', value: descrizione || 'Da definire' },
-    { icon: '👤', label: 'CONTATTI', value: nome || 'Da definire' },
+    { key: 'tipo',        label: 'TIPO INTERVENTO', value: step1.length ? (step1.length === 1 ? STEP1_ITEMS[step1[0]] : `${step1.length} selezionati`) : 'Da definire' },
+    { key: 'settore',     label: 'SETTORE', value: step2 != null ? STEP2_ITEMS[step2] : 'Da definire' },
+    { key: 'dove',        label: 'DOVE E QUANDO', value: localita || 'Da definire' },
+    { key: 'foto',        label: 'FOTO / VIDEO', value: files.length > 0 ? `${files.length} file` : 'Da caricare' },
+    { key: 'descrizione', label: 'DESCRIZIONE', value: descrizione || 'Da definire' },
+    { key: 'contatti',    label: 'CONTATTI', value: nome || 'Da definire' },
   ]
 
   const themeVars = {
@@ -887,8 +930,12 @@ export default function ClientForm() {
               borderRight: i < summaryItems.length - 1 ? '1px solid #1A1A1A' : 'none',
               paddingRight: i < summaryItems.length - 1 ? 12 : 0,
             }}>
-              <span style={{ fontSize: 16 }}>{s.icon}</span>
-              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', color: 'var(--oc-text-muted)', textAlign: 'center' }}>{s.label}</span>
+              <div style={{
+                color: SUMMARY[s.key].color,
+                filter: `drop-shadow(0 0 6px rgba(${SUMMARY[s.key].rgb},0.85))`,
+                lineHeight: 0, marginBottom: 3,
+              }}>{SUMMARY[s.key].icon}</div>
+              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', color: '#FFFFFF', textAlign: 'center' }}>{s.label}</span>
               <span style={{ fontSize: 10, color: 'var(--oc-text-2)', fontFamily: "'Inter', sans-serif", textAlign: 'center', lineHeight: 1.2 }}>{s.value.length > 20 ? s.value.slice(0, 18) + '…' : s.value}</span>
             </div>
           ))}

@@ -188,26 +188,28 @@ textarea {
 /* ============================================================
    Map blinking pin + slow always-on runner
    ============================================================ */
-.oc-pin { position: relative; width: 24px; height: 24px; }
-.oc-pin-core {
-  position: absolute; left: 50%; top: 50%;
-  width: 12px; height: 12px; margin: -6px 0 0 -6px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #FFC24A, #FF7A00);
-  box-shadow: 0 0 10px rgba(255,140,0,0.95), 0 0 22px rgba(255,140,0,0.55);
+.oc-pin { position: relative; width: 44px; height: 44px; }
+.oc-sniper {
+  position: absolute; left: 0; top: 0;
+  filter: drop-shadow(0 0 6px rgba(255,140,0,0.95)) drop-shadow(0 0 12px rgba(255,140,0,0.5));
+  animation: oc-sniper-blink 1.2s ease-in-out infinite;
+}
+@keyframes oc-sniper-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
 }
 .oc-pin-ring {
   position: absolute; left: 50%; top: 50%;
-  width: 16px; height: 16px; margin: -8px 0 0 -8px;
+  width: 26px; height: 26px; margin: -13px 0 0 -13px;
   border-radius: 50%;
-  border: 2px solid rgba(255,150,0,0.85);
-  animation: oc-pin-pulse 1.6s ease-out infinite;
+  border: 2px solid rgba(255,150,0,0.7);
+  animation: oc-pin-pulse 1.8s ease-out infinite;
 }
-.oc-pin-ring2 { animation-delay: 0.8s; }
+.oc-pin-ring2 { animation-delay: 0.9s; }
 @keyframes oc-pin-pulse {
-  0%   { transform: scale(0.5); opacity: 1; }
+  0%   { transform: scale(0.45); opacity: 0.9; }
   80%  { opacity: 0; }
-  100% { transform: scale(2.8); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
 }
 
 .oc-runner-slow {
