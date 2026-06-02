@@ -58,8 +58,8 @@ const ItalyMapSVG = () => (
 )
 
 const card = {
-  background: '#111111',
-  border: '1px solid #1E1E1E',
+  background: 'var(--oc-card)',
+  border: '1px solid var(--oc-card-border)',
   borderRadius: 6,
   padding: '16px',
   display: 'flex',
@@ -68,10 +68,10 @@ const card = {
 }
 
 const inputStyle = {
-  background: '#0A0A0A',
-  border: '1px solid #2A2A2A',
+  background: 'var(--oc-input-bg)',
+  border: '1px solid var(--oc-input-border)',
   borderRadius: 4,
-  color: '#fff',
+  color: 'var(--oc-text)',
   padding: '9px 12px',
   fontFamily: "'Inter', sans-serif",
   fontSize: 13,
@@ -85,7 +85,7 @@ const labelStyle = {
   fontWeight: 700,
   fontSize: 11,
   letterSpacing: '0.1em',
-  color: '#9A9A9A',
+  color: 'var(--oc-text-2)',
   textTransform: 'uppercase',
 }
 
@@ -120,7 +120,7 @@ function InputField({ label, placeholder, icon, value, onChange, type = 'text' }
         {icon && (
           <span style={{
             position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)',
-            color: focused ? '#FF8C00' : '#555', fontSize: 14, transition: 'color 0.2s',
+            color: focused ? '#FF8C00' : 'var(--oc-text-muted)', fontSize: 14, transition: 'color 0.2s',
           }}>{icon}</span>
         )}
       </div>
@@ -148,7 +148,7 @@ function TextArea({ label, placeholder, max, value, onChange }) {
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
-      <div style={{ textAlign: 'right', fontSize: 10, color: '#555', marginTop: 3 }}>
+      <div style={{ textAlign: 'right', fontSize: 10, color: 'var(--oc-text-muted)', marginTop: 3 }}>
         {value.length} / {max}
       </div>
     </div>
@@ -273,7 +273,7 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
           fontWeight: 700,
           fontSize: 10,
           letterSpacing: '0.07em',
-          color: hover ? '#FFFFFF' : '#555',
+          color: hover ? '#FFFFFF' : 'var(--oc-text-muted)',
           textTransform: 'uppercase',
           transition: 'color 0.25s',
         }}>{label}</div>
@@ -321,6 +321,7 @@ export default function ClientForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [ctaHover, setCtaHover] = useState(false)
+  const [theme, setTheme] = useState('dark')
 
   const navigate = useNavigate()
 
@@ -341,6 +342,30 @@ export default function ClientForm() {
     { icon: '📝', label: 'DESCRIZIONE', value: descrizione || 'Da definire' },
     { icon: '👤', label: 'CONTATTI', value: nome || 'Da definire' },
   ]
+
+  const themeVars = theme === 'light'
+    ? {
+        '--oc-bg': 'linear-gradient(180deg,#ECEDF1 0%,#DCDEE4 100%)',
+        '--oc-surface': '#F4F5F8',
+        '--oc-card': '#FFFFFF',
+        '--oc-card-border': '#D4D7DE',
+        '--oc-input-bg': '#F2F3F6',
+        '--oc-input-border': '#C3C6CE',
+        '--oc-text': '#15161B',
+        '--oc-text-2': '#54565F',
+        '--oc-text-muted': '#8A8D96',
+      }
+    : {
+        '--oc-bg': '#080808',
+        '--oc-surface': '#0A0A0A',
+        '--oc-card': '#111111',
+        '--oc-card-border': '#1E1E1E',
+        '--oc-input-bg': '#0A0A0A',
+        '--oc-input-border': '#2A2A2A',
+        '--oc-text': '#FFFFFF',
+        '--oc-text-2': 'var(--oc-text-2)',
+        '--oc-text-muted': 'var(--oc-text-muted)',
+      }
 
   const handleFileChange = (e) => {
     const selected = Array.from(e.target.files || [])
@@ -394,7 +419,7 @@ export default function ClientForm() {
           <div style={{ fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700, fontSize: 32, color: '#00E676', letterSpacing: '0.06em' }}>
             RICHIESTA INVIATA
           </div>
-          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: '#9A9A9A', marginTop: 8 }}>
+          <div style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: 'var(--oc-text-2)', marginTop: 8 }}>
             Il team Palmisano riceverà la tua richiesta e ti risponderà in pochi minuti.
           </div>
         </div>
@@ -413,11 +438,11 @@ export default function ClientForm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--oc-bg)', color: 'var(--oc-text)', display: 'flex', flexDirection: 'column', ...themeVars }}>
       {/* Header */}
       <header style={{
-        background: '#0A0A0A',
-        borderBottom: '1px solid #1A1A1A',
+        background: 'var(--oc-surface)',
+        borderBottom: '1px solid var(--oc-card-border)',
         padding: '10px 24px',
         display: 'flex',
         alignItems: 'center',
@@ -427,6 +452,37 @@ export default function ClientForm() {
         <Logo size={29} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <button
+            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+            title="Tema chiaro / scuro"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              background: 'var(--oc-input-bg)',
+              border: '1px solid var(--oc-input-border)',
+              borderRadius: 20,
+              color: '#FF8C00',
+              padding: '5px 12px 5px 8px',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF8C00'; e.currentTarget.style.boxShadow = '0 0 10px rgba(255,140,0,0.3)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--oc-input-border)'; e.currentTarget.style.boxShadow = 'none' }}
+          >
+            {theme === 'dark' ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="4"/>
+                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+              </svg>
+            )}
+            <span style={{
+              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 10,
+              letterSpacing: '0.08em', color: 'var(--oc-text-2)',
+            }}>{theme === 'dark' ? 'CHIARO' : 'SCURO'}</span>
+          </button>
           <button
             onClick={() => navigate('/istruzioni')}
             style={{
@@ -519,7 +575,7 @@ export default function ClientForm() {
                 borderRadius: '50%',
                 width: 22, height: 22,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: '#fff',
+                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: 'var(--oc-text)',
                 boxShadow: '0 0 8px rgba(255,140,0,0.5)',
               }}>1</span>
               <span style={{
@@ -537,7 +593,7 @@ export default function ClientForm() {
               centerLabel="TIPO INTERVENTO"
               centerSub="Selezione multipla"
             />
-            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
+            <p style={{ fontSize: 10, color: 'var(--oc-text-muted)', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
               Clicca per accendere uno o più tipi di intervento.
             </p>
           </div>
@@ -567,7 +623,7 @@ export default function ClientForm() {
               centerLabel="SETTORE"
               centerSub="Selezione singola"
             />
-            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
+            <p style={{ fontSize: 10, color: 'var(--oc-text-muted)', fontFamily: "'Inter', sans-serif", textAlign: 'center' }}>
               Clicca per selezionare il settore di riferimento.
             </p>
           </div>
@@ -575,7 +631,7 @@ export default function ClientForm() {
           {/* Step 3 */}
           <div style={{ ...card }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
+              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
                 STEP <span style={{ color: '#FF8C00' }}>3</span> — DOVE SI TROVA L'INTERVENTO E QUANDO È PREVISTO?
               </span>
             </div>
@@ -647,7 +703,7 @@ export default function ClientForm() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ ...labelStyle, fontSize: 10 }}>RICHIEDO SOPRALLUOGO OPERATIVO <span style={{ color: '#555' }}>(FACOLTATIVO)</span></span>
+                  <span style={{ ...labelStyle, fontSize: 10 }}>RICHIEDO SOPRALLUOGO OPERATIVO <span style={{ color: 'var(--oc-text-muted)' }}>(FACOLTATIVO)</span></span>
                   <div
                     onClick={() => setSopralluogo(!sopralluogo)}
                     style={{
@@ -732,19 +788,19 @@ export default function ClientForm() {
                 {files.map((f, i) => (
                   <span key={i} style={{
                     background: '#1A1A1A', border: '1px solid #2A2A2A', borderRadius: 3,
-                    padding: '2px 8px', fontSize: 10, color: '#9A9A9A', fontFamily: "'Inter', sans-serif",
+                    padding: '2px 8px', fontSize: 10, color: 'var(--oc-text-2)', fontFamily: "'Inter', sans-serif",
                     display: 'flex', alignItems: 'center', gap: 4,
                   }}>
                     {f.name.length > 20 ? f.name.slice(0, 18) + '…' : f.name}
                     <span
-                      style={{ cursor: 'pointer', color: '#555', marginLeft: 2 }}
+                      style={{ cursor: 'pointer', color: 'var(--oc-text-muted)', marginLeft: 2 }}
                       onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))}
                     >×</span>
                   </span>
                 ))}
               </div>
             )}
-            <p style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 10, color: 'var(--oc-text-muted)', fontFamily: "'Inter', sans-serif", margin: 0, lineHeight: 1.6 }}>
               Puoi caricare più file alla volta.<br/>
               Formati supportati: JPG, PNG, MP4, MP3 (max 100MB)
             </p>
@@ -752,7 +808,7 @@ export default function ClientForm() {
 
           {/* Step 5 */}
           <div style={{ ...card }}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
+            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
               STEP <span style={{ color: '#FF8C00' }}>5</span> — DESCRIVI LA RICHIESTA
             </div>
             <div style={{ display: 'flex', gap: 10, flex: 1, minHeight: 140 }}>
@@ -775,7 +831,7 @@ export default function ClientForm() {
 
           {/* Step 6 */}
           <div style={card}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: '#fff' }}>
+            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
               STEP <span style={{ color: '#FF8C00' }}>6</span> — I TUOI CONTATTI
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -790,8 +846,8 @@ export default function ClientForm() {
 
       {/* Summary bar */}
       <footer style={{
-        background: '#0A0A0A',
-        borderTop: '1px solid #1A1A1A',
+        background: 'var(--oc-surface)',
+        borderTop: '1px solid var(--oc-card-border)',
         padding: '12px 16px',
         display: 'flex',
         alignItems: 'center',
@@ -802,7 +858,7 @@ export default function ClientForm() {
           <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, color: '#FF8C00', letterSpacing: '0.08em' }}>
             STEP 7 — RIEPILOGO RICHIESTA
           </div>
-          <div style={{ fontSize: 10, color: '#555', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
+          <div style={{ fontSize: 10, color: 'var(--oc-text-muted)', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
             Verifica i dati inseriti e invia la tua richiesta.
           </div>
         </div>
@@ -820,8 +876,8 @@ export default function ClientForm() {
               paddingRight: i < summaryItems.length - 1 ? 12 : 0,
             }}>
               <span style={{ fontSize: 16 }}>{s.icon}</span>
-              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', color: '#555', textAlign: 'center' }}>{s.label}</span>
-              <span style={{ fontSize: 10, color: '#9A9A9A', fontFamily: "'Inter', sans-serif", textAlign: 'center', lineHeight: 1.2 }}>{s.value.length > 20 ? s.value.slice(0, 18) + '…' : s.value}</span>
+              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', color: 'var(--oc-text-muted)', textAlign: 'center' }}>{s.label}</span>
+              <span style={{ fontSize: 10, color: 'var(--oc-text-2)', fontFamily: "'Inter', sans-serif", textAlign: 'center', lineHeight: 1.2 }}>{s.value.length > 20 ? s.value.slice(0, 18) + '…' : s.value}</span>
             </div>
           ))}
         </div>
@@ -961,8 +1017,8 @@ export default function ClientForm() {
 
       {/* Security footer */}
       <div style={{
-        background: '#050505',
-        borderTop: '1px solid #141414',
+        background: 'var(--oc-surface)',
+        borderTop: '1px solid var(--oc-card-border)',
         padding: '6px 16px',
         display: 'flex',
         alignItems: 'center',
@@ -970,7 +1026,7 @@ export default function ClientForm() {
         gap: 8,
       }}>
         <span style={{ fontSize: 12 }}>🛡</span>
-        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, color: '#555' }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, color: 'var(--oc-text-muted)' }}>
           I tuoi dati sono al sicuro. Le richieste vengono gestite con priorità tecnica.
         </span>
       </div>
