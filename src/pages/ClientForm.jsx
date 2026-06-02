@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import StepNav from '../components/StepNav.jsx'
+import HeaderStepper from '../components/HeaderStepper.jsx'
 import RotarySelector from '../components/RotarySelector.jsx'
 import ItalyMapLeaflet from '../components/ItalyMapLeaflet.jsx'
 import Logo from '../components/Logo.jsx'
@@ -468,7 +468,12 @@ export default function ClientForm() {
         justifyContent: 'space-between',
         flexShrink: 0,
       }}>
-        <Logo size={33} />
+        <Logo size={40} />
+
+        {/* Accordion step tracker — centered */}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', padding: '0 16px', overflow: 'hidden' }}>
+          <HeaderStepper completed={completedSteps} />
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
@@ -546,8 +551,6 @@ export default function ClientForm() {
           </div>
         </div>
       </header>
-
-      <StepNav completed={completedSteps} />
 
       {/* Main grid */}
       <main style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, overflow: 'auto' }}>

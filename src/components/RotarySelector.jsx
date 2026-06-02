@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 /* ── Icons ──────────────────────────────────────────────────────── */
 const ICONS = {
@@ -202,6 +202,8 @@ export default function RotarySelector({
   const GAP     = 2.6          // degrees between segments
   const segHalf = 180 / n
 
+  const [hoverIndex, setHoverIndex] = useState(-1)
+
   /* ── Selection helpers ── */
   const isSel = (i) =>
     multiple ? Array.isArray(selected) && selected.includes(i) : selected === i
@@ -282,30 +284,37 @@ export default function RotarySelector({
             const a1  = ca - segHalf + GAP / 2
             const a2  = ca + segHalf - GAP / 2
             const on  = isSel(i)
+            const hot = hoverIndex === i && !on     // hover preview (not yet selected)
+            const lit = on || hot
             return (
-              <g key={i} onClick={() => toggle(i)} style={{ cursor: 'pointer' }}>
+              <g key={i}
+                onClick={() => toggle(i)}
+                onMouseEnter={() => setHoverIndex(i)}
+                onMouseLeave={() => setHoverIndex(h => h === i ? -1 : h)}
+                style={{ cursor: 'pointer' }}>
                 {/* segment plate */}
                 <path
                   d={donutArc(CX, CY, RI, RO, a1, a2)}
-                  fill={on ? `url(#segOn${id})` : `url(#segOff${id})`}
-                  stroke={on ? `rgba(${RGB},0.55)` : '#0A0A0C'}
-                  strokeWidth={on ? 1.4 : 1}
-                  filter={on ? `url(#neon${id})` : undefined}
-                  style={{ transition: 'fill 0.25s' }}
+                  fill={lit ? `url(#segOn${id})` : `url(#segOff${id})`}
+                  stroke={lit ? `rgba(${RGB},0.55)` : '#0A0A0C'}
+                  strokeWidth={lit ? 1.4 : 1}
+                  filter={lit ? `url(#neon${id})` : undefined}
+                  opacity={on ? 1 : hot ? 0.6 : 1}
+                  style={{ transition: 'fill 0.2s, opacity 0.2s' }}
                 />
-                {/* bright outer rim highlight when on */}
-                {on && (
+                {/* bright outer rim highlight when lit */}
+                {lit && (
                   <path
                     d={donutArc(CX, CY, RO - 14, RO - 2, a1 + 1.5, a2 - 1.5)}
                     fill={NEON_HI}
-                    opacity="0.92"
+                    opacity={on ? 0.92 : 0.5}
                     filter={`url(#neon${id})`}
                   />
                 )}
                 {/* inner bevel line */}
                 <path
                   d={donutArc(CX, CY, RI, RI + 2.5, a1, a2)}
-                  fill={on ? `rgba(${RGB},0.5)` : 'rgba(255,255,255,0.05)'}
+                  fill={lit ? `rgba(${RGB},0.5)` : 'rgba(255,255,255,0.05)'}
                 />
               </g>
             )
@@ -324,12 +333,16 @@ export default function RotarySelector({
           const x = CX + RITEM * Math.cos(angleRad)
           const y = CY + RITEM * Math.sin(angleRad)
           const on = isSel(i)
+          const hot = hoverIndex === i && !on
+          const lit = on || hot
           const subtitle = SUBTITLE[item]
 
           return (
             <button
               key={i}
               onClick={() => toggle(i)}
+              onMouseEnter={() => setHoverIndex(i)}
+              onMouseLeave={() => setHoverIndex(h => h === i ? -1 : h)}
               title={item}
               style={{
                 position: 'absolute',
@@ -344,12 +357,12 @@ export default function RotarySelector({
               }}
             >
               <div style={{
-                color: on ? NEON_HI : '#F2F2F2',
-                filter: on
+                color: on ? NEON_HI : hot ? NEON : '#F2F2F2',
+                filter: lit
                   ? `drop-shadow(0 0 6px rgba(${RGB},1)) drop-shadow(0 0 13px rgba(${RGB},0.6))`
                   : 'drop-shadow(0 1px 2px rgba(0,0,0,0.9))',
-                transform: 'scale(1.3)',
-                transition: 'color 0.25s, filter 0.25s',
+                transform: lit ? 'scale(1.42)' : 'scale(1.3)',
+                transition: 'color 0.2s, filter 0.2s, transform 0.2s',
                 lineHeight: 0,
               }}>
                 {ICONS[item] || (
@@ -364,12 +377,12 @@ export default function RotarySelector({
                 fontWeight: 700,
                 fontSize: 11,
                 letterSpacing: '0.04em',
-                color: on ? '#FFFFFF' : '#EDEDED',
+                color: lit ? '#FFFFFF' : '#EDEDED',
                 textAlign: 'center',
                 lineHeight: 1.2,
-                textShadow: on ? `0 0 10px rgba(${RGB},0.9)` : '0 1px 3px rgba(0,0,0,0.95)',
+                textShadow: lit ? `0 0 10px rgba(${RGB},0.9)` : '0 1px 3px rgba(0,0,0,0.95)',
                 whiteSpace: 'pre-line',
-                maxWidth: 82,
+                maxWidth: 96,
                 transition: 'all 0.25s',
               }}>
                 {SHORT_LABEL[item] || item.toUpperCase()}

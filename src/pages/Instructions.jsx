@@ -107,7 +107,7 @@ export default function Instructions() {
         minHeight: 72,
       }}>
         {/* Left: logo */}
-        <Logo size={29} />
+        <Logo size={35} />
 
         {/* Center: big title */}
         <div style={{ textAlign: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
