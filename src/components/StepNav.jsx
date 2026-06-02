@@ -30,11 +30,12 @@ export default function StepNav({ activeSteps = [1, 2] }) {
         return (
           <div
             key={step.num}
+            title={step.label}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 7,
-              padding: '5px 14px',
+              padding: isPrimary || isSecondary ? '5px 14px' : '5px 9px',
               borderRadius: 4,
               background: isPrimary
                 ? 'rgba(255,140,0,0.14)'
@@ -71,14 +72,16 @@ export default function StepNav({ activeSteps = [1, 2] }) {
               boxShadow: isPrimary ? '0 0 8px rgba(255,140,0,0.5)' : 'none',
               flexShrink: 0,
             }}>{step.num}</div>
-            <span style={{
-              fontFamily: "'Rajdhani', sans-serif",
-              fontWeight: isPrimary || isSecondary ? 700 : 600,
-              fontSize: 11,
-              letterSpacing: '0.08em',
-              color: isPrimary ? '#FFA500' : isSecondary ? '#CC8800' : '#333',
-              whiteSpace: 'nowrap',
-            }}>{step.label}</span>
+            {(isPrimary || isSecondary) && (
+              <span style={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontWeight: 700,
+                fontSize: 11,
+                letterSpacing: '0.08em',
+                color: isPrimary ? '#FFA500' : '#CC8800',
+                whiteSpace: 'nowrap',
+              }}>{step.label}</span>
+            )}
           </div>
         )
       })}

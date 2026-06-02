@@ -210,7 +210,16 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
       onMouseLeave={() => setHover(false)}
     >
       <div style={{ position: 'relative', width: SZ, height: SZ }}>
-        <svg width={SZ} height={SZ} viewBox={`0 0 ${SZ} ${SZ}`} style={{ position: 'absolute', top: 0, left: 0 }}>
+        <svg width={SZ} height={SZ} viewBox={`0 0 ${SZ} ${SZ}`} style={{ position: 'absolute', top: 0, left: 0, overflow: 'visible' }}>
+          <defs>
+            <filter id={`ub-glow-${iconKey}`} x="-70%" y="-70%" width="240%" height="240%">
+              <feGaussianBlur stdDeviation="3" result="b1" />
+              <feGaussianBlur stdDeviation="6" result="b2" />
+              <feMerge>
+                <feMergeNode in="b2" /><feMergeNode in="b1" /><feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
           {/* Outer glow ring */}
           {hover && (
             <circle cx={CX} cy={CX} r={R_OUTER - 1}
@@ -249,6 +258,19 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
             fill="radial-gradient(#111,#060606)"
             style={{ transition: 'all 0.25s' }}
           />
+          {/* Fluorescent blue runner comet on hover */}
+          {hover && (
+            <g className="oc-runner" style={{ transformOrigin: `${CX}px ${CX}px` }}>
+              <circle cx={CX} cy={CX} r={R_OUTER - 1}
+                fill="none"
+                stroke={BLUE}
+                strokeWidth="3.4"
+                strokeLinecap="round"
+                strokeDasharray="46 218"
+                filter={`url(#ub-glow-${iconKey})`}
+              />
+            </g>
+          )}
         </svg>
 
         {/* Icon centered over SVG */}
