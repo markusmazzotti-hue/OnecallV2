@@ -53,11 +53,13 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
           <span style={{
             fontFamily: "'Barlow Condensed', sans-serif",
             fontWeight: 700,
-            fontSize: size * 0.30,
-            color: '#BBBBBB',
+            fontSize: size * 0.44,
+            color: '#C8C8C8',
             lineHeight: 1,
-            marginTop: size * 0.03,
-            marginLeft: size * 0.04,
+            marginTop: size * 0.02,
+            marginLeft: size * 0.05,
+            transform: 'scaleY(1.22)',
+            transformOrigin: 'top',
           }}>™</span>
         </span>
       </div>
@@ -66,13 +68,15 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
       {subtitle && (
         <div style={{
           fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 500,
-          fontSize: stacked ? size * 0.285 : size * 0.34,
-          letterSpacing: '0.04em',
-          color: '#868686',
+          fontWeight: 600,
+          fontSize: stacked ? size * 0.34 : size * 0.40,
+          letterSpacing: '0.02em',
+          color: '#9A9A9A',
           textTransform: 'uppercase',
-          whiteSpace: 'nowrap',
-          paddingLeft: 1,
+          width: '100%',
+          textAlign: 'justify',
+          textAlignLast: 'justify',
+          lineHeight: 1,
         }}>
           DEMOLIZIONI &amp; TAGLIO TERMICO
         </div>
