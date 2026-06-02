@@ -214,3 +214,15 @@ textarea {
   transform-origin: center;
   animation: oc-runner-spin 3s linear infinite;
 }
+
+/* ============================================================
+   Security shield — 3D rotation on hover
+   ============================================================ */
+.oc-shield {
+  transition: transform 0.9s cubic-bezier(0.34, 1.15, 0.4, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.oc-shield:hover {
+  transform: perspective(520px) rotateY(360deg);
+}

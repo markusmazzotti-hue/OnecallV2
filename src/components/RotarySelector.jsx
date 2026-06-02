@@ -66,42 +66,69 @@ const ICONS = {
     </svg>
   ),
   'Industria': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 20V10l5-5v5l5-5v5l5-5v15H2z"/><line x1="2" y1="20" x2="22" y2="20"/>
-      <rect x="14" y="14" width="4" height="6"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.4 9.6V3.6h3.2V9.6"/>
+      <path d="M10.9 3.6V2.2M13.1 3.6V2.2"/>
+      <path d="M3.6 19v-7l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3V19z"/>
+      <circle cx="6.7" cy="15" r="0.9"/><circle cx="10" cy="15" r="0.9"/><circle cx="13.3" cy="15" r="0.9"/><circle cx="16.6" cy="15" r="0.9"/>
+      <path d="M10 16.4V19M13.3 16.4V19"/>
     </svg>
   ),
   'Trader & Mandatari Acciaierie': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
-      <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 17l2 2a1 1 0 001.5-1.3"/>
+      <path d="M13.5 14.5l2 2a1 1 0 001.5-1.3l-3.7-3.7a3 3 0 00-4.2 0l-.8.8a1 1 0 01-1.4-1.4l2.7-2.7a5.5 5.5 0 016.7-.8l.4.3a2 2 0 001.4.2L21 7"/>
+      <path d="M21 6l1 9h-1.6"/>
+      <path d="M3 6l-1 9 6 6a1 1 0 001.5-1.3"/>
+      <path d="M3 7h7"/>
     </svg>
   ),
   'Acciaieria & Fonderia': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v11m0 0H5m4 0h10m0-11v11m0 0h-4"/>
-      <path d="M2 9h20"/><circle cx="12" cy="16" r="2"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 3.5h4v3l3.2 4.3a4.2 4.2 0 01-3.4 6.7h-3.6a4.2 4.2 0 01-3.4-6.7L10 6.5z"/>
+      <path d="M6.6 13.5a5.4 5.4 0 0010.8 0"/>
+      <line x1="9.5" y1="20.5" x2="14.5" y2="20.5"/>
+      <line x1="9.8" y1="3.5" x2="14.2" y2="3.5"/>
     </svg>
   ),
   'Altro Settore': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-      <circle cx="5" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="5" r="2.6"/>
+      <circle cx="5.5" cy="17" r="2.6"/>
+      <circle cx="18.5" cy="17" r="2.6"/>
+      <line x1="10.8" y1="7.3" x2="6.7" y2="14.7"/>
+      <line x1="13.2" y1="7.3" x2="17.3" y2="14.7"/>
+      <line x1="8.1" y1="17" x2="15.9" y2="17"/>
     </svg>
   ),
   'Settore Commerciale': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 8l1.8-3.2A1.6 1.6 0 016.2 4h11.6a1.6 1.6 0 011.4.8L21 8"/>
+      <path d="M4.5 11.5V19a1.5 1.5 0 001.5 1.5h12a1.5 1.5 0 001.5-1.5v-7.5"/>
+      <path d="M14 20.5v-3.5a1.5 1.5 0 00-1.5-1.5h-1a1.5 1.5 0 00-1.5 1.5v3.5"/>
+      <line x1="3" y1="8" x2="21" y2="8"/>
+      <path d="M21 8v2a1.6 1.6 0 01-3 .7 1.6 1.6 0 01-3 0 1.6 1.6 0 01-3 0 1.6 1.6 0 01-3 0 1.6 1.6 0 01-3 0A1.6 1.6 0 013 10V8"/>
     </svg>
   ),
   'Impianto Industriale e Sito Produttivo': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="9" width="5" height="10" rx="0.4"/>
+      <rect x="5.3" y="5.5" width="2.4" height="3.5"/>
+      <circle cx="6.5" cy="12.5" r="0.45"/><circle cx="6.5" cy="15" r="0.45"/>
+      <path d="M12.8 19l1-7h3.4l1 7z"/>
+      <line x1="13" y1="14" x2="18.2" y2="14"/>
+      <line x1="14.2" y1="14.5" x2="14.2" y2="19"/><line x1="15.5" y1="14.5" x2="15.5" y2="19"/><line x1="17" y1="14.5" x2="17" y2="19"/>
+      <path d="M15.5 12V9M14 9.4l1.5-.9 1.5.9M15.5 8.5V6.5"/>
     </svg>
   ),
   'Centro Riciclo Rottami': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 19H4.8a1.8 1.8 0 01-1.57-2.66L7.2 9.5"/>
+      <path d="M11 19h8.2a1.8 1.8 0 001.56-2.66l-1.23-2.12"/>
+      <path d="M14 16l-3 3 3 3"/>
+      <path d="M8.29 13.6L7.2 9.5 3.1 10.6"/>
+      <path d="M9.34 5.81l1.1-1.9A1.8 1.8 0 0113.53 3.9l3.94 6.84"/>
+      <path d="M13.38 9.63l4.1 1.1 1.1-4.1"/>
     </svg>
   ),
 }

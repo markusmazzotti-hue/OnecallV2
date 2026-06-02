@@ -10,13 +10,16 @@ const STEPS = [
   { num: 7, label: 'RIEPILOGO' },
 ]
 
-export default function StepNav({ activeSteps = [1, 2] }) {
+/*
+ * completed: array of step numbers that are done -> stay illuminated (orange).
+ */
+export default function StepNav({ completed = [] }) {
   return (
     <div style={{
       display: 'flex',
       alignItems: 'center',
-      background: '#0A0A0A',
-      borderBottom: '1px solid #1A1A1A',
+      background: 'var(--oc-surface)',
+      borderBottom: '1px solid var(--oc-card-border)',
       padding: '0 16px',
       height: 44,
       gap: 3,
@@ -24,8 +27,7 @@ export default function StepNav({ activeSteps = [1, 2] }) {
       flexShrink: 0,
     }}>
       {STEPS.map((step) => {
-        const isPrimary = activeSteps[0] === step.num
-        const isSecondary = activeSteps.length > 1 && activeSteps[1] === step.num
+        const isLit = completed.includes(step.num)
 
         return (
           <div
@@ -35,18 +37,12 @@ export default function StepNav({ activeSteps = [1, 2] }) {
               display: 'flex',
               alignItems: 'center',
               gap: 7,
-              padding: isPrimary || isSecondary ? '5px 14px' : '5px 9px',
+              padding: isLit ? '5px 14px' : '5px 9px',
               borderRadius: 4,
-              background: isPrimary
-                ? 'rgba(255,140,0,0.14)'
-                : isSecondary
-                ? 'rgba(255,140,0,0.04)'
-                : 'transparent',
-              border: isPrimary
-                ? '1px solid rgba(255,140,0,0.55)'
-                : isSecondary
-                ? '1px solid rgba(255,140,0,0.25)'
-                : '1px solid transparent',
+              background: isLit ? 'rgba(255,140,0,0.14)' : 'transparent',
+              border: isLit ? '1px solid rgba(255,140,0,0.55)' : '1px solid transparent',
+              boxShadow: isLit ? '0 0 12px rgba(255,140,0,0.25)' : 'none',
+              transition: 'all 0.35s ease',
               flexShrink: 0,
             }}
           >
@@ -54,32 +50,35 @@ export default function StepNav({ activeSteps = [1, 2] }) {
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: isPrimary
-                ? 'linear-gradient(135deg, #CC7000, #FF8C00)'
-                : 'transparent',
-              border: isPrimary
-                ? 'none'
-                : isSecondary
-                ? '1px solid #FF8C00'
-                : '1px solid #2A2A2A',
+              background: isLit ? 'linear-gradient(135deg, #CC7000, #FF8C00)' : 'transparent',
+              border: isLit ? 'none' : '1px solid #2A2A2A',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontFamily: "'Barlow Condensed', sans-serif",
               fontWeight: 700,
               fontSize: 11,
-              color: isPrimary ? '#fff' : isSecondary ? '#FF8C00' : '#3A3A3A',
-              boxShadow: isPrimary ? '0 0 8px rgba(255,140,0,0.5)' : 'none',
+              color: isLit ? '#fff' : '#3A3A3A',
+              boxShadow: isLit ? '0 0 10px rgba(255,140,0,0.7)' : 'none',
               flexShrink: 0,
-            }}>{step.num}</div>
-            {(isPrimary || isSecondary) && (
+              transition: 'all 0.35s ease',
+            }}>
+              {isLit ? (
+                /* check mark when completed */
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              ) : step.num}
+            </div>
+            {isLit && (
               <span style={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: 700,
                 fontSize: 11,
                 letterSpacing: '0.08em',
-                color: isPrimary ? '#FFA500' : '#CC8800',
+                color: '#FFA500',
                 whiteSpace: 'nowrap',
+                textShadow: '0 0 8px rgba(255,140,0,0.5)',
               }}>{step.label}</span>
             )}
           </div>

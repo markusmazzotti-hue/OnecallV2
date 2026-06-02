@@ -343,7 +343,6 @@ export default function ClientForm() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState(null)
   const [ctaHover, setCtaHover] = useState(false)
-  const [theme, setTheme] = useState('dark')
 
   const navigate = useNavigate()
 
@@ -365,29 +364,27 @@ export default function ClientForm() {
     { icon: '👤', label: 'CONTATTI', value: nome || 'Da definire' },
   ]
 
-  const themeVars = theme === 'light'
-    ? {
-        '--oc-bg': 'linear-gradient(180deg,#ECEDF1 0%,#DCDEE4 100%)',
-        '--oc-surface': '#F4F5F8',
-        '--oc-card': '#FFFFFF',
-        '--oc-card-border': '#D4D7DE',
-        '--oc-input-bg': '#F2F3F6',
-        '--oc-input-border': '#C3C6CE',
-        '--oc-text': '#15161B',
-        '--oc-text-2': '#54565F',
-        '--oc-text-muted': '#8A8D96',
-      }
-    : {
-        '--oc-bg': '#080808',
-        '--oc-surface': '#0A0A0A',
-        '--oc-card': '#111111',
-        '--oc-card-border': '#1E1E1E',
-        '--oc-input-bg': '#0A0A0A',
-        '--oc-input-border': '#2A2A2A',
-        '--oc-text': '#FFFFFF',
-        '--oc-text-2': 'var(--oc-text-2)',
-        '--oc-text-muted': 'var(--oc-text-muted)',
-      }
+  const themeVars = {
+    '--oc-bg': '#080808',
+    '--oc-surface': '#0A0A0A',
+    '--oc-card': '#111111',
+    '--oc-card-border': '#1E1E1E',
+    '--oc-input-bg': '#0A0A0A',
+    '--oc-input-border': '#2A2A2A',
+    '--oc-text': '#FFFFFF',
+    '--oc-text-2': '#9A9A9A',
+    '--oc-text-muted': '#555555',
+  }
+
+  const completedSteps = [
+    step1.length > 0 && 1,
+    step2 != null && 2,
+    localita.trim() && 3,
+    files.length > 0 && 4,
+    descrizione.trim() && 5,
+    (nome.trim() || email.trim() || telefono.trim()) && 6,
+    submitted && 7,
+  ].filter(Boolean)
 
   const handleFileChange = (e) => {
     const selected = Array.from(e.target.files || [])
@@ -475,37 +472,6 @@ export default function ClientForm() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <button
-            onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
-            title="Tema chiaro / scuro"
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              background: 'var(--oc-input-bg)',
-              border: '1px solid var(--oc-input-border)',
-              borderRadius: 20,
-              color: '#FF8C00',
-              padding: '5px 12px 5px 8px',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = '#FF8C00'; e.currentTarget.style.boxShadow = '0 0 10px rgba(255,140,0,0.3)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--oc-input-border)'; e.currentTarget.style.boxShadow = 'none' }}
-          >
-            {theme === 'dark' ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"/>
-                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
-              </svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
-              </svg>
-            )}
-            <span style={{
-              fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 10,
-              letterSpacing: '0.08em', color: 'var(--oc-text-2)',
-            }}>{theme === 'dark' ? 'CHIARO' : 'SCURO'}</span>
-          </button>
-          <button
             onClick={() => navigate('/istruzioni')}
             style={{
               background: 'transparent',
@@ -552,7 +518,7 @@ export default function ClientForm() {
             boxShadow: '0 0 14px rgba(255,140,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)',
           }}>
             {/* Shield with star icon — heraldic pointed-bottom shape */}
-            <div style={{ flexShrink: 0, filter: 'drop-shadow(0 0 6px rgba(255,140,0,0.7))' }}>
+            <div className="oc-shield" style={{ flexShrink: 0, filter: 'drop-shadow(0 0 6px rgba(255,140,0,0.7))' }}>
               <svg width="34" height="40" viewBox="0 0 34 40" fill="none">
                 {/* Outer shield — pointed bottom via quadratic bezier */}
                 <path d="M17 1L2 6.5V19C2 28 8 35 17 39C26 35 32 28 32 19V6.5L17 1Z"
@@ -581,7 +547,7 @@ export default function ClientForm() {
         </div>
       </header>
 
-      <StepNav activeSteps={[1, 2]} />
+      <StepNav completed={completedSteps} />
 
       {/* Main grid */}
       <main style={{ flex: 1, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10, overflow: 'auto' }}>
