@@ -9,9 +9,10 @@ import React from 'react'
  * subtitle  : DEMOLIZIONI & TAGLIO TERMICO — silver-grey, wide tracking
  */
 export default function Logo({ size = 32, subtitle = true, stacked = false }) {
+  // PALMISANO — white with a faint silver sheen (reads white, subtle metallic depth)
   const chrome =
     'linear-gradient(180deg,' +
-    '#FFFFFF 0%,#DEDEDE 12%,#A8A8A8 32%,#686868 50%,#ABABAB 68%,#D8D8D8 84%,#F2F2F2 100%)'
+    '#FFFFFF 0%,#FFFFFF 46%,#DADADA 72%,#FFFFFF 100%)'
 
   const gold =
     'linear-gradient(180deg,' +
@@ -28,10 +29,12 @@ export default function Logo({ size = 32, subtitle = true, stacked = false }) {
     color: 'transparent',
     WebkitTextFillColor: 'transparent',
     display: 'inline-block',
+    transform: 'scaleY(1.22)',          // stretch glyphs taller
+    transformOrigin: 'bottom',
   }
 
   return (
-    <div style={{ display: 'inline-flex', flexDirection: 'column', gap: size * 0.09 }}>
+    <div style={{ display: 'inline-flex', flexDirection: 'column', gap: size * 0.14, paddingTop: size * 0.14 }}>
 
       {/* Main lockup — single row or stacked two lines */}
       <div style={{
