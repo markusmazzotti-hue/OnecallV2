@@ -97,6 +97,35 @@ const boltStyle = (left, top) => ({
   zIndex: 3,
 })
 
+/* Unified step header: "STEP N" badge (tab color) + uppercase title */
+function StepHeader({ n, color, rgb, children }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 2 }}>
+      <div style={{
+        background: `rgba(${rgb},0.15)`,
+        border: `1px solid rgba(${rgb},0.4)`,
+        borderRadius: 4,
+        padding: '2px 10px',
+        fontFamily: "'Barlow Condensed', sans-serif",
+        fontWeight: 700,
+        fontSize: 15,
+        letterSpacing: '0.1em',
+        color,
+        boxShadow: `0 0 10px rgba(${rgb},0.25)`,
+        whiteSpace: 'nowrap',
+      }}>STEP {n}</div>
+      <div style={{
+        fontFamily: "'Rajdhani', sans-serif",
+        fontWeight: 700,
+        fontSize: 13,
+        letterSpacing: '0.08em',
+        color: '#CCCCCC',
+        textTransform: 'uppercase',
+      }}>{children}</div>
+    </div>
+  )
+}
+
 function InputField({ label, placeholder, icon, value, onChange, type = 'text' }) {
   const [focused, setFocused] = useState(false)
   return (
@@ -603,19 +632,8 @@ export default function ClientForm() {
 
           {/* Step 1 */}
           <div style={{ ...card, alignItems: 'center' }}>
-            <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                background: 'linear-gradient(135deg, #CC7000, #FF8C00)',
-                borderRadius: '50%',
-                width: 22, height: 22,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: 'var(--oc-text)',
-                boxShadow: '0 0 8px rgba(255,140,0,0.5)',
-              }}>1</span>
-              <span style={{
-                fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13,
-                letterSpacing: '0.1em', color: '#FF8C00', textTransform: 'uppercase',
-              }}>SELEZIONA IL TIPO DI INTERVENTO</span>
+            <div style={{ alignSelf: 'flex-start' }}>
+              <StepHeader n="1" color="#FF8C00" rgb="255,140,0">SELEZIONA IL TIPO DI INTERVENTO</StepHeader>
             </div>
             <RotarySelector
               items={STEP1_ITEMS}
@@ -634,19 +652,8 @@ export default function ClientForm() {
 
           {/* Step 2 */}
           <div style={{ ...card, alignItems: 'center' }}>
-            <div style={{ alignSelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                background: 'linear-gradient(135deg, #008040, #00E676)',
-                borderRadius: '50%',
-                width: 22, height: 22,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, color: '#000',
-                boxShadow: '0 0 8px rgba(0,230,118,0.5)',
-              }}>2</span>
-              <span style={{
-                fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13,
-                letterSpacing: '0.1em', color: '#00E676', textTransform: 'uppercase',
-              }}>SELEZIONA IL SETTORE DI RIFERIMENTO</span>
+            <div style={{ alignSelf: 'flex-start' }}>
+              <StepHeader n="2" color="#00E676" rgb="0,230,118">SELEZIONA IL SETTORE DI RIFERIMENTO</StepHeader>
             </div>
             <RotarySelector
               items={STEP2_ITEMS}
@@ -664,11 +671,7 @@ export default function ClientForm() {
 
           {/* Step 3 */}
           <div style={{ ...card }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
-                STEP <span style={{ color: '#FF8C00' }}>3</span> — DOVE SI TROVA L'INTERVENTO E QUANDO È PREVISTO?
-              </span>
-            </div>
+            <StepHeader n="3" color="#FF8C00" rgb="255,140,0">DOVE SI TROVA L'INTERVENTO E QUANDO È PREVISTO?</StepHeader>
 
             {/* Content row: form fields left, map right */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
@@ -798,30 +801,7 @@ export default function ClientForm() {
 
           {/* Step 4 */}
           <div style={card}>
-            {/* Header matching mockup: blue STEP 4 badge + title */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 2 }}>
-              <div style={{
-                background: 'rgba(0,136,255,0.15)',
-                border: '1px solid rgba(0,136,255,0.4)',
-                borderRadius: 4,
-                padding: '2px 10px',
-                fontFamily: "'Barlow Condensed', sans-serif",
-                fontWeight: 700,
-                fontSize: 15,
-                letterSpacing: '0.1em',
-                color: '#0088FF',
-                boxShadow: '0 0 10px rgba(0,136,255,0.25)',
-                whiteSpace: 'nowrap',
-              }}>STEP 4</div>
-              <div style={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 700,
-                fontSize: 13,
-                letterSpacing: '0.08em',
-                color: '#CCCCCC',
-                textTransform: 'uppercase',
-              }}>CARICA FOTO, VIDEO E DESCRIZIONE AUDIO</div>
-            </div>
+            <StepHeader n="4" color="#0088FF" rgb="0,136,255">CARICA FOTO, VIDEO E DESCRIZIONE AUDIO</StepHeader>
 
             <input
               ref={fileInputRef}
@@ -863,9 +843,7 @@ export default function ClientForm() {
 
           {/* Step 5 */}
           <div style={{ ...card }}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
-              STEP <span style={{ color: '#FF8C00' }}>5</span> — DESCRIVI LA RICHIESTA
-            </div>
+            <StepHeader n="5" color="#FF8C00" rgb="255,140,0">DESCRIVI LA RICHIESTA</StepHeader>
             <div style={{ display: 'flex', gap: 10, flex: 1, minHeight: 140 }}>
               <TextArea
                 label="COSA VUOI OTTENERE?"
@@ -886,9 +864,7 @@ export default function ClientForm() {
 
           {/* Step 6 */}
           <div style={card}>
-            <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.1em', color: 'var(--oc-text)' }}>
-              STEP <span style={{ color: '#FF8C00' }}>6</span> — I TUOI CONTATTI
-            </div>
+            <StepHeader n="6" color="#FF8C00" rgb="255,140,0">I TUOI CONTATTI</StepHeader>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <InputField label="NOME E COGNOME" placeholder="Es. Mario Rossi" icon="👤" value={nome} onChange={setNome} />
               <InputField label="AZIENDA" placeholder="Nome azienda" icon="🏢" value={azienda} onChange={setAzienda} />
@@ -909,10 +885,8 @@ export default function ClientForm() {
         gap: 16,
         flexShrink: 0,
       }}>
-        <div style={{ minWidth: 180 }}>
-          <div style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 13, color: '#FF8C00', letterSpacing: '0.08em' }}>
-            STEP 7 — RIEPILOGO RICHIESTA
-          </div>
+        <div style={{ minWidth: 230, flexShrink: 0 }}>
+          <StepHeader n="7" color="#FF8C00" rgb="255,140,0">RIEPILOGO RICHIESTA</StepHeader>
           <div style={{ fontSize: 10, color: 'var(--oc-text-muted)', fontFamily: "'Inter', sans-serif", marginTop: 2 }}>
             Verifica i dati inseriti e invia la tua richiesta.
           </div>
