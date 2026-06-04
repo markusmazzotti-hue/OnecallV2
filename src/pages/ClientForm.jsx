@@ -57,10 +57,15 @@ const ItalyMapSVG = () => (
   </svg>
 )
 
+/* Chamfered (cut-corner) clip-path — industrial HUD look */
+const chamfer = (c) =>
+  `polygon(${c}px 0, calc(100% - ${c}px) 0, 100% ${c}px, 100% calc(100% - ${c}px), ` +
+  `calc(100% - ${c}px) 100%, ${c}px 100%, 0 calc(100% - ${c}px), 0 ${c}px)`
+
 const card = {
   background: 'var(--oc-card)',
   border: '1px solid var(--oc-card-border)',
-  borderRadius: 6,
+  clipPath: chamfer(12),
   padding: '16px',
   display: 'flex',
   flexDirection: 'column',
@@ -97,36 +102,23 @@ const boltStyle = (left, top) => ({
   zIndex: 3,
 })
 
-/* Chamfered (cut-corner) clip-path — industrial HUD look */
-const chamfer = (c) =>
-  `polygon(${c}px 0, calc(100% - ${c}px) 0, 100% ${c}px, 100% calc(100% - ${c}px), ` +
-  `calc(100% - ${c}px) 100%, ${c}px 100%, 0 calc(100% - ${c}px), 0 ${c}px)`
-
-/* Unified step header: "STEP N" badge (tab color, chamfered) + uppercase title */
+/* Unified step header: "STEP N" badge (tab color) + uppercase title */
 function StepHeader({ n, color, rgb, children }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 2 }}>
-      {/* Outer = border layer (chamfered) */}
       <div style={{
-        background: `rgba(${rgb},0.5)`,
-        clipPath: chamfer(6),
+        background: `rgba(${rgb},0.15)`,
+        border: `1px solid rgba(${rgb},0.4)`,
+        borderRadius: 4,
+        padding: '2px 10px',
+        fontFamily: "'Barlow Condensed', sans-serif",
+        fontWeight: 700,
+        fontSize: 15,
+        letterSpacing: '0.1em',
+        color,
         boxShadow: `0 0 10px rgba(${rgb},0.25)`,
         whiteSpace: 'nowrap',
-        flexShrink: 0,
-      }}>
-        {/* Inner = fill + text (chamfered, 1px inset reveals border) */}
-        <div style={{
-          margin: 1,
-          background: 'linear-gradient(180deg, #141414, #0C0C0C)',
-          clipPath: chamfer(5.3),
-          padding: '2px 11px',
-          fontFamily: "'Barlow Condensed', sans-serif",
-          fontWeight: 700,
-          fontSize: 15,
-          letterSpacing: '0.1em',
-          color,
-        }}>STEP {n}</div>
-      </div>
+      }}>STEP {n}</div>
       <div style={{
         fontFamily: "'Rajdhani', sans-serif",
         fontWeight: 700,
