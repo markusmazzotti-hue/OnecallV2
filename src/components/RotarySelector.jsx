@@ -66,7 +66,7 @@ const ICONS = {
     </svg>
   ),
   'Industria': (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
       {/* Smoke curls rising from chimney */}
       <path d="M3.1 5c.55-.75 1.3-.75 1.85 0s1.3.75 1.85 0" strokeWidth="1.05"/>
       <path d="M3.6 2.7c.5-.65 1.15-.65 1.65 0s1.15.65 1.65 0" strokeWidth="1.05"/>
