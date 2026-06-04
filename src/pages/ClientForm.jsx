@@ -292,7 +292,7 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
               </feMerge>
             </filter>
           </defs>
-          {/* Outer glow ring */}
+          {/* Outer glow ring on hover */}
           {hover && (
             <circle cx={CX} cy={CX} r={R_OUTER - 1}
               fill="none"
@@ -300,7 +300,7 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
               strokeWidth="8"
             />
           )}
-          {/* Tick marks */}
+          {/* Tick marks — dim blue idle, bright blue on hover */}
           {Array.from({ length: TICKS }).map((_, i) => {
             const angle = (i / TICKS) * 360
             const rad   = ((angle - 90) * Math.PI) / 180
@@ -312,16 +312,16 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
                 key={i}
                 x1={CX + r1 * Math.cos(rad)} y1={CX + r1 * Math.sin(rad)}
                 x2={CX + r2 * Math.cos(rad)} y2={CX + r2 * Math.sin(rad)}
-                stroke={hover ? `rgba(${RGB},0.75)` : '#252525'}
+                stroke={`rgba(${RGB},${hover ? 0.85 : 0.22})`}
                 strokeWidth={long ? 1.5 : 1}
                 style={{ transition: 'stroke 0.25s' }}
               />
             )
           })}
-          {/* Inner border circle */}
+          {/* Inner border circle — dim blue idle, bright on hover */}
           <circle cx={CX} cy={CX} r={R_INNER}
             fill="#080808"
-            stroke={hover ? `rgba(${RGB},0.55)` : '#1C1C1C'}
+            stroke={`rgba(${RGB},${hover ? 0.6 : 0.28})`}
             strokeWidth="1.5"
             style={{ transition: 'stroke 0.25s' }}
           />
@@ -330,29 +330,29 @@ function UploadBtn({ iconKey, label, optional, onClick }) {
             fill="radial-gradient(#111,#060606)"
             style={{ transition: 'all 0.25s' }}
           />
-          {/* Fluorescent blue runner comet on hover */}
-          {hover && (
-            <g className="oc-runner" style={{ transformOrigin: `${CX}px ${CX}px` }}>
-              <circle cx={CX} cy={CX} r={R_OUTER - 1}
-                fill="none"
-                stroke={BLUE}
-                strokeWidth="3.4"
-                strokeLinecap="round"
-                strokeDasharray="46 218"
-                filter={`url(#ub-glow-${iconKey})`}
-              />
-            </g>
-          )}
+          {/* Always-on rotating runner comet — dim/thin idle, bright/thick on hover */}
+          <g className="oc-runner-slow" style={{ transformOrigin: `${CX}px ${CX}px` }}>
+            <circle cx={CX} cy={CX} r={R_OUTER - 1}
+              fill="none"
+              stroke={BLUE}
+              strokeWidth={hover ? 3.4 : 1.8}
+              strokeLinecap="round"
+              strokeDasharray="46 218"
+              opacity={hover ? 1 : 0.3}
+              filter={`url(#ub-glow-${iconKey})`}
+              style={{ transition: 'stroke-width 0.25s, opacity 0.25s' }}
+            />
+          </g>
         </svg>
 
-        {/* Icon centered over SVG */}
+        {/* Icon centered over SVG — dim blue idle, bright blue on hover */}
         <div style={{
           position: 'absolute',
           inset: 0,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: hover ? BLUE : '#333',
+          color: hover ? BLUE : `rgba(${RGB},0.42)`,
           filter: hover ? `drop-shadow(0 0 8px rgba(${RGB},0.85))` : 'none',
           transition: 'color 0.25s, filter 0.25s',
         }}>
