@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 
+/* Uniform icon rendering — every icon is normalized to this size + stroke */
+const ICON_SIZE = 30
+const ICON_STROKE = 1.05
+
 /* ── Icons ──────────────────────────────────────────────────────── */
 const ICONS = {
   'Demolizione Industriale': (
@@ -378,11 +382,13 @@ export default function RotarySelector({
                 transition: 'color 0.2s, filter 0.2s, transform 0.2s',
                 lineHeight: 0,
               }}>
-                {ICONS[item] || (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <circle cx="12" cy="12" r="10" />
-                  </svg>
-                )}
+                {ICONS[item]
+                  ? React.cloneElement(ICONS[item], { width: ICON_SIZE, height: ICON_SIZE, strokeWidth: ICON_STROKE })
+                  : (
+                    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={ICON_STROKE}>
+                      <circle cx="12" cy="12" r="10" />
+                    </svg>
+                  )}
               </div>
 
               <span style={{
