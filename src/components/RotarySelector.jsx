@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 /* Uniform icon rendering — every icon is normalized to this size + stroke */
-const ICON_SIZE = 30
-const ICON_STROKE = 1.05
+const ICON_SIZE = 40
+const ICON_STROKE = 0.95
 
 /* ── Icons ──────────────────────────────────────────────────────── */
 const ICONS = {
@@ -72,8 +72,8 @@ const ICONS = {
   'Industria': (
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
       {/* Smoke curls rising from chimney */}
-      <path d="M3.1 5c.55-.75 1.3-.75 1.85 0s1.3.75 1.85 0" strokeWidth="1.05"/>
-      <path d="M3.6 2.7c.5-.65 1.15-.65 1.65 0s1.15.65 1.65 0" strokeWidth="1.05"/>
+      <path d="M3.1 5c.55-.75 1.3-.75 1.85 0s1.3.75 1.85 0" strokeWidth="0.95"/>
+      <path d="M3.6 2.7c.5-.65 1.15-.65 1.65 0s1.15.65 1.65 0" strokeWidth="0.95"/>
       {/* Chimney */}
       <path d="M3.9 21V8.4h2.5v4"/>
       {/* Sawtooth (shed) roof building */}
