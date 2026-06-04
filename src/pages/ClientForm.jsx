@@ -65,7 +65,7 @@ const chamfer = (c) =>
 const card = {
   background: 'var(--oc-card)',
   border: '1px solid var(--oc-card-border)',
-  clipPath: chamfer(12),
+  clipPath: chamfer(18),
   padding: '16px',
   display: 'flex',
   flexDirection: 'column',
