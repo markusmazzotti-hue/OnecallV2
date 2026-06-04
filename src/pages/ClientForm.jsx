@@ -843,7 +843,7 @@ export default function ClientForm() {
 
           {/* Step 5 */}
           <div style={{ ...card }}>
-            <StepHeader n="5" color="#FF8C00" rgb="255,140,0">DESCRIVI LA RICHIESTA</StepHeader>
+            <StepHeader n="5" color="#9CFF00" rgb="156,255,0">DESCRIVI LA RICHIESTA</StepHeader>
             <div style={{ display: 'flex', gap: 10, flex: 1, minHeight: 140 }}>
               <TextArea
                 label="COSA VUOI OTTENERE?"
@@ -864,7 +864,7 @@ export default function ClientForm() {
 
           {/* Step 6 */}
           <div style={card}>
-            <StepHeader n="6" color="#FF8C00" rgb="255,140,0">I TUOI CONTATTI</StepHeader>
+            <StepHeader n="6" color="#00E5C8" rgb="0,229,200">I TUOI CONTATTI</StepHeader>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <InputField label="NOME E COGNOME" placeholder="Es. Mario Rossi" icon="👤" value={nome} onChange={setNome} />
               <InputField label="AZIENDA" placeholder="Nome azienda" icon="🏢" value={azienda} onChange={setAzienda} />
