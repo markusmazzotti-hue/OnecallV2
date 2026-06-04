@@ -66,25 +66,25 @@ const ICONS = {
     </svg>
   ),
   'Industria': (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      {/* Smoke curls */}
-      <path d="M3 4.6c.6-.8 1.4-.8 2 0s1.4.8 2 0" strokeWidth="1.2"/>
-      <path d="M3.6 2.3c.5-.7 1.1-.7 1.6 0s1.1.7 1.6 0" strokeWidth="1.2"/>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      {/* Smoke curls rising from chimney */}
+      <path d="M3.1 5c.55-.75 1.3-.75 1.85 0s1.3.75 1.85 0" strokeWidth="1.05"/>
+      <path d="M3.6 2.7c.5-.65 1.15-.65 1.65 0s1.15.65 1.65 0" strokeWidth="1.05"/>
       {/* Chimney */}
-      <path d="M4 20.5V8h2.6v3.5"/>
+      <path d="M3.9 21V8.4h2.5v4"/>
       {/* Sawtooth (shed) roof building */}
-      <path d="M6.6 20.5v-7l3 2v-2l3 2v-2l3 2V9h4.8v11.5z"/>
-      {/* Window grid (filled squares) */}
+      <path d="M6.4 21v-7.6l3.4 2.2v-2.2l3.4 2.2v-2.2l3.4 2.2V9.4h4.9V21z"/>
+      {/* Window grid */}
       <g fill="currentColor" stroke="none">
-        <rect x="8" y="15.4" width="1.5" height="1.5"/>
-        <rect x="10.7" y="15.4" width="1.5" height="1.5"/>
-        <rect x="13.4" y="15.4" width="1.5" height="1.5"/>
-        <rect x="8" y="17.9" width="1.5" height="1.5"/>
-        <rect x="10.7" y="17.9" width="1.5" height="1.5"/>
-        <rect x="13.4" y="17.9" width="1.5" height="1.5"/>
+        <rect x="7.9" y="15.6" width="1.6" height="1.7"/>
+        <rect x="10.8" y="15.6" width="1.6" height="1.7"/>
+        <rect x="13.7" y="15.6" width="1.6" height="1.7"/>
+        <rect x="7.9" y="18.2" width="1.6" height="1.7"/>
+        <rect x="10.8" y="18.2" width="1.6" height="1.7"/>
+        <rect x="13.7" y="18.2" width="1.6" height="1.7"/>
       </g>
-      {/* Right section windows (slits) */}
-      <path d="M17 13h2.6M17 15.6h2.6M17 18.2h2.6"/>
+      {/* Right section windows */}
+      <path d="M17.6 13.2h2.6M17.6 16h2.6M17.6 18.8h2.6"/>
     </svg>
   ),
   'Trader & Mandatari Acciaierie': (
