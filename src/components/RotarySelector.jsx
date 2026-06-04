@@ -67,11 +67,24 @@ const ICONS = {
   ),
   'Industria': (
     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10.4 9.6V3.6h3.2V9.6"/>
-      <path d="M10.9 3.6V2.2M13.1 3.6V2.2"/>
-      <path d="M3.6 19v-7l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3v-1.3l2 1.3V19z"/>
-      <circle cx="6.7" cy="15" r="0.9"/><circle cx="10" cy="15" r="0.9"/><circle cx="13.3" cy="15" r="0.9"/><circle cx="16.6" cy="15" r="0.9"/>
-      <path d="M10 16.4V19M13.3 16.4V19"/>
+      {/* Smoke curls */}
+      <path d="M3 4.6c.6-.8 1.4-.8 2 0s1.4.8 2 0" strokeWidth="1.2"/>
+      <path d="M3.6 2.3c.5-.7 1.1-.7 1.6 0s1.1.7 1.6 0" strokeWidth="1.2"/>
+      {/* Chimney */}
+      <path d="M4 20.5V8h2.6v3.5"/>
+      {/* Sawtooth (shed) roof building */}
+      <path d="M6.6 20.5v-7l3 2v-2l3 2v-2l3 2V9h4.8v11.5z"/>
+      {/* Window grid (filled squares) */}
+      <g fill="currentColor" stroke="none">
+        <rect x="8" y="15.4" width="1.5" height="1.5"/>
+        <rect x="10.7" y="15.4" width="1.5" height="1.5"/>
+        <rect x="13.4" y="15.4" width="1.5" height="1.5"/>
+        <rect x="8" y="17.9" width="1.5" height="1.5"/>
+        <rect x="10.7" y="17.9" width="1.5" height="1.5"/>
+        <rect x="13.4" y="17.9" width="1.5" height="1.5"/>
+      </g>
+      {/* Right section windows (slits) */}
+      <path d="M17 13h2.6M17 15.6h2.6M17 18.2h2.6"/>
     </svg>
   ),
   'Trader & Mandatari Acciaierie': (
